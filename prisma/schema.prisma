@@ -4,11 +4,19 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 
-generator client {
-  provider = "prisma-client-js"
+model Content {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  image       String?  // Chemin de l'image (optionnel)
+  pdf         String?  // Chemin du PDF (optionnel)
 }
