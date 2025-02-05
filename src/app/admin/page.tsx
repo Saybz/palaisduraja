@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default function Admin() {
   const [content, setContent] = useState({
@@ -68,6 +69,8 @@ export default function Admin() {
   };
 
   return (
+    <ProtectedRoute>
+
     <div className="p-8 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Interface Admin</h1>
 
@@ -121,5 +124,6 @@ export default function Admin() {
         </button>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
