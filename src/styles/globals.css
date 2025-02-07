@@ -3,8 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #75192E;
+  --color-secondary: #f5c378;
+  --color-dark: #1e2225;
+  --color-light: #f5efe6;
+  --font-head: "Geist Mono", serif;
+  --font-body: "Geist", serif;
+}
+
+.font-head {
+  font-family: var(--font-head);
+}
+
+.font-body {
+  font-family: var(--font-body);
 }
 
 @media (prefers-color-scheme: dark) {
