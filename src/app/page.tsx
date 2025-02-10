@@ -6,7 +6,7 @@ export default async function Home() {
   const content = await prisma.content.findFirst();
 
   return (
-    <div className="min-h-screen w-screen px-10 font-body bg-gray-50 flex flex-col mt-24 items-center">
+    <div className="min-h-screen w-screen px-6 md:px-10 font-body bg-gray-50 flex flex-col mt-18 items-center">
       <div className="relative w-screen max-h-screen mb-20 md:mb-30 lg:mb-40">
         <Image
           src="https://placehold.jp/2000x900.png"
@@ -21,7 +21,7 @@ export default async function Home() {
         id="about"
         className="flex flex-col w-full max-w-main mb-20 md:mb-30 lg:mb-40"
       >
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-20">
+        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-16 md:mb-20">
           Restaurant Familial
         </h2>
         <div className="flex flex-col lg:flex-row ">
@@ -48,7 +48,7 @@ export default async function Home() {
         </div>
       </section>
       <section id="menu" className="max-w-main w-full mb-20 md:mb-30 lg:mb-40">
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-20">
+        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-16 md:mb-20">
           Carte & Menus
         </h2>
         <div className="relative w-full justify-center items-center">
@@ -81,17 +81,17 @@ export default async function Home() {
         className="w-screen py-20 md:py-30 lg:py-40 bg-slate-200"
       >
         <div className="max-w-main w-full mx-auto">
-          <h2 className="mx-10 relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-20">
+          <h2 className="mx-6 md:mx-10 relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-16 md:mb-20">
             Infos pratiques
           </h2>
-          <div className="w-full flex flex-col md:flex-row justify-between mb-8 px-10">
+          <div className="w-full flex flex-col md:flex-row justify-between mb-8 px-6 md:px-10">
             <div className="w-full md:w-1/2 flex-col pr-0 md:pr-10 mb-10 md:mb-0">
               <div className="flex-col mb-10">
-                <h3 className="font-bold text-xl mb-2">Cuisine</h3>
+                <h3 className="font-bold text-xl mb-2">Cuisine :</h3>
                 <p>Indienne, pakistanaise</p>
               </div>
               <div className="flex-col">
-                <h3 className="font-bold text-xl mb-2">Moyens de paiement</h3>
+                <h3 className="font-bold text-xl mb-2">Moyens de paiement :</h3>
                 <p>
                   Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact,
                   Chèque vacances, Tickets restaurant
@@ -114,11 +114,11 @@ export default async function Home() {
         id="contact"
         className="max-w-main w-full my-20 md:mb-30 lg:mb-40"
       >
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-20">
+        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-16 md:mb-20">
           Contact
         </h2>
         <div className="flex flex-col items-center lg:flex-row">
-          <div className="w-full p-16 bg-white rounded shadow-lg mb-10 lg:mb-0 h-full lg:max-w-[500px]">
+          <div className="w-full flex flex-col flex-1 p-6 md:p-16 bg-white rounded shadow-lg mb-10 lg:mb-0 h-full lg:max-w-[500px]">
             <h3 className="font-bold font-head mb-8">Adresse :</h3>
             <p className="py-5 mb-8 px-8 rounded whitespace-nowrap bg-primary text-white">
               113 rue Colbert, 37000 Tours
@@ -162,7 +162,7 @@ export default async function Home() {
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5401.635074206616!2d0.689015977602613!3d47.395992871171224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcd5b248f1490b%3A0xd4bc494e1971897e!2sLe%20Palais%20du%20Rajah%20(Rajasthan)!5e0!3m2!1sfr!2sfr!4v1738936968444!5m2!1sfr!2sfr"
               width="600"
-              height="450"
+              height="400"
               style={{ border: 0 }}
               title="Google Maps location of the restaurant"
               loading="lazy"
