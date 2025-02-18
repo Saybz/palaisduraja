@@ -1,9 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ProtectedRoute from '@/components/ProtectedRoute';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-export default function Admin() {
+export default async function Admin() {
+  const session = await getServerSession(authOptions);
+  console.log("SESSION:", session); // Ajout du log
+
+  if (!session) {
+    redirect("/admin/login");
+  }
+
   const [content, setContent] = useState({
     title: "",
     description: "",
@@ -69,9 +78,8 @@ export default function Admin() {
   };
 
   return (
-    <ProtectedRoute>
 
-    <div className="p-8 bg-gray-100 min-h-screen">
+    <div className="p-8 bg-gray-100 min-h-scree text-dark min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Interface Admin</h1>
 
       <div className="space-y-4">
@@ -124,6 +132,5 @@ export default function Admin() {
         </button>
       </div>
     </div>
-    </ProtectedRoute>
   );
 }

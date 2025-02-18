@@ -6,7 +6,7 @@ export default async function Home() {
   const content = await prisma.content.findFirst();
 
   return (
-    <div className="min-h-screen w-screen px-6 md:px-10 font-body bg-gray-50 flex flex-col mt-18 items-center">
+    <div className="min-h-screen w-screen px-6 md:px-10 font-body bg-gray-50 text-dark flex flex-col mt-18 items-center">
       <div className="relative w-screen max-h-screen mb-20 md:mb-30 lg:mb-40">
         <Image
           src="https://placehold.jp/2000x900.png"
