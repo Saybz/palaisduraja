@@ -1,3 +1,5 @@
+// Route apellée pour mettre à jour le contenus du site
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/utils/db";
 

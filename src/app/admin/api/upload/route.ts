@@ -1,3 +1,4 @@
+// Route apellée pour mettre à jour le contenu fichier pdf (upload)
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
@@ -7,7 +8,10 @@ export async function POST(req: Request) {
   const file = data.get("file") as File;
 
   if (!file) {
-    return NextResponse.json({ error: "Aucun fichier fourni" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Aucun fichier fourni" },
+      { status: 400 }
+    );
   }
 
   const uploadsDir = path.join(process.cwd(), "public/uploads");

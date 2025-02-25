@@ -1,18 +1,10 @@
 "use client";
+// Page /admin
 
 import { useState, useEffect } from "react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
-
-export default async function Admin() {
-  const session = await getServerSession(authOptions);
-  console.log("SESSION:", session); // Ajout du log
-
-  if (!session) {
-    redirect("/admin/login");
-  }
-
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+export default function AdminPage() {
   const [content, setContent] = useState({
     title: "",
     description: "",
@@ -21,6 +13,8 @@ export default async function Admin() {
   });
   const [newImage, setNewImage] = useState<File | null>(null);
   const [newPdf, setNewPdf] = useState<File | null>(null);
+  const { data: session } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     // Récupérer le contenu existant
@@ -77,8 +71,13 @@ export default async function Admin() {
     }
   };
 
-  return (
+  if (!session) {
+    // Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
+    router.push("/login");
+    return null;
+  }
 
+  return (
     <div className="p-8 bg-gray-100 min-h-scree text-dark min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Interface Admin</h1>
 
@@ -115,7 +114,7 @@ export default async function Admin() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Carte</label>
+          <label className="block text-sm font-medium">PDF</label>
           <input
             type="file"
             accept=".pdf"
