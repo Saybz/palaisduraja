@@ -1,24 +1,22 @@
-// types/next-auth.d.ts (ou à la racine du projet)
+// types/next-auth.d.ts
+
+import { JWT } from "next-auth/jwt"; // Importation du type JWT
 
 declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      email: string;
       name?: string | null;
-      image?: string | null;
     };
   }
+}
 
-  interface User {
-    id: string;
-    email: string;
-    name?: string | null;
-    image?: string | null;
-  }
-
-  interface Token {
+declare module "next-auth/jwt" {
+  // Utilisation du type JWT pour l'extension
+  interface JWT {
     id?: string;
-    email?: string;
+    name?: string | null;
   }
 }
+
+export { JWT };

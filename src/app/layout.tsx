@@ -1,12 +1,13 @@
+"use client";
 import { Geist, Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-export const metadata = {
-  title: "Palais du Raja",
-  description: "Restaurant indien",
-};
+import { SessionProvider } from "next-auth/react";
+// export const metadata = {
+//   title: "Palais du Raja",
+//   description: "Restaurant indien",
+// };
 const geistSans = Geist({
   variable: "--font-body",
   subsets: ["latin"],
@@ -25,14 +26,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <SessionProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <Header />
           <main>{children}</main>
           <Footer />
-      </body>
-    </html>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

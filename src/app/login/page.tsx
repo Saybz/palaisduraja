@@ -1,14 +1,23 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const { data: session } = useSession();
+
+  // Effectuer la redirection uniquement après que la session soit disponible
+  useEffect(() => {
+    if (session) {
+      router.push("/admin");
+    }
+  }, [session, router]); // Dépendance de la session
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
