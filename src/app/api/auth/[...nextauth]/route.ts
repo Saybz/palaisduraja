@@ -38,7 +38,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      console.log("JWT callback:", { token, user });
       // Ajouter les informations d'utilisateur au token JWT
       if (user) {
         token.id = user.id;
@@ -48,7 +47,6 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       // Ajouter les informations du token dans la session
-      console.log("Session callback:", { session, token });
       if (session.user) {
         session.user.id = token.id as string;
         session.user.name = token.name as string;

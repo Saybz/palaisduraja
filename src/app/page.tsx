@@ -7,16 +7,18 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen w-screen px-6 md:px-10 font-body bg-gray-50 text-dark flex flex-col mt-18 items-center">
-      <div className="relative w-screen max-h-screen mb-20 md:mb-30 lg:mb-40">
-        <Image
-          src="https://placehold.jp/2000x900.png"
-          alt="Image"
-          layout="responsive"
-          width={2000}
-          height={900}
-          className="w-screen object-cover"
-        />
-      </div>
+      {content?.banner && (
+        <div className="relative w-screen max-h-screen mb-20 md:mb-30 lg:mb-40">
+          <Image
+            src={content.banner}
+            alt="Image"
+            layout="responsive"
+            width={2000}
+            height={900}
+            className="w-screen object-cover"
+          />
+        </div>
+      )}
       <section
         id="about"
         className="flex flex-col w-full max-w-main mb-20 md:mb-30 lg:mb-40"
@@ -25,10 +27,10 @@ export default async function Home() {
           Restaurant Familial
         </h2>
         <div className="flex flex-col lg:flex-row ">
-          {content?.image && (
+          {content?.histoireImg && (
             <div className="w-full lg:w-1/2">
               <Image
-                src={content.image}
+                src={content.histoireImg}
                 alt="Image"
                 layout="responsive"
                 width={700}
@@ -42,7 +44,7 @@ export default async function Home() {
               {content?.title || "Titre par défaut"}
             </h2>
             <p className="text-lg text-gray-600">
-              {content?.description || "Description par défaut"}
+              {content?.histoire || "Description par défaut"}
             </p>
           </div>
         </div>
@@ -52,9 +54,9 @@ export default async function Home() {
           Carte & Menus
         </h2>
         <div className="relative w-full justify-center items-center">
-          {content?.image && (
+          {content?.menuImg && (
             <Image
-              src="https://placehold.jp/1440x720.png"
+              src={content.menuImg}
               alt="Image"
               layout="responsive"
               width={1440}
@@ -63,14 +65,14 @@ export default async function Home() {
             />
           )}
 
-          {content?.pdf && (
+          {content?.menuPdf && (
             <div className="absolute top-0 right-0 w-full h-full flex justify-center items-center">
               <a
-                href={content.pdf}
+                href={content.menuPdf}
                 target="_blank"
                 className="p-4 bg-primary text-white shadow-lg rounded-lg"
               >
-                Télécharger la carte
+                {content.menuDesc || "Télécharger le menu"}
               </a>
             </div>
           )}
@@ -86,27 +88,35 @@ export default async function Home() {
           </h2>
           <div className="w-full flex flex-col md:flex-row justify-between mb-8 px-6 md:px-10">
             <div className="w-full md:w-1/2 flex-col pr-0 md:pr-10 mb-10 md:mb-0">
-              <div className="flex-col mb-10">
-                <h3 className="font-bold text-xl mb-2">Cuisine :</h3>
-                <p>Indienne, pakistanaise</p>
-              </div>
-              <div className="flex-col">
-                <h3 className="font-bold text-xl mb-2">Moyens de paiement :</h3>
-                <p>
-                  Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact,
-                  Chèque vacances, Tickets restaurant
-                </p>
-              </div>
+              {content?.cuisine && (
+                <div className="flex-col mb-10">
+                  <h3 className="font-bold text-xl mb-2">Cuisine :</h3>
+                  <p>{content.cuisine}</p>
+                </div>
+              )}
+              {content?.paiement && (
+                <div className="flex-col">
+                  <h3 className="font-bold text-xl mb-2">
+                    Moyens de paiement :
+                  </h3>
+                  <p>
+                    Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans
+                    Contact, Chèque vacances, Tickets restaurant
+                  </p>
+                </div>
+              )}
             </div>
-            <div className="flex-col w-full md:w-1/2 p-10 border border-primary">
-              <h3 className="font-bold text-xl mb-6">Horaires :</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <span>Mardi - Mercredi midi</span>
-                <span>Fermé</span>
-                <span>Mercredi soir - lundi</span>
-                <span>12h00-14h30 19h00-22h30</span>
+            {content?.horaire1 && (
+              <div className="flex-col w-full md:w-1/2 p-10 border border-primary">
+                <h3 className="font-bold text-xl mb-6">Horaires :</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <span>{content?.horaire1}</span>
+                  <span>{content?.horaire1state}</span>
+                  <span>{content?.horaire2}</span>
+                  <span>{content?.horaire2state}</span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -132,32 +142,36 @@ export default async function Home() {
           </div>
           <div className="w-full">
             <div className="flex flex-col md:flex-row lg:justify-end justify-around items-center mb-10">
-              <a
-                href="#contact"
-                className="relative p-3 pl-8 ml-0 md:ml-8 mb-6 md:mb-0 bg-white text-black shadow-lg rounded-lg flex items-center hover:text-gray-900"
-              >
-                <Image
-                  src="/img/mail.svg"
-                  alt="mail icon"
-                  width={32}
-                  height={32}
-                  className="absolute -left-4 shadow-lg mr-2"
-                />
-                palaisduraja@gmail.com
-              </a>
-              <a
-                href="#contact"
-                className="relative p-3 pl-8 ml-0 md:ml-8 bg-white text-black shadow-lg rounded-lg flex items-center hover:text-gray-900"
-              >
-                <Image
-                  src="/img/phone.svg"
-                  alt="phone icon"
-                  width={32}
-                  height={32}
-                  className="absolute -left-4 shadow-lg mr-2"
-                />
-                Reserver
-              </a>
+              {content?.mail && (
+                <a
+                  href={"mailto:" + content.mail}
+                  className="relative p-3 pl-8 ml-0 md:ml-8 mb-6 md:mb-0 bg-white text-black shadow-lg rounded-lg flex items-center hover:text-gray-900"
+                >
+                  <Image
+                    src="/img/mail.svg"
+                    alt="mail icon"
+                    width={32}
+                    height={32}
+                    className="absolute -left-4 shadow-lg mr-2"
+                  />
+                  {content?.mail}
+                </a>
+              )}
+              {content?.tel && (
+                <a
+                  href={"tel:" + content.tel}
+                  className="relative p-3 pl-8 ml-0 md:ml-8 bg-white text-black shadow-lg rounded-lg flex items-center hover:text-gray-900"
+                >
+                  <Image
+                    src="/img/phone.svg"
+                    alt="phone icon"
+                    width={32}
+                    height={32}
+                    className="absolute -left-4 shadow-lg mr-2"
+                  />
+                  Reserver
+                </a>
+              )}
             </div>
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5401.635074206616!2d0.689015977602613!3d47.395992871171224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcd5b248f1490b%3A0xd4bc494e1971897e!2sLe%20Palais%20du%20Rajah%20(Rajasthan)!5e0!3m2!1sfr!2sfr!4v1738936968444!5m2!1sfr!2sfr"

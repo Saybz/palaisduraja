@@ -14,9 +14,22 @@ datasource db {
 }
 
 model Content {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  image       String?  // Chemin de l'image (optionnel)
-  pdf         String?  // Chemin du PDF (optionnel)
+  id          Int     @id @default(autoincrement())
+  banner      String?
+  title       String?
+  histoire    String?
+  histoireImg String?
+  menuDesc    String?
+  menuImg     String?
+  menuPdf     String?
+
+  cuisine       String?
+  paiement      String?
+  horaire1      String?
+  horaire1state String?
+  horaire2      String?
+  horaire2state String?
+
+  mail String?
+  tel  String?
 }

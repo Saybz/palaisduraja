@@ -13,7 +13,23 @@ export async function GET() {
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const { title, description, image, pdf } = body;
+  const {
+    banner,
+    title,
+    histoire,
+    histoireImg,
+    menuDesc,
+    menuImg,
+    menuPdf,
+    cuisine,
+    paiement,
+    horaire1,
+    horaire1state,
+    horaire2,
+    horaire2state,
+    mail,
+    tel,
+  } = body;
 
   // Vérifier si le contenu existe
   const existingContent = await prisma.content.findFirst();
@@ -21,13 +37,45 @@ export async function POST(req: Request) {
     // Mise à jour
     const updatedContent = await prisma.content.update({
       where: { id: existingContent.id },
-      data: { title, description, image, pdf },
+      data: {
+        banner,
+        title,
+        histoire,
+        histoireImg,
+        menuDesc,
+        menuImg,
+        menuPdf,
+        cuisine,
+        paiement,
+        horaire1,
+        horaire1state,
+        horaire2,
+        horaire2state,
+        mail,
+        tel,
+      },
     });
     return NextResponse.json(updatedContent);
   } else {
     // Création
     const newContent = await prisma.content.create({
-      data: { title, description, image, pdf },
+      data: {
+        banner,
+        title,
+        histoire,
+        histoireImg,
+        menuDesc,
+        menuImg,
+        menuPdf,
+        cuisine,
+        paiement,
+        horaire1,
+        horaire1state,
+        horaire2,
+        horaire2state,
+        mail,
+        tel,
+      },
     });
     return NextResponse.json(newContent);
   }
