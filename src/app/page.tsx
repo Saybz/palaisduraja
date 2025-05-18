@@ -1,21 +1,54 @@
 import { prisma } from "@/utils/db";
-// import { div } from "framer-motion/client";
 import Image from "next/image";
+// import { motion, useScroll, useTransform } from "framer-motion";
+
+interface Content {
+  banner?: string | null;
+  histoireImg?: string | null;
+  histoire?: string | null;
+  title?: string | null;
+  menuImg?: string | null;
+  menuPdf?: string | null;
+  menuDesc?: string | null;
+  cuisine?: string | null;
+  paiement?: string | null;
+  horaire1?: string | null;
+  horaire1state?: string | null;
+  horaire2?: string | null;
+  horaire2state?: string | null;
+  mail?: string | null;
+  tel?: string | null;
+}
 
 export default async function Home() {
-  const content = await prisma.content.findFirst();
+const content: Content | null = await prisma.content.findFirst();
+
+// const [offsetY, setOffsetY] = useState(0);
+
+// const handleScroll = () => {
+//   setOffsetY(window.scrollY);
+// };
+
+// useEffect(() => {
+//   window.addEventListener("scroll", handleScroll);
+//   return () => window.removeEventListener("scroll", handleScroll);
+// }, []);
+
+// const { scrollY } = useScroll();
+// const y = useTransform(scrollY, [0, 1000], [0, 200]);
 
   return (
-    <div className="min-h-screen w-screen px-6 md:px-10 font-body bg-gray-50 text-dark flex flex-col mt-18 items-center">
+    <div className="min-h-screen w-screen px-6 md:px-10 font-body flex flex-col mt-18 items-center">
       {content?.banner && (
-        <div className="relative w-screen max-h-screen mb-20 md:mb-30 lg:mb-40">
+        <div className="relative min-h-[calc(100vh-80px)] w-screen mb-20 md:mb-30 lg:mb-40">
           <Image
             src={content.banner}
             alt="Image"
             layout="responsive"
-            width={2000}
-            height={900}
-            className="w-screen object-cover"
+            fill
+            sizes="100vw" 
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            priority
           />
         </div>
       )}
@@ -23,7 +56,7 @@ export default async function Home() {
         id="about"
         className="flex flex-col w-full max-w-main mb-20 md:mb-30 lg:mb-40"
       >
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-16 md:mb-20">
+        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-6xl underline-offset-2 mb-16 md:mb-20">
           Restaurant Familial
         </h2>
         <div className="flex flex-col lg:flex-row ">
@@ -40,9 +73,9 @@ export default async function Home() {
             </div>
           )}
           <div className="ml-0 lg:ml-10 mt-10 lg:mt-0">
-            <h2 className="text-4xl font-bold font-head mb-4">
+            <h3 className="text-xl font-bold mb-4">
               {content?.title || "Titre par défaut"}
-            </h2>
+            </h3>
             <p className="text-lg text-gray-600">
               {content?.histoire || "Description par défaut"}
             </p>
@@ -50,7 +83,7 @@ export default async function Home() {
         </div>
       </section>
       <section id="menu" className="max-w-main w-full mb-20 md:mb-30 lg:mb-40">
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-16 md:mb-20">
+        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-6xl underline-offset-2 mb-16 md:mb-20">
           Carte & Menus
         </h2>
         <div className="relative w-full justify-center items-center">
@@ -83,7 +116,7 @@ export default async function Home() {
         className="w-screen py-20 md:py-30 lg:py-40 bg-slate-200"
       >
         <div className="max-w-main w-full mx-auto">
-          <h2 className="mx-6 md:mx-10 relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-16 md:mb-20">
+          <h2 className="mx-6 md:mx-10 relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-6xl underline-offset-2 mb-16 md:mb-20">
             Infos pratiques
           </h2>
           <div className="w-full flex flex-col md:flex-row justify-between mb-8 px-6 md:px-10">
@@ -124,12 +157,12 @@ export default async function Home() {
         id="contact"
         className="max-w-main w-full my-20 md:mb-30 lg:mb-40"
       >
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-3xl underline-offset-2 mb-16 md:mb-20">
+        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-6xl underline-offset-2 mb-16 md:mb-20">
           Contact
         </h2>
         <div className="flex flex-col items-center lg:flex-row">
           <div className="w-full flex flex-col flex-1 p-6 md:p-16 bg-white rounded shadow-lg mb-10 lg:mb-0 h-full lg:max-w-[500px]">
-            <h3 className="font-bold font-head mb-8">Adresse :</h3>
+            <h3 className="font-bold text-xl mb-8">Adresse :</h3>
             <p className="py-5 mb-8 px-8 rounded whitespace-nowrap bg-primary text-white">
               113 rue Colbert, 37000 Tours
             </p>

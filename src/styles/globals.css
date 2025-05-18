@@ -4,11 +4,13 @@
 
 :root {
   --color-primary: #75192E;
-  --color-secondary: #f5c378;
+  --color-secondary: #FFF2E0;
   --color-dark: #1e2225;
   --color-light: #f5efe6;
-  --font-head: "Geist Mono", serif;
-  --font-body: "Geist", serif;
+  --font-head: "Tangerine", serif;
+  --font-body: "Karma", sans-serif;
+  --background: #FFF2E0;
+  --foreground: #1e2225;
 }
 
 .font-head {
@@ -21,8 +23,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #FFF2E0;
+    --foreground: #1e2225;
   }
 }
 
