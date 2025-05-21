@@ -32,4 +32,24 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+@layer utilities {
+  .before-max-w-right-fill::before {
+    left: 100%;
+    max-width: 9999px;
+  }
+
+  .before-right-fill::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: calc(100vw - 66.6667%); /* largeur restante si la div fait 2/3 */
+    background-color: theme('colors.primary');
+    border: 8px;
+    border-color: theme('colors.primary');
+    z-index: -1;
+  }
 }

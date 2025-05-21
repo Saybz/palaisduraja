@@ -21,65 +21,75 @@ interface Content {
 }
 
 export default async function Home() {
-const content: Content | null = await prisma.content.findFirst();
+  const content: Content | null = await prisma.content.findFirst();
 
-// const [offsetY, setOffsetY] = useState(0);
+  // const [offsetY, setOffsetY] = useState(0);
 
-// const handleScroll = () => {
-//   setOffsetY(window.scrollY);
-// };
+  // const handleScroll = () => {
+  //   setOffsetY(window.scrollY);
+  // };
 
-// useEffect(() => {
-//   window.addEventListener("scroll", handleScroll);
-//   return () => window.removeEventListener("scroll", handleScroll);
-// }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
-// const { scrollY } = useScroll();
-// const y = useTransform(scrollY, [0, 1000], [0, 200]);
+  // const { scrollY } = useScroll();
+  // const y = useTransform(scrollY, [0, 1000], [0, 200]);
 
   return (
     <div className="min-h-screen w-screen px-6 md:px-10 font-body flex flex-col mt-18 items-center">
-      {content?.banner && (
-        <div className="relative min-h-[calc(100vh-80px)] w-screen mb-20 md:mb-30 lg:mb-40">
-          <Image
-            src={content.banner}
-            alt="Image"
-            layout="responsive"
-            fill
-            sizes="100vw" 
-            style={{ objectFit: "cover", objectPosition: "center" }}
-            priority
-          />
+      <section
+        id=""
+        className="flex flex-col gap-10 items-center lg:flex-row w-full h-[calc(100vh-80px)] max-w-main mb-20 md:mb-30 lg:mb-0 lg:py-10"
+      >
+        <div className="ml-0 lg:w-1/2 lg:ml-10 mt-10 lg:mt-0">
+          <h1 className="relative font-body text-primary font-bold text-7xl underline-offset-2 mb-2 md:mb-4">
+            Palais du Raja
+          </h1>
+          <p className="text-lg text-gray-600">
+            Restaurant traditionnel indien à Tours
+          </p>
+          <p className="text-lg text-gray-600">
+            Ouvert du mercredi soir au lundi
+          </p>
         </div>
-      )}
+        {content?.banner && (
+          <div className="relative aspect-square w-full lg:w-1/2 before:left-full bg-primary rounded-l-full shadow-lg before-right-fill">
+            <Image
+              src={content.banner}
+              alt="Image"
+              fill
+              sizes="100vw"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              className="rounded-full shadow-lg"
+            />
+          </div>
+        )}
+      </section>
       <section
         id="about"
-        className="flex flex-col w-full max-w-main mb-20 md:mb-30 lg:mb-40"
+        className="flex flex-col gap-10 items-center lg:flex-row h-screen w-full max-w-main mb-20 md:mb-30 lg:mb-0 lg:py-10 "
       >
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-6xl underline-offset-2 mb-16 md:mb-20">
-          Restaurant Familial
-        </h2>
-        <div className="flex flex-col lg:flex-row ">
-          {content?.histoireImg && (
-            <div className="w-full lg:w-1/2">
-              <Image
-                src={content.histoireImg}
-                alt="Image"
-                layout="responsive"
-                width={700}
-                height={500}
-                className="rounded-lg shadow-lg text-primary "
-              />
-            </div>
-          )}
-          <div className="ml-0 lg:ml-10 mt-10 lg:mt-0">
-            <h3 className="text-xl font-bold mb-4">
-              {content?.title || "Titre par défaut"}
-            </h3>
-            <p className="text-lg text-gray-600">
-              {content?.histoire || "Description par défaut"}
-            </p>
+        {content?.histoireImg && (
+          <div className="relative aspect-square w-full lg:w-1/2 rounded-r-full shadow-lg p-3 before:right-full bg-primary before-right-fill">
+            <Image
+              src={content.histoireImg}
+              alt="Image"
+              fill
+              sizes="100vw"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              className="rounded-full shadow-lg"
+            />
           </div>
+        )}
+        <div className="ml-0 lg:w-1/2 lg:ml-10 mt-10 lg:px-10 lg:mt-0">
+          <h2 className="relative font-head font-light text-6xl text-primary underline-offset-2 mb-2 md:mb-4">
+            {content?.title || "Histoire du restaurant"}
+          </h2>
+          <p className="text-lg text-gray-600">
+            {content?.histoire || "Description par défaut"}
+          </p>
         </div>
       </section>
       <section id="menu" className="max-w-main w-full mb-20 md:mb-30 lg:mb-40">
@@ -91,10 +101,10 @@ const content: Content | null = await prisma.content.findFirst();
             <Image
               src={content.menuImg}
               alt="Image"
-              layout="responsive"
-              width={1440}
-              height={720}
-              className="relative rounded-lg shadow-lg"
+              fill
+              sizes="100vw"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              className="rounded-full shadow-lg"
             />
           )}
 
