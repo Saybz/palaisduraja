@@ -35,6 +35,11 @@ body {
   overflow-x: hidden;
 }
 
+section {
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
 @layer utilities {
   .before-max-w-right-fill::before {
     left: 100%;

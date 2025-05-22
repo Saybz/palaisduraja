@@ -1,5 +1,7 @@
 import { prisma } from "@/utils/db";
 import Image from "next/image";
+import CtaBtn from "@/components/CtaButton";
+import ScrollToTopButton from "@/components/ScrollToTopBtn";
 // import { motion, useScroll, useTransform } from "framer-motion";
 
 interface Content {
@@ -38,53 +40,57 @@ export default async function Home() {
   // const y = useTransform(scrollY, [0, 1000], [0, 200]);
 
   return (
-    <div className="min-h-screen w-screen px-6 md:px-10 font-body flex flex-col mt-18 items-center">
-      <section
-        id=""
-        className="flex flex-col gap-10 items-center lg:flex-row w-full h-[calc(100vh-80px)] max-w-main mb-20 md:mb-30 lg:mb-0 lg:py-10"
-      >
-        <div className="ml-0 lg:w-1/2 lg:ml-10 mt-10 lg:mt-0">
-          <h1 className="relative font-body text-primary font-bold text-7xl underline-offset-2 mb-2 md:mb-4">
-            Palais du Raja
-          </h1>
-          <p className="text-lg text-gray-600">
-            Restaurant traditionnel indien à Tours
-          </p>
-          <p className="text-lg text-gray-600">
-            Ouvert du mercredi soir au lundi
-          </p>
-        </div>
+    <div className="z-0 min-h-screen w-screen  font-body flex flex-col mt-18 items-center">
+      <section id="" className="relative w-full ">
         {content?.banner && (
-          <div className="relative aspect-square w-full lg:w-1/2 before:left-full bg-primary rounded-l-full shadow-lg before-right-fill">
+          <div className="h-screen w-full">
             <Image
               src={content.banner}
               alt="Image"
               fill
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
-              className="rounded-full shadow-lg"
+              className=""
             />
           </div>
         )}
+        <div className="absolute inset-0 bg-black/40 z-10" />
+        <div className="absolute inset-0 flex flex-col text-secondary items-center justify-center z-20 px-4 text-center">
+          <h1 className="relative font-body font-bold text-5xl md:text-7xl mb-2 md:mb-4">
+            Palais du Raja
+          </h1>
+          <p className="text-lg mb-2 ">
+            Restaurant traditionnel indien à Tours
+          </p>
+          <p className="text-lg mb-6 ">
+            Ouvert du <span className="font-bold">mercredi soir</span> au
+            <span className="font-bold"> lundi</span>
+          </p>
+          <CtaBtn
+            type="tel"
+            value={content?.tel ? content.tel : "0247648155"}
+            label="Réserver"
+          />
+        </div>
       </section>
       <section
         id="about"
-        className="flex flex-col gap-10 items-center lg:flex-row h-screen w-full max-w-main mb-20 md:mb-30 lg:mb-0 lg:py-10 "
+        className="relative flex flex-col-reverse gap-10 items-center lg:flex-row w-full max-w-main py-10 md:py-20 lg:py-30 lg:pt-40 "
       >
         {content?.histoireImg && (
-          <div className="relative aspect-square w-full lg:w-1/2 rounded-r-full shadow-lg p-3 before:right-full bg-primary before-right-fill">
+          <div className="relative h-[20vh] md:h-[30vh] w-full lg:w-1/2 before:left-full rounded-3xl shadow-lg">
             <Image
               src={content.histoireImg}
               alt="Image"
               fill
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
-              className="rounded-full shadow-lg"
+              className="rounded-3xl"
             />
           </div>
         )}
         <div className="ml-0 lg:w-1/2 lg:ml-10 mt-10 lg:px-10 lg:mt-0">
-          <h2 className="relative font-head font-light text-6xl text-primary underline-offset-2 mb-2 md:mb-4">
+          <h2 className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-1 md:mb-4">
             {content?.title || "Histoire du restaurant"}
           </h2>
           <p className="text-lg text-gray-600">
@@ -92,11 +98,15 @@ export default async function Home() {
           </p>
         </div>
       </section>
-      <section id="menu" className="max-w-main w-full mb-20 md:mb-30 lg:mb-40">
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-6xl underline-offset-2 mb-16 md:mb-20">
+      <section
+        id="menu"
+        className="relative max-w-main w-full py-10 md:py-20 lg:py-30"
+      >
+        <h2 className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
           Carte & Menus
         </h2>
-        <div className="relative w-full justify-center items-center">
+        <div className="relative h-[20vh] md:h-[50vh] w-full before:left-full rounded-3xl shadow-lg">
+          <div className="absolute inset-0 bg-black/20 z-10 rounded-3xl" />
           {content?.menuImg && (
             <Image
               src={content.menuImg}
@@ -104,16 +114,16 @@ export default async function Home() {
               fill
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
-              className="rounded-full shadow-lg"
+              className="rounded-3xl"
             />
           )}
 
           {content?.menuPdf && (
-            <div className="absolute top-0 right-0 w-full h-full flex justify-center items-center">
+            <div className="absolute z-20 top-0 right-0 w-full h-full flex justify-center items-center">
               <a
                 href={content.menuPdf}
                 target="_blank"
-                className="p-4 bg-primary text-white shadow-lg rounded-lg"
+                className="p-4 bg-primary text-white shadow-lg rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-all"
               >
                 {content.menuDesc || "Télécharger le menu"}
               </a>
@@ -121,15 +131,12 @@ export default async function Home() {
           )}
         </div>
       </section>
-      <section
-        id="infos"
-        className="w-screen py-20 md:py-30 lg:py-40 bg-slate-200"
-      >
+      <section id="infos" className=" w-full md:px-10 py-10 md:py-20 lg:py-30">
         <div className="max-w-main w-full mx-auto">
-          <h2 className="mx-6 md:mx-10 relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-6xl underline-offset-2 mb-16 md:mb-20">
+          <h2 className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
             Infos pratiques
           </h2>
-          <div className="w-full flex flex-col md:flex-row justify-between mb-8 px-6 md:px-10">
+          <div className="w-full flex flex-col md:flex-row justify-between">
             <div className="w-full md:w-1/2 flex-col pr-0 md:pr-10 mb-10 md:mb-0">
               {content?.cuisine && (
                 <div className="flex-col mb-10">
@@ -150,7 +157,7 @@ export default async function Home() {
               )}
             </div>
             {content?.horaire1 && (
-              <div className="flex-col w-full md:w-1/2 p-10 border border-primary">
+              <div className="flex-col w-full md:w-1/2 p-3 md:p-10 border border-primary">
                 <h3 className="font-bold text-xl mb-6">Horaires :</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <span>{content?.horaire1}</span>
@@ -163,71 +170,43 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <section
-        id="contact"
-        className="max-w-main w-full my-20 md:mb-30 lg:mb-40"
-      >
-        <h2 className="relative before:absolute before:-bottom-4 before:left-0 before:rounded-sm before:w-20 before:h-[2px] before:bg-primary font-head font-light text-6xl underline-offset-2 mb-16 md:mb-20">
-          Contact
-        </h2>
-        <div className="flex flex-col items-center lg:flex-row">
-          <div className="w-full flex flex-col flex-1 p-6 md:p-16 bg-white rounded shadow-lg mb-10 lg:mb-0 h-full lg:max-w-[500px]">
-            <h3 className="font-bold text-xl mb-8">Adresse :</h3>
-            <p className="py-5 mb-8 px-8 rounded whitespace-nowrap bg-primary text-white">
-              113 rue Colbert, 37000 Tours
-            </p>
-            <ul className="pl-3 border-l flex-col border-primary">
-              <li className="mb-6">A 8 min de la gare</li>
-              <li className="mb-6">200m de la Loire</li>
-              <li className="mb-6">300m de la cathédrale Saint gatien</li>
-              <li className="mb-6">Débouche sur la rue Nationale</li>
-            </ul>
-          </div>
-          <div className="w-full">
-            <div className="flex flex-col md:flex-row lg:justify-end justify-around items-center mb-10">
+      <section id="contact" className="w-full p-0">
+        <div className="max-w-main w-full px-5 pt-10 md:pt-20 lg:pt-30 mx-auto">
+          <h2 className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10 ">
+            Contact
+          </h2>
+          <div className="flex flex-col gap-4 items-start md:items-center lg:flex-row-reverse justify-between pl-4">
+            <div className="flex flex-col gap-4 md:flex-row lg:justify-end justify-around items-start md:items-center ">
               {content?.mail && (
-                <a
-                  href={"mailto:" + content.mail}
-                  className="relative p-3 pl-8 ml-0 md:ml-8 mb-6 md:mb-0 bg-white text-black shadow-lg rounded-lg flex items-center hover:text-gray-900"
-                >
-                  <Image
-                    src="/img/mail.svg"
-                    alt="mail icon"
-                    width={32}
-                    height={32}
-                    className="absolute -left-4 shadow-lg mr-2"
-                  />
-                  {content?.mail}
-                </a>
+                <CtaBtn
+                  type="email"
+                  value={content.mail}
+                  label={content.mail}
+                  className="md:mr-10"
+                />
               )}
               {content?.tel && (
-                <a
-                  href={"tel:" + content.tel}
-                  className="relative p-3 pl-8 ml-0 md:ml-8 bg-white text-black shadow-lg rounded-lg flex items-center hover:text-gray-900"
-                >
-                  <Image
-                    src="/img/phone.svg"
-                    alt="phone icon"
-                    width={32}
-                    height={32}
-                    className="absolute -left-4 shadow-lg mr-2"
-                  />
-                  Reserver
-                </a>
+                <CtaBtn type="tel" value={content.tel} label="Réserver" />
               )}
             </div>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5401.635074206616!2d0.689015977602613!3d47.395992871171224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcd5b248f1490b%3A0xd4bc494e1971897e!2sLe%20Palais%20du%20Rajah%20(Rajasthan)!5e0!3m2!1sfr!2sfr!4v1738936968444!5m2!1sfr!2sfr"
-              width="600"
-              height="400"
-              style={{ border: 0 }}
-              title="Google Maps location of the restaurant"
-              loading="lazy"
-              className="w-full h-[450px] rounded-lg shadow-lg"
-            ></iframe>
+            <CtaBtn
+              type="location"
+              value="113 rue Colbert, 37000 Tours"
+              label="113 rue Colbert, 37000 Tours"
+            />
           </div>
         </div>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5401.635074206616!2d0.689015977602613!3d47.395992871171224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcd5b248f1490b%3A0xd4bc494e1971897e!2sLe%20Palais%20du%20Rajah%20(Rajasthan)!5e0!3m2!1sfr!2sfr!4v1738936968444!5m2!1sfr!2sfr"
+          width="600"
+          height="400"
+          style={{ border: 0 }}
+          title="Google Maps location of the restaurant"
+          loading="lazy"
+          className="w-full h-[450px] rounded-lg shadow-lg mt-10"
+        ></iframe>
       </section>
+      <ScrollToTopButton />
     </div>
   );
 }

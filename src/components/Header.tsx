@@ -1,27 +1,40 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import LogOutBtn from "@/components/LogOutBtn";
 const Header: React.FC = () => {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/admin");
   const isLogin = pathname.startsWith("/admin/login");
+  const [isScrolled, setIsScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
-    <header className="z-10 sticky w-screen top-0 left-0 bg-primary shadow-md  font-body text-white py-2 md:py-6">
-      <div className="container h-full max-w-main mx-auto px-4 md:px-10 lg:px-4 flex flex-col md:flex-row justify-between items-center">
+    <header
+      className={`z-50 fixed w-screen top-0 left-0 font-body text-secondary py-2 md:py-6 transition-all duration-300 ${
+        isScrolled ? "shadow-md bg-primary" : ""
+      }`}
+    >
+      <div className="container h-full max-w-main mx-auto px-4 md:px-10 lg:px-0 flex flex-col md:flex-row justify-between items-center">
         <div className="text-xl font-bold mb-2 md:mb-0">Palais du Raja</div>
         {!isAdminPage && !isLogin && (
-          <nav className="flex w-full md:w-auto items-center justify-around">
-            <a href="#about" className="mx-2 hover:text-gray-900">
+          <nav className="flex w-full gap-4 md:w-auto items-center justify-around font-semibold">
+            <a href="#about" className="hover:text-white">
               Histoire
             </a>
-            <a href="#menu" className="mx-2 hover:text-gray-900">
+            <a href="#menu" className="hover:text-white">
               Menu
             </a>
-            <a href="#infos" className="mx-2 hover:text-gray-900">
+            <a href="#infos" className="hover:text-white">
               Infos
             </a>
-            <a href="#contact" className="mx-2 hover:text-gray-900">
+            <a href="#contact" className="hover:text-white">
               Contact
             </a>
           </nav>
