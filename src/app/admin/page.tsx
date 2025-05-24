@@ -24,6 +24,7 @@ export default function AdminPage() {
     mail: "",
     tel: "",
   });
+
   const [newHistoireImage, setNewHistoireImage] = useState<File | null>(null);
   const [newBannerImage, setNewBannerImage] = useState<File | null>(null);
   const [newMenuImage, setNewMenuImage] = useState<File | null>(null);
@@ -33,45 +34,37 @@ export default function AdminPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Récupérer le contenu existant
     const fetchContent = async () => {
       const res = await fetch("/admin/api/content");
       const data = await res.json();
-      setContent(
-        data || {
-          banner: "",
-          title: "",
-          histoire: "",
-          histoireImg: "",
-          menuDesc: "",
-          menuImg: "",
-          menuPdf: "",
-          cuisine: "",
-          paiement: "",
-          horaire1: "",
-          horaire1state: "",
-          horaire2: "",
-          horaire2state: "",
-          mail: "",
-          tel: "",
-        }
-      );
+      setContent(data || content);
     };
     fetchContent();
   }, []);
 
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, router]);
+
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   const handleFileUpload = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-
     const res = await fetch("/admin/api/upload", {
       method: "POST",
       body: formData,
     });
-
     if (res.ok) {
       const data = await res.json();
-      return data.fileUrl; // Retourne le chemin du fichier
+      return data.fileUrl;
     }
     return null;
   };
@@ -82,38 +75,23 @@ export default function AdminPage() {
     let uploadedMenuImage = content.menuImg;
     let uploadedPdf = content.menuPdf;
 
-    if (newBannerImage) {
+    if (newBannerImage)
       uploadedBannerImage = await handleFileUpload(newBannerImage);
-    }
-    if (newHistoireImage) {
+    if (newHistoireImage)
       uploadedHistoireImage = await handleFileUpload(newHistoireImage);
-    }
-    if (newMenuImage) {
-      uploadedMenuImage = await handleFileUpload(newMenuImage);
-    }
-    if (newPdf) {
-      uploadedPdf = await handleFileUpload(newPdf);
-    }
+    if (newMenuImage) uploadedMenuImage = await handleFileUpload(newMenuImage);
+    if (newPdf) uploadedPdf = await handleFileUpload(newPdf);
 
     // Sauvegarde du contenu
     const res = await fetch("/admin/api/content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        ...content,
         banner: uploadedBannerImage,
-        title: content.title,
-        histoire: content.histoire,
         histoireImg: uploadedHistoireImage,
         menuImg: uploadedMenuImage,
         menuPdf: uploadedPdf,
-        cuisine: content.cuisine,
-        paiement: content.paiement,
-        horaire1: content.horaire1,
-        horaire1state: content.horaire1state,
-        horaire2: content.horaire2,
-        horaire2state: content.horaire2state,
-        mail: content.mail,
-        tel: content.tel,
       }),
     });
 
@@ -129,158 +107,176 @@ export default function AdminPage() {
     }
   };
 
-  useEffect(() => {
-    if (!session) {
-      router.push("/login");
-    }
-  }, [session, router]); // Dépendance de la session
-
   return (
-    <div className="p-8 bg-gray-100 min-h-screen text-dark flex justify-center items-center">
-      <div className="w-full max-w-lg">
-        <h1 className="text-2xl font-bold mb-4">Interface Admin</h1>
-        {/* Affichage du message de succès */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 pt-[100px] pb-[80px] py-12 px-6">
+      <div className="relative max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md border border-gray-200">
+        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
+          Interface d’administration
+        </h1>
+
         {successMessage && (
-          <div
-            className={`p-4 mb-4 text-white rounded-md ${
-              successMessage.includes("succès") ? "bg-green-500" : "bg-red-500"
-            }`}
-          >
-            {successMessage}
+          <div className="fixed bottom-[77px] left-0 w-full flex justify-center z-50">
+            <div
+              className={`w-fit transition-all duration-300 ease-in-out p-4 text-sm font-medium rounded-lg text-white ${
+                successMessage.includes("succès")
+                  ? "bg-green-500"
+                  : "bg-red-500"
+              }`}
+            >
+              {successMessage}
+            </div>
           </div>
         )}
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Image bannière</label>
-            {content.banner && (
-              <div className="mb-2">
-                <Image
-                  src={content.banner}
-                  alt="Image bannière actuelle"
-                  width={700}
-                  height={475}
-                  className="rounded-md"
+
+        <div className="grid grid-cols-1 gap-6">
+          {[
+            {
+              label: "Titre Histoire",
+              type: "text",
+              value: content.title,
+              onChange: (v: string) => setContent({ ...content, title: v }),
+            },
+            {
+              label: "Description Histoire",
+              type: "textarea",
+              value: content.histoire,
+              onChange: (v: string) => setContent({ ...content, histoire: v }),
+            },
+            {
+              label: "Cuisine",
+              type: "text",
+              value: content.cuisine,
+              onChange: (v: string) => setContent({ ...content, cuisine: v }),
+            },
+            {
+              label: "Paiement",
+              type: "text",
+              value: content.paiement,
+              onChange: (v: string) => setContent({ ...content, paiement: v }),
+            },
+            {
+              label: "Horaire 1",
+              type: "text",
+              value: content.horaire1,
+              onChange: (v: string) => setContent({ ...content, horaire1: v }),
+            },
+            {
+              label: "Horaire 1 Etat",
+              type: "text",
+              value: content.horaire1state,
+              onChange: (v: string) =>
+                setContent({ ...content, horaire1state: v }),
+            },
+            {
+              label: "Horaire 2",
+              type: "text",
+              value: content.horaire2,
+              onChange: (v: string) => setContent({ ...content, horaire2: v }),
+            },
+            {
+              label: "Horaire 2 Etat",
+              type: "text",
+              value: content.horaire2state,
+              onChange: (v: string) =>
+                setContent({ ...content, horaire2state: v }),
+            },
+            {
+              label: "Adresse Mail",
+              type: "text",
+              value: content.mail,
+              onChange: (v: string) => setContent({ ...content, mail: v }),
+            },
+            {
+              label: "Numéro Réservation",
+              type: "text",
+              value: content.tel,
+              onChange: (v: string) => setContent({ ...content, tel: v }),
+            },
+          ].map(({ label, type, value, onChange }, idx) => (
+            <div key={idx}>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                {label}
+              </label>
+              {type === "textarea" ? (
+                <textarea
+                  value={value}
+                  rows={5}
+                  onChange={(e) => onChange(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
                 />
-              </div>
-            )}
-            <input
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              onChange={(e) => setNewBannerImage(e.target.files?.[0] || null)}
-              className="mt-2 p-2 border-gray-300 rounded-md shadow-sm max-w-full"
-            />
-            {newBannerImage && (
-              <div className="mt-2">
-                <p>Prévisualisation de l&apos;image bannière :</p>
+              ) : (
+                <input
+                  type={type}
+                  value={value}
+                  onChange={(e) => onChange(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                />
+              )}
+            </div>
+          ))}
+
+          {/* Fichiers */}
+          {[
+            {
+              label: "Image Bannière",
+              file: newBannerImage,
+              current: content.banner,
+              setFile: setNewBannerImage,
+            },
+            {
+              label: "Image Histoire",
+              file: newHistoireImage,
+              current: content.histoireImg,
+              setFile: setNewHistoireImage,
+            },
+            {
+              label: "Image Menu",
+              file: newMenuImage,
+              current: content.menuImg,
+              setFile: setNewMenuImage,
+            },
+          ].map(({ label, file, current, setFile }, idx) => (
+            <div key={idx}>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                {label}
+              </label>
+              {current && (
                 <Image
-                  src={URL.createObjectURL(newBannerImage)}
-                  alt="Prévisualisation bannière"
+                  src={current}
+                  alt={label}
+                  width={600}
+                  height={400}
+                  className="rounded-md mb-2"
+                />
+              )}
+              <input
+                type="file"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
+              />
+              {file && (
+                <Image
+                  src={URL.createObjectURL(file)}
+                  alt={`Prévisualisation ${label}`}
                   width={100}
                   height={64}
-                  className="rounded-md"
+                  className="mt-2 rounded-md"
                 />
-              </div>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Titre histoire</label>
-            <input
-              type="text"
-              value={content.title}
-              onChange={(e) =>
-                setContent({ ...content, title: e.target.value })
-              }
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
+              )}
+            </div>
+          ))}
 
+          {/* PDF */}
           <div>
-            <label className="block text-sm font-medium">
-              Description histoire
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Menu PDF
             </label>
-            <textarea
-              value={content.histoire}
-              onChange={(e) =>
-                setContent({ ...content, histoire: e.target.value })
-              }
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Image histoire</label>
-            {content.histoireImg && (
-              <div className="mb-2">
-                <Image
-                  src={content.histoireImg}
-                  alt="Image histoire actuelle"
-                  width={700}
-                  height={475}
-                  className="rounded-md"
-                />
-              </div>
-            )}
-            <input
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              onChange={(e) => setNewHistoireImage(e.target.files?.[0] || null)}
-              className="mt-2 p-2 border-gray-300 rounded-md shadow-sm max-w-full"
-            />
-            {newHistoireImage && (
-              <div className="mt-2">
-                <p>Prévisualisation de l&apos;image histoire :</p>
-                <Image
-                  src={URL.createObjectURL(newHistoireImage)}
-                  alt="Prévisualisation image histoire"
-                  width={100}
-                  height={64}
-                  className="rounded-md"
-                />
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Image Menu</label>
-            {content.menuImg && (
-              <div className="mb-2">
-                <Image
-                  src={content.menuImg}
-                  alt="Image Menu actuelle"
-                  width={700}
-                  height={475}
-                  className="rounded-md"
-                />
-              </div>
-            )}
-            <input
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              onChange={(e) => setNewMenuImage(e.target.files?.[0] || null)}
-              className="mt-2 p-2 border-gray-300 rounded-md shadow-sm max-w-full"
-            />
-            {newMenuImage && (
-              <div className="mt-2">
-                <p>Prévisualisation de l&apos;image histoire :</p>
-                <Image
-                  src={URL.createObjectURL(newMenuImage)}
-                  alt="Prévisualisation image histoire"
-                  width={100}
-                  height={64}
-                  className="rounded-md"
-                />
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Menu pdf</label>
             {content.menuPdf && (
               <a
                 href={content.menuPdf}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600"
+                className="text-blue-600 block mb-2"
               >
                 Voir le PDF actuel
               </a>
@@ -289,123 +285,28 @@ export default function AdminPage() {
               type="file"
               accept=".pdf"
               onChange={(e) => setNewPdf(e.target.files?.[0] || null)}
-              className="mt-2 p-2 border-gray-300 rounded-md shadow-sm max-w-full"
+              className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
             />
             {newPdf && (
-              <div className="mt-2">
-                <p>Prévisualisation du fichier PDF :</p>
-                <a
-                  href={URL.createObjectURL(newPdf)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600"
-                >
-                  Fichier PDF sélectionné : {newPdf.name}
-                </a>
-              </div>
+              <a
+                href={URL.createObjectURL(newPdf)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 block mt-2"
+              >
+                Fichier PDF sélectionné : {newPdf.name}
+              </a>
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium">Cuisine</label>
-            <input
-              type="text"
-              value={content.cuisine}
-              onChange={(e) =>
-                setContent({ ...content, cuisine: e.target.value })
-              }
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
+          <div className="text-center mt-6">
+            <button
+              onClick={handleSave}
+              className="bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 shadow-md"
+            >
+              💾 Sauvegarder les modifications
+            </button>
           </div>
-
-          <div>
-            <label className="block text-sm font-medium">Paiement</label>
-            <input
-              type="text"
-              value={content.paiement}
-              onChange={(e) =>
-                setContent({ ...content, paiement: e.target.value })
-              }
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Horaire 1</label>
-            <input
-              type="text"
-              value={content.horaire1}
-              onChange={(e) =>
-                setContent({ ...content, horaire1: e.target.value })
-              }
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Horaire 1 Etat</label>
-            <input
-              type="text"
-              value={content.horaire1state}
-              onChange={(e) =>
-                setContent({ ...content, horaire1state: e.target.value })
-              }
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Horaire 2</label>
-            <input
-              type="text"
-              value={content.horaire2}
-              onChange={(e) =>
-                setContent({ ...content, horaire2: e.target.value })
-              }
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Horaire 2 Etat</label>
-            <input
-              type="text"
-              value={content.horaire2state}
-              onChange={(e) =>
-                setContent({ ...content, horaire2state: e.target.value })
-              }
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Adresse mail</label>
-            <input
-              type="text"
-              value={content.mail}
-              onChange={(e) => setContent({ ...content, mail: e.target.value })}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">
-              Numéro réservation
-            </label>
-            <input
-              type="text"
-              value={content.tel}
-              onChange={(e) => setContent({ ...content, tel: e.target.value })}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 max-w-full"
-            />
-          </div>
-
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md"
-          >
-            Sauvegarder
-          </button>
         </div>
       </div>
     </div>

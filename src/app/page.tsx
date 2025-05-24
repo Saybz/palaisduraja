@@ -75,8 +75,16 @@ export default async function Home() {
       </section>
       <section
         id="about"
-        className="relative flex flex-col-reverse gap-10 items-center lg:flex-row w-full max-w-main py-10 md:py-20 lg:py-30 lg:pt-40 "
+        className="relative flex flex-col gap-10 items-center lg:flex-row w-full max-w-main py-10 md:py-20 lg:py-30 lg:pt-40 "
       >
+        <div className="ml-0 lg:w-1/2 lg:ml-10 mt-10 lg:px-10 lg:mt-0">
+          <h2 className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-1 md:mb-4">
+            {content?.title || "Histoire du restaurant"}
+          </h2>
+          <p className="text-lg text-gray-600">
+            {content?.histoire || "Description par défaut"}
+          </p>
+        </div>
         {content?.histoireImg && (
           <div className="relative h-[20vh] md:h-[30vh] w-full lg:w-1/2 before:left-full rounded-3xl shadow-lg">
             <Image
@@ -89,14 +97,6 @@ export default async function Home() {
             />
           </div>
         )}
-        <div className="ml-0 lg:w-1/2 lg:ml-10 mt-10 lg:px-10 lg:mt-0">
-          <h2 className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-1 md:mb-4">
-            {content?.title || "Histoire du restaurant"}
-          </h2>
-          <p className="text-lg text-gray-600">
-            {content?.histoire || "Description par défaut"}
-          </p>
-        </div>
       </section>
       <section
         id="menu"
