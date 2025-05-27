@@ -2,10 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import LogOutBtn from "@/components/LogOutBtn";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 const Header: React.FC = () => {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/admin");
   const isLogin = pathname.startsWith("/admin/login");
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => {
@@ -15,14 +18,20 @@ const Header: React.FC = () => {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
   return (
     <header
-      className={`z-50 fixed w-screen top-0 left-0 font-body text-secondary py-2 md:py-6 transition-all duration-300 ${
-        isScrolled ? "shadow-md bg-primary" : ""
-      }`}
+      className={`z-50 fixed w-screen top-0 left-0 font-body text-secondary py-2 md:py-6 transition-all duration-300  ${
+        isScrolled ? "shadow-md bg-primary text-secondary" : ""
+      }
+      ${isAdminPage ? "bg-primary" : ""}
+      
+      `}
     >
       <div className="container h-full max-w-main mx-auto px-4 md:px-10 lg:px-0 flex flex-col md:flex-row justify-between items-center">
-        <div className="text-xl font-bold mb-2 md:mb-0">Palais du Raja</div>
+        <Link href="/" className={`text-xl font-bold mb-2 md:mb-0`}>
+          Palais du Raja
+        </Link>
         {!isAdminPage && !isLogin && (
           <nav className="flex w-full gap-4 md:w-auto items-center justify-around font-semibold">
             <a href="#about" className="hover:text-white">
