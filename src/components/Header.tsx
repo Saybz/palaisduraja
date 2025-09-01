@@ -2,14 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import LogOutBtn from "@/components/LogOutBtn";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 const Header: React.FC = () => {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/admin");
   const isLogin = pathname.startsWith("/admin/login");
-  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
     const onScroll = () => {
       setIsScrolled(window.scrollY > 0);

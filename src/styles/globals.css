@@ -35,9 +35,25 @@ body {
   overflow-x: hidden;
 }
 
-section {
+.section-responsive {
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
+  padding-top: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section-responsive {
+    padding: inherit 1.5rem;
+    padding-top: 6rem;
+
+  }
+}
+@media (min-width: 1024px) {
+  .section-responsive {
+    padding: inherit 1.5rem;
+    padding-top: 10rem;
+  }
 }
 
 @layer utilities {

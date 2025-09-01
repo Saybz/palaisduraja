@@ -22,7 +22,7 @@ export default {
         foreground: "var(--foreground)",
       },
       maxWidth: {
-        main: "1440px",
+        main: "1280px",
       },
       maxHeight: {
         desktop: "1440px",
