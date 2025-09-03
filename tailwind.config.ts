@@ -15,7 +15,8 @@ export default {
         body: ["var(--font-body)"],
       },
       colors: {
-        primary: "#902036",
+        // primary: "#902036",
+        primary: "#75192E",
         secondary: "#FFF2E0",
         dark: "#333333",
         background: "var(--background)",

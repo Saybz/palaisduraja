@@ -28,23 +28,23 @@ const Header: React.FC = () => {
       `}
     >
       <div className="container h-full max-w-main mx-auto px-4 md:px-10 lg:px-0 flex flex-col md:flex-row justify-between items-center">
-        <Link href="/" className={`text-xl font-bold mb-2 md:mb-0`}>
+        <Link href="/" aria-label="Accueil" className={`text-xl font-bold mb-2 md:mb-0`}>
           Palais du Raja
         </Link>
         {!isAdminPage && !isLogin && (
-          <nav className="flex w-full gap-4 md:w-auto items-center justify-around font-semibold">
-            <a href="#about" className="hover:text-white">
+          <nav aria-label="Navigation principale" className="flex w-full gap-4 md:w-auto items-center justify-around font-semibold">
+            <Link href="#about" className="hover:text-white">
               Histoire
-            </a>
-            <a href="#menu" className="hover:text-white">
+            </Link>
+            <Link href="#menu" className="hover:text-white">
               Menu
-            </a>
-            <a href="#infos" className="hover:text-white">
+            </Link>
+            <Link href="#infos" className="hover:text-white">
               Infos
-            </a>
-            <a href="#contact" className="hover:text-white">
+            </Link>
+            <Link href="#contact" className="hover:text-white">
               Contact
-            </a>
+            </Link>
           </nav>
         )}
         {isAdminPage && !isLogin && <LogOutBtn />}

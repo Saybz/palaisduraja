@@ -33,8 +33,9 @@ export default async function Home() {
           <div className="h-screen w-full">
             <Image
               src={content.banner}
-              alt="Image"
+              alt="Salle du restaurant Palais du Raja à Tours"
               fill
+              priority
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
               className=""
@@ -59,7 +60,7 @@ export default async function Home() {
             label="Réserver"
           />
         </div>
-        <a href="#about">
+        <a href="#about" aria-label="Aller à la section À propos">
           <MoveDown className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 text-white animate-bounce drop-shadow-lg"/>
         </a>
       </section>
@@ -79,8 +80,9 @@ export default async function Home() {
           <div className="relative min-h-[400px] h-[20vh] md:h-[30vh] w-full lg:w-1/2 before:left-full rounded-3xl shadow-lg">
             <Image
               src={content.histoireImg}
-              alt="Image"
+              alt="Devanture du restaurant Palais du Raja à Tours"
               fill
+              loading="lazy"
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
               className="rounded-3xl"
@@ -100,8 +102,9 @@ export default async function Home() {
           {content?.menuImg && (
             <Image
               src={content.menuImg}
-              alt="Image"
+              alt="Photos de plats du restaurant Palais du Raja à Tours"
               fill
+              loading="lazy"
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
               className="rounded-3xl"
@@ -113,6 +116,8 @@ export default async function Home() {
             <div className="absolute z-20 top-0 right-0 w-full h-full flex justify-center items-center">
               <a
                 href={content.menuPdf}
+                rel="noopener noreferrer"
+                aria-label="Télécharger le menu au format PDF"
                 target="_blank"
                 className="p-4 bg-primary text-white shadow-lg rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-all"
               >
@@ -127,7 +132,7 @@ export default async function Home() {
           <h2 className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
             Infos pratiques
           </h2>
-          <div className="w-full flex flex-col md:flex-row justify-between">
+          <div itemScope itemType="https://schema.org/Restaurant" className="w-full flex flex-col md:flex-row justify-between">
             <div className="w-full md:w-1/2 flex-col pr-0 md:pr-10 mb-10 md:mb-0">
               {content?.cuisine && (
                 <div className="flex-col mb-10">
@@ -150,12 +155,12 @@ export default async function Home() {
             {content?.horaire1 && (
               <div className="flex-col w-full md:w-1/2 p-3 md:p-10 border border-primary">
                 <h3 className="font-bold text-xl mb-6">Horaires :</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <span>{content?.horaire1}</span>
-                  <span>{content?.horaire1state}</span>
-                  <span>{content?.horaire2}</span>
-                  <span>{content?.horaire2state}</span>
-                </div>
+                <dl className="grid grid-cols-2 gap-4">
+                  <dt itemProp="openingHours">{content?.horaire1}</dt>
+                  <dd itemProp="openingHours">{content?.horaire1state}</dd>
+                  <dt itemProp="openingHours">{content?.horaire2}</dt>
+                  <dd itemProp="openingHours">{content?.horaire2state}</dd>
+                </dl>
               </div>
             )}
           </div>
@@ -171,17 +176,19 @@ export default async function Home() {
               {content?.mail && (
                 <CtaBtn
                   type="email"
+                  aria-label="Envoyer un email au restaurant Palais du Raja"
                   value={content.mail}
                   label={content.mail}
                   className="md:mr-10"
                 />
               )}
               {content?.tel && (
-                <CtaBtn type="tel" value={content.tel} label="Réserver" />
+                <CtaBtn aria-label="Réserver une table par téléphone" type="tel" value={content.tel} label="Réserver" />
               )}
             </div>
             <CtaBtn
               type="location"
+              aria-label="Trouver le restaurant Palais du Raja à Tours sur Google Maps"
               value="113 rue Colbert, 37000 Tours"
               label="113 rue Colbert, 37000 Tours"
             />
@@ -192,7 +199,8 @@ export default async function Home() {
           width="600"
           height="400"
           style={{ border: 0 }}
-          title="Google Maps location of the restaurant"
+          title="Carte Google Maps du Palais du Raja à Tours"
+          aria-label="Carte Google Maps du Palais du Raja à Tours"
           loading="lazy"
           className="w-full h-[450px] rounded-lg shadow-lg mt-10"
         ></iframe>

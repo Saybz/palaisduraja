@@ -28,6 +28,11 @@
   }
 }
 
+html {
+  background: var(--color-primary);
+
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
