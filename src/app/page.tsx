@@ -145,7 +145,7 @@ export default async function Home() {
                   <h3 className="font-bold text-xl mb-2">
                     Moyens de paiement :
                   </h3>
-                  <p>
+                  <p className="max-w-md">
                     Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans
                     Contact, Chèque vacances, Tickets restaurant
                   </p>

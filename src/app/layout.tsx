@@ -7,11 +7,11 @@ import Providers from "@/components/Providers";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Restaurant Indien à Tours | Palais du Raja",
+  title: "Palais du Raja | Restaurant Indien à Tours",
   description:
-    "Découvrez le Palais du Raja, restaurant traditionnel indien à Tours. Carte authentique, ambiance chaleureuse, réservation en ligne.",
+    "Découvrez le Palais du Raja, restaurant traditionnel indien au cœur de Tours. Carte authentique, ambiance chaleureuse, réservation en par téléphone.",
   openGraph: {
-    title: "Restaurant Indien à Tours | Palais du Raja",
+    title: "Palais du Raja | Restaurant Indien à Tours",
     description:
       "Cuisine traditionnelle indienne au cœur de Tours. Découvrez nos spécialités.",
     url: "https://palaisduraja.fr",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Restaurant Indien à Tours | Palais du Raja",
+    title: "Palais du Raja | Restaurant Indien à Tours",
     description:
       "Découvrez la cuisine indienne authentique du Palais du Raja à Tours.",
     images: ["/og-image.jpg"],
