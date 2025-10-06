@@ -5,6 +5,15 @@ import ScrollToTopButton from "@/components/ScrollToTopBtn";
 import {MoveDown} from "lucide-react";
 // import { motion, useScroll, useTransform } from "framer-motion";
 
+type Schedule = {
+  id: number;
+  day: "Lundi" | "Mardi" | "Mercredi" | "Jeudi" | "Vendredi" | "Samedi" | "Dimanche";
+  period: "MIDI" | "SOIR";
+  openTime: string | null;
+  closeTime: string | null;
+  isClosed: boolean;
+};
+
 interface Content {
   banner?: string | null;
   histoireImg?: string | null;
@@ -15,16 +24,32 @@ interface Content {
   menuDesc?: string | null;
   cuisine?: string | null;
   paiement?: string | null;
-  horaire1?: string | null;
-  horaire1state?: string | null;
-  horaire2?: string | null;
-  horaire2state?: string | null;
   mail?: string | null;
   tel?: string | null;
+  schedules?: Schedule[]; // ✅ ajout des horaires
 }
 
+const DAYS: Schedule["day"][] = [
+  "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"
+];
+
 export default async function Home() {
-  const content: Content | null = await prisma.content.findFirst();
+  const rawContent = await prisma.content.findFirst({
+    include: {
+      schedules: true,
+    },
+  });
+
+  const content: Content | null = rawContent
+    ? {
+        ...rawContent,
+        schedules: rawContent.schedules.map((schedule) => ({
+          ...schedule,
+          day: schedule.day.charAt(0).toUpperCase() + schedule.day.slice(1).toLowerCase() as Schedule["day"],
+        })),
+      }
+    : null;
+  
 
   return (
     <div className="z-0 min-h-screen w-screen  font-body flex flex-col mt-18 items-center">
@@ -152,15 +177,43 @@ export default async function Home() {
                 </div>
               )}
             </div>
-            {content?.horaire1 && (
-              <div className="flex-col w-full md:w-1/2 p-3 md:p-10 border border-primary">
+            {content?.schedules && content.schedules.length > 0 && (
+              <div className="flex-col w-full md:w-1/2">
                 <h3 className="font-bold text-xl mb-6">Horaires :</h3>
-                <dl className="grid grid-cols-2 gap-4">
-                  <dt itemProp="openingHours">{content?.horaire1}</dt>
-                  <dd itemProp="openingHours">{content?.horaire1state}</dd>
-                  <dt itemProp="openingHours">{content?.horaire2}</dt>
-                  <dd itemProp="openingHours">{content?.horaire2state}</dd>
-                </dl>
+                <table className="w-full border-collapse border text-sm">
+                  <thead>
+                    <tr className="bg-primary text-white">
+                      <th className="border px-3 py-2 text-left">Jour</th>
+                      <th className="border px-3 py-2 text-left">Midi</th>
+                      <th className="border px-3 py-2 text-left">Soir</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {DAYS.map((day) => {
+                      const midi = content.schedules?.find(
+                        (s: Schedule) => s.day === day && s.period === "MIDI"
+                      );
+                      const soir = content.schedules?.find(
+                        (s: Schedule) => s.day === day && s.period === "SOIR"
+                      );
+
+                      const format = (s?: Schedule) =>
+                        s
+                          ? s.isClosed
+                            ? "Fermé"
+                            : `${s.openTime || "??"} - ${s.closeTime || "??"}`
+                          : "Non renseigné";
+
+                      return (
+                        <tr key={day}>
+                          <td className="border border-primary px-3 py-2">{day}</td>
+                          <td className="border border-primary px-3 py-2">{format(midi)}</td>
+                          <td className="border border-primary px-3 py-2">{format(soir)}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>

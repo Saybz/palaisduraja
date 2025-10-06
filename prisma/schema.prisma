@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Content {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   banner      String?
   title       String?
   histoire    String?
@@ -23,13 +23,39 @@ model Content {
   menuImg     String?
   menuPdf     String?
 
-  cuisine       String?
-  paiement      String?
-  horaire1      String?
-  horaire1state String?
-  horaire2      String?
-  horaire2state String?
+  cuisine     String?
+  paiement    String?
 
-  mail String?
-  tel  String?
+  mail        String?
+  tel         String?
+
+  // Relation avec les horaires
+  schedules   Schedule[]
+}
+
+model Schedule {
+  id        Int      @id @default(autoincrement())
+  day       WeekDay  // Enum -> jour de la semaine
+  period    Period   // midi ou soir
+  openTime  String?  // Exemple "12:00"
+  closeTime String?  // Exemple "14:30"
+  isClosed  Boolean  @default(false)
+
+  contentId Int
+  content   Content  @relation(fields: [contentId], references: [id])
+}
+
+enum WeekDay {
+  LUNDI
+  MARDI
+  MERCREDI
+  JEUDI
+  VENDREDI
+  SAMEDI
+  DIMANCHE
+}
+
+enum Period {
+  MIDI
+  SOIR
 }

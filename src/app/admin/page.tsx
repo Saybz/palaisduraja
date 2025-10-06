@@ -6,6 +6,27 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+type Schedule = {
+  id?: number;
+  day: "LUNDI" | "MARDI" | "MERCREDI" | "JEUDI" | "VENDREDI" | "SAMEDI" | "DIMANCHE";
+  period: "MIDI" | "SOIR";
+  openTime?: string;
+  closeTime?: string;
+  isClosed: boolean;
+};
+
+// Constantes
+const DAYS: Schedule["day"][] = [
+  "LUNDI",
+  "MARDI",
+  "MERCREDI",
+  "JEUDI",
+  "VENDREDI",
+  "SAMEDI",
+  "DIMANCHE",
+];
+const PERIODS: Schedule["period"][] = ["MIDI", "SOIR"];
+
 export default function AdminPage() {
   const [content, setContent] = useState({
     banner: "",
@@ -17,13 +38,11 @@ export default function AdminPage() {
     menuPdf: "",
     cuisine: "",
     paiement: "",
-    horaire1: "",
-    horaire1state: "",
-    horaire2: "",
-    horaire2state: "",
     mail: "",
     tel: "",
   });
+  
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
 
   const [newHistoireImage, setNewHistoireImage] = useState<File | null>(null);
   const [newBannerImage, setNewBannerImage] = useState<File | null>(null);
@@ -38,6 +57,19 @@ export default function AdminPage() {
       const res = await fetch("/admin/api/content");
       const data = await res.json();
       setContent(data || content);
+      setSchedules(
+        data?.schedules?.length
+          ? data.schedules
+          : DAYS.flatMap((day) =>
+              PERIODS.map((period) => ({
+                day,
+                period,
+                openTime: "",
+                closeTime: "",
+                isClosed: false,
+              }))
+            )
+      );
     };
     fetchContent();
   }, []);
@@ -54,6 +86,24 @@ export default function AdminPage() {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
+
+  // Mettre à jour un horaire
+  const updateSchedule = <
+  K extends keyof Pick<Schedule, "openTime" | "closeTime" | "isClosed">
+  >(
+    day: Schedule["day"],
+    period: Schedule["period"],
+    field: K,
+    value: Schedule[K]
+  ) => {
+    setSchedules((prev) =>
+      prev.map((s) =>
+        s.day === day && s.period === period
+          ? { ...s, [field]: value }
+          : s
+      )
+    );
+  };
 
   const handleFileUpload = async (file: File) => {
     const formData = new FormData();
@@ -92,6 +142,7 @@ export default function AdminPage() {
         histoireImg: uploadedHistoireImage,
         menuImg: uploadedMenuImage,
         menuPdf: uploadedPdf,
+        schedules,
       }),
     });
 
@@ -102,6 +153,7 @@ export default function AdminPage() {
       // Récupérer à nouveau le contenu mis à jour
       const updatedContent = await res.json();
       setContent(updatedContent); // Mettre à jour le contenu affiché
+      setSchedules(updatedContent.schedules); // mettre à jour les horaires
     } else {
       setSuccessMessage("Erreur lors de la sauvegarde du contenu.");
     }
@@ -153,32 +205,6 @@ export default function AdminPage() {
               type: "text",
               value: content.paiement,
               onChange: (v: string) => setContent({ ...content, paiement: v }),
-            },
-            {
-              label: "Horaire 1",
-              type: "text",
-              value: content.horaire1,
-              onChange: (v: string) => setContent({ ...content, horaire1: v }),
-            },
-            {
-              label: "Horaire 1 Etat",
-              type: "text",
-              value: content.horaire1state,
-              onChange: (v: string) =>
-                setContent({ ...content, horaire1state: v }),
-            },
-            {
-              label: "Horaire 2",
-              type: "text",
-              value: content.horaire2,
-              onChange: (v: string) => setContent({ ...content, horaire2: v }),
-            },
-            {
-              label: "Horaire 2 Etat",
-              type: "text",
-              value: content.horaire2state,
-              onChange: (v: string) =>
-                setContent({ ...content, horaire2state: v }),
             },
             {
               label: "Adresse Mail",
@@ -298,6 +324,71 @@ export default function AdminPage() {
               </a>
             )}
           </div>
+
+          {/* Grille des horaires */}
+          <h2 className="text-xl font-semibold mb-4">🕒 Horaires</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border px-3 py-2 text-left">Jour</th>
+                  <th className="border px-3 py-2">Midi</th>
+                  <th className="border px-3 py-2">Soir</th>
+                </tr>
+              </thead>
+              <tbody>
+                {DAYS.map((day) => {
+                  const midi = schedules.find((s) => s.day === day && s.period === "MIDI");
+                  const soir = schedules.find((s) => s.day === day && s.period === "SOIR");
+
+                  const renderInput = (s: Schedule | undefined, field: "openTime" | "closeTime" | "isClosed") => {
+                    if (!s) return null;
+                    if (field === "isClosed") {
+                      return (
+                        <div>
+                        <input
+                          type="checkbox"
+                          checked={s.isClosed}
+                          onChange={(e) => updateSchedule(day, s.period, "isClosed", e.target.checked)}
+                          />
+
+                          {" "}Fermé
+
+                        </div>
+                      );
+                    }
+                    return (
+                      <input
+                        type="time"
+                        value={s[field] || ""}
+                        onChange={(e) => updateSchedule(day, s.period, field, e.target.value)}
+                        disabled={s.isClosed}
+                        className="border rounded px-2 py-1 w-full"
+                      />
+                    );
+                  };
+
+                  return (
+                    <tr key={day}>
+                      <td className="border px-3 py-2">{day}</td>
+                      <td className="border px-3 py-2">
+                        {renderInput(midi, "openTime")}
+                        {renderInput(midi, "closeTime")}
+                        {renderInput(midi, "isClosed")}
+                      </td>
+                      <td className="border px-3 py-2">
+                        {renderInput(soir, "openTime")}
+                        {renderInput(soir, "closeTime")}
+                        {renderInput(soir, "isClosed")}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+
 
           <div className="text-center mt-6">
             <button
