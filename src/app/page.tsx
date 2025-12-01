@@ -76,8 +76,8 @@ export default async function Home() {
             Restaurant traditionnel indien à Tours
           </p>
           <p className="text-lg font-semibold mb-6 drop-shadow-lg">
-            Ouvert du <span className="font-black">mercredi soir</span> au
-            <span className="font-black"> lundi</span>
+            Ouvert du <span className="font-black">mardi soir</span> au
+            <span className="font-black">Dimanche</span>
           </p>
           <CtaBtn
             type="tel"
