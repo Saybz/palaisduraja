@@ -46,26 +46,28 @@ export default function AnimatedSections({ content }: { content: Content | null 
       {/* About Section */}
       <section
         id="about"
+        aria-labelledby="about-heading"
         className="relative flex flex-col gap-10 items-center lg:flex-row w-full max-w-main section-responsive "
       >
         <ScrollAnimated direction="up" delay={0} className="ml-0 lg:w-1/2 mt-10 lg:pr-10 lg:mt-0">
-          <h2 className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-1 md:mb-4">
-            {content?.title || "Histoire du restaurant"}
+          <h2 id="about-heading" className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-1 md:mb-4">
+            {content?.title || "Histoire du restaurant Palais du Raja"}
           </h2>
-          <p className="text-lg text-gray-600">
-            {content?.histoire || "Description par défaut"}
+          <p className="text-lg text-gray-600" itemProp="description">
+            {content?.histoire || "Découvrez l'histoire du Palais du Raja, restaurant indien traditionnel à Tours."}
           </p>
         </ScrollAnimated>
         {content?.histoireImg && (
           <ScrollAnimated direction="up" delay={150} className="relative min-h-[400px] h-[20vh] md:h-[30vh] w-full lg:w-1/2 before:left-full rounded-3xl shadow-lg">
             <Image
               src={content.histoireImg}
-              alt="Devanture du restaurant Palais du Raja à Tours"
+              alt={`${content?.title || "Histoire"} - Restaurant Palais du Raja, restaurant indien traditionnel à Tours, 113 rue Colbert`}
               fill
               loading="lazy"
-              sizes="100vw"
+              sizes="(max-width: 768px) 100vw, 50vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
               className="rounded-3xl"
+              title={`${content?.title || "Histoire"} du restaurant Palais du Raja`}
             />
           </ScrollAnimated>
         )}
@@ -74,10 +76,11 @@ export default function AnimatedSections({ content }: { content: Content | null 
       {/* Menu Section */}
       <section
         id="menu"
+        aria-labelledby="menu-heading"
         className="relative max-w-main w-full section-responsive"
       >
         <ScrollAnimated direction="up" delay={0}>
-          <h2 className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
+          <h2 id="menu-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
             Carte & Menus
           </h2>
         </ScrollAnimated>
@@ -87,24 +90,26 @@ export default function AnimatedSections({ content }: { content: Content | null 
               {content?.menuImg && (
                 <Image
                   src={content.menuImg}
-                  alt="Photos de plats du restaurant Palais du Raja à Tours"
+                  alt="Carte et menu du restaurant Palais du Raja - Spécialités indiennes et pakistanaises : currys, tandoori, naans, biryani, plats végétariens à Tours"
                   fill
                   loading="lazy"
-                  sizes="100vw"
+                  sizes="(max-width: 768px) 100vw, 1280px"
                   style={{ objectFit: "cover", objectPosition: "center" }}
                   className="rounded-3xl"
+                  title="Menu et carte du restaurant indien Palais du Raja à Tours"
                 />
               )}
             </div>
 
             {content?.menuPdf && (
               <div className="absolute z-20 top-0 right-0 w-full h-full flex justify-center items-center">
-                <a
+                  <a
                   href={content.menuPdf}
                   rel="noopener noreferrer"
-                  aria-label="Télécharger le menu au format PDF"
+                  aria-label="Télécharger le menu complet au format PDF - Restaurant Palais du Raja"
                   target="_blank"
                   className="p-4 bg-primary text-white shadow-lg rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-all"
+                  title="Menu PDF du restaurant Palais du Raja - Téléchargement"
                 >
                   {content.menuDesc || "Télécharger le menu"}
                 </a>
@@ -115,14 +120,14 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </section>
 
       {/* Infos Section */}
-      <section id="infos" className="w-full section-responsive">
+      <section id="infos" aria-labelledby="infos-heading" className="w-full section-responsive">
         <div className="max-w-main w-full mx-auto">
           <ScrollAnimated direction="up" delay={0}>
-            <h2 className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
+            <h2 id="infos-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
               Infos pratiques
             </h2>
           </ScrollAnimated>
-          <div itemScope itemType="https://schema.org/Restaurant" className="w-full flex flex-col md:flex-row justify-between">
+          <div className="w-full flex flex-col md:flex-row justify-between">
             <ScrollAnimated direction="up" delay={0} className="w-full md:w-1/2 flex-col pr-0 md:pr-10 mb-10 md:mb-0">
               {content?.cuisine && (
                 <div className="flex-col mb-10">
@@ -179,11 +184,11 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="w-full">
+      <section id="contact" aria-labelledby="contact-heading" className="w-full">
         <div className="max-w-main w-full section-responsive mx-auto">
           <ScrollAnimated direction="up" delay={0}>
-            <h2 className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
-              Contact
+            <h2 id="contact-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
+              Contact et réservation
             </h2>
           </ScrollAnimated>
           <ScrollAnimated direction="up" delay={150}>

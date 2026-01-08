@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import LogOutBtn from "@/components/LogOutBtn";
 import Link from "next/link";
+
 const Header: React.FC = () => {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/admin");
@@ -17,6 +18,24 @@ const Header: React.FC = () => {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Fonction pour scroller vers une section sans ajouter l'ID dans l'URL
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    e.preventDefault();
+    
+    const section = document.getElementById(sectionId);
+    if (section) {
+      // Calculer l'offset pour compenser la hauteur du header fixe
+      const headerHeight = 80; // Hauteur approximative du header
+      const elementPosition = section.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <header
@@ -33,18 +52,34 @@ const Header: React.FC = () => {
         </Link>
         {!isAdminPage && !isLogin && (
           <nav aria-label="Navigation principale" className="flex w-full gap-4 md:w-auto items-center justify-around font-semibold">
-            <Link href="#about" className="hover:text-white">
+            <a
+              href="#about"
+              onClick={(e) => scrollToSection(e, "about")}
+              className="hover:text-white cursor-pointer"
+            >
               Histoire
-            </Link>
-            <Link href="#menu" className="hover:text-white">
+            </a>
+            <a
+              href="#menu"
+              onClick={(e) => scrollToSection(e, "menu")}
+              className="hover:text-white cursor-pointer"
+            >
               Menu
-            </Link>
-            <Link href="#infos" className="hover:text-white">
+            </a>
+            <a
+              href="#infos"
+              onClick={(e) => scrollToSection(e, "infos")}
+              className="hover:text-white cursor-pointer"
+            >
               Infos
-            </Link>
-            <Link href="#contact" className="hover:text-white">
+            </a>
+            <a
+              href="#contact"
+              onClick={(e) => scrollToSection(e, "contact")}
+              className="hover:text-white cursor-pointer"
+            >
               Contact
-            </Link>
+            </a>
           </nav>
         )}
         {isAdminPage && !isLogin && <LogOutBtn />}

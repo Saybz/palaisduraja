@@ -1,0 +1,17 @@
+# robots.txt pour Palais du Raja
+# https://palaisduraja.fr/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+Disallow: /_next/
+Disallow: /uploads/
+
+# Sitemap
+Sitemap: https://palaisduraja.fr/sitemap.xml
+
+# Crawl-delay (optionnel, aide à éviter la surcharge du serveur)
+Crawl-delay: 1
+

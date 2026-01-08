@@ -51,33 +51,36 @@ export default function HeroSection({ banner, tel }: HeroSectionProps) {
           </div>
         </div>
       )}
-      <div className="absolute inset-0 bg-black/40 z-10" />
+      <div className="absolute inset-0 bg-black/40 z-10" aria-hidden="true" />
       <div className="absolute inset-0 flex flex-col text-secondary items-center justify-center z-20 section-responsive text-center">
-        <h1 className="relative font-body font-bold text-5xl md:text-7xl mb-2 md:mb-4 flex flex-wrap justify-center gap-2 md:gap-3">
-          {titleWords.map((word, index) => (
-            <span
-              key={index}
-              className="hero-word inline-block"
-              style={{
-                animationDelay: `${index * 200 + 300}ms`,
-              }}
-            >
-              {word}
-            </span>
-          ))}
-        </h1>
-        <p className="text-lg mb-2 font-semibold drop-shadow-lg hero-subtitle">
-          Restaurant traditionnel indien à Tours
-        </p>
-        <p className="text-lg font-semibold mb-6 drop-shadow-lg hero-schedule">
-          Ouvert du <span className="font-black">mardi soir</span> au
-          <span className="font-black">Dimanche</span>
-        </p>
+        <header>
+          <h1 className="relative font-body font-bold text-5xl md:text-7xl mb-2 md:mb-4 flex flex-wrap justify-center gap-2 md:gap-3">
+            {titleWords.map((word, index) => (
+              <span
+                key={index}
+                className="hero-word inline-block"
+                style={{
+                  animationDelay: `${index * 200 + 300}ms`,
+                }}
+              >
+                {word}
+              </span>
+            ))}
+          </h1>
+          <p className="text-lg mb-2 font-semibold drop-shadow-lg hero-subtitle" role="doc-subtitle">
+            Restaurant traditionnel indien et pakistanais à Tours
+          </p>
+          <p className="text-lg font-semibold mb-6 drop-shadow-lg hero-schedule">
+            <time dateTime="2024">Ouvert du</time> <strong className="font-black">mardi soir</strong> au
+            <strong className="font-black"> dimanche</strong>
+          </p>
+        </header>
         <div className="hero-button">
           <CtaBtn
             type="tel"
             value={tel || "0247648155"}
-            label="Réserver"
+            label="Réserver une table"
+            aria-label="Réserver une table au restaurant Palais du Raja par téléphone"
           />
         </div>
       </div>
