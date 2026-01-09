@@ -50,7 +50,6 @@ export default function AdminPage() {
 
   const [newHistoireImage, setNewHistoireImage] = useState<File | null>(null);
   const [newBannerImage, setNewBannerImage] = useState<File | null>(null);
-  const [newMenuImage, setNewMenuImage] = useState<File | null>(null);
   const [newMenuImage1, setNewMenuImage1] = useState<File | null>(null);
   const [newMenuImage2, setNewMenuImage2] = useState<File | null>(null);
   const [newMenuImage3, setNewMenuImage3] = useState<File | null>(null);
@@ -147,7 +146,7 @@ export default function AdminPage() {
   const handleSave = async () => {
     let uploadedBannerImage = content.banner;
     let uploadedHistoireImage = content.histoireImg;
-    let uploadedMenuImage = content.menuImg;
+    const uploadedMenuImage = content.menuImg;
     let uploadedMenuImage1 = content.menuImg1;
     let uploadedMenuImage2 = content.menuImg2;
     let uploadedMenuImage3 = content.menuImg3;
@@ -158,7 +157,6 @@ export default function AdminPage() {
       uploadedBannerImage = await handleFileUpload(newBannerImage);
     if (newHistoireImage)
       uploadedHistoireImage = await handleFileUpload(newHistoireImage);
-    if (newMenuImage) uploadedMenuImage = await handleFileUpload(newMenuImage);
     if (newMenuImage1) uploadedMenuImage1 = await handleFileUpload(newMenuImage1);
     if (newMenuImage2) uploadedMenuImage2 = await handleFileUpload(newMenuImage2);
     if (newMenuImage3) uploadedMenuImage3 = await handleFileUpload(newMenuImage3);

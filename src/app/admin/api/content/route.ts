@@ -56,7 +56,13 @@ export async function POST(req: Request) {
     mail,
     tel,
     schedules,
-  } = body as Content & { schedules: ScheduleInput[] };
+  } = body as Content & { 
+    menuImg1?: string | null;
+    menuImg2?: string | null;
+    menuImg3?: string | null;
+    menuImg4?: string | null;
+    schedules: ScheduleInput[] 
+  };
 
   // Vérifier si le contenu existe
   const existingContent = await prisma.content.findFirst();
@@ -81,7 +87,7 @@ export async function POST(req: Request) {
         paiement,
         mail,
         tel,
-      },
+      } as Parameters<typeof prisma.content.update>[0]['data'],
     });
 
     // 🟢 Mise à jour des horaires
@@ -138,7 +144,7 @@ export async function POST(req: Request) {
             isClosed: s.isClosed,
           })) || [],
         },
-      },
+      } as Parameters<typeof prisma.content.create>[0]['data'],
       include: { schedules: true },
     });
 
