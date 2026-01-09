@@ -30,23 +30,20 @@ export default function MenuSection({
     <section
       id="menu"
       aria-labelledby="menu-heading"
-      className="relative w-full section-responsive"
+      className="relative w-full min-h-screen"
     >
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
-        {/* Partie gauche - Sticky */}
-        <div className="lg:w-1/2 flex-shrink-0 lg:sticky lg:top-24 lg:self-start">
-          <div className="flex flex-col gap-6 py-8">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-0 relative">
+        {/* Partie gauche - Sticky avec padding */}
+        <div className="lg:w-1/2 lg:flex-shrink-0 lg:sticky lg:top-24 lg:self-start px-4 md:px-6 lg:px-8 xl:px-12" style={{ paddingTop: "6rem", paddingBottom: "6rem" }}>
+          <div className="flex flex-col gap-2">
             <ScrollAnimated direction="up" delay={0}>
-              <h2 id="menu-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-6 md:mb-8">
+              <h2 id="menu-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-6 md:mb-2">
                 Carte & Menus
               </h2>
             </ScrollAnimated>
             
             {/* Description cuisine indienne */}
             <div className="space-y-4">
-              <h3 className="text-2xl md:text-3xl font-head text-primary mb-4">
-                Un Voyage Culinaire Authentique
-              </h3>
               <p className="text-lg text-gray-700 leading-relaxed">
                 Plongez dans l&apos;univers envoûtant de la cuisine indienne traditionnelle. 
                 Au Palais du Raja, chaque plat raconte une histoire, chaque épice révèle 
@@ -83,35 +80,36 @@ export default function MenuSection({
           </div>
         </div>
 
-        {/* Partie droite - Images en colonne */}
-        <div className="lg:w-1/2 flex-shrink-0">
-          <div className="flex flex-col ">
+        {/* Partie droite - Images en colonne collées au bord */}
+        <div className="lg:w-1/2 lg:flex-shrink-0">
+          <div className="flex flex-col">
             {imagesToShow.map((img, index) => (
-              <div
-                key={index}
-                className="relative min-h-[400px] md:min-h-[500px] h-[50vh] w-full"
-              >
-                <div 
-                  className="relative w-full h-full shadow-lg overflow-hidden"
-                  style={{
-                    boxShadow: "inset 0 0 30px 10px rgba(0, 0, 0, 0.15)",
-                  }}
+              <ScrollAnimated key={index} direction="right" delay={index * 150}>
+                <div
+                  className="relative min-h-[400px] md:min-h-[500px] h-[50vh] w-full"
                 >
-                  {img && (
-                    <Image
-                      src={img}
-                      alt={`Plat indien ${index + 1} - Restaurant Palais du Raja, spécialités indiennes et pakistanaises à Tours`}
-                      fill
-                      loading={index === 0 ? "eager" : "lazy"}
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      style={{ objectFit: "cover", objectPosition: "center" }}
-                      className="transition-transform duration-300 hover:scale-105"
-                      title={`Spécialité indienne ${index + 1} - Palais du Raja`}
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  <div 
+                    className="relative w-full h-full shadow-lg overflow-hidden group"
+                    style={{
+                      boxShadow: "inset 0 0 30px 10px rgba(0, 0, 0, 0.15)",
+                    }}
+                  >
+                    {img && (
+                      <Image
+                        src={img}
+                        alt={`Plat indien ${index + 1} - Restaurant Palais du Raja, spécialités indiennes et pakistanaises à Tours`}
+                        fill
+                        loading={index === 0 ? "eager" : "lazy"}
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        style={{ objectFit: "cover", objectPosition: "center" }}
+                        className="transition-transform duration-500 ease-out group-hover:scale-110"
+                        title={`Spécialité indienne ${index + 1} - Palais du Raja`}
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  </div>
                 </div>
-              </div>
+              </ScrollAnimated>
             ))}
           </div>
         </div>

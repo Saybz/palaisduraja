@@ -52,9 +52,10 @@ export default function AnimatedSections({ content }: { content: Content | null 
       <section
         id="about"
         aria-labelledby="about-heading"
-        className="relative flex flex-col gap-10 items-center lg:flex-row w-full max-w-main section-responsive "
+        className="relative flex flex-col gap-10 lg:gap-0 items-center lg:flex-row w-full min-h-screen"
+        style={{ paddingTop: "6rem", paddingBottom: "6rem" }}
       >
-        <ScrollAnimated direction="up" delay={0} className="ml-0 lg:w-1/2 mt-10 lg:pr-10 lg:mt-0">
+        <ScrollAnimated direction="up" delay={0} className="ml-0 lg:w-1/2 lg:flex-shrink-0 mt-10 lg:mt-0 px-4 md:px-6 lg:px-8 xl:px-12">
           <h2 id="about-heading" className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-1 md:mb-4">
             {content?.title || "Histoire du restaurant Palais du Raja"}
           </h2>
@@ -63,7 +64,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
           </p>
         </ScrollAnimated>
         {content?.histoireImg && (
-          <ScrollAnimated direction="up" delay={150} className="relative min-h-[400px] h-[20vh] md:h-[30vh] w-full lg:w-1/2 before:left-full rounded-3xl shadow-lg">
+          <ScrollAnimated direction="up" delay={150} className="relative min-h-[400px] h-[20vh] md:h-[30vh] w-full lg:w-1/2 lg:flex-shrink-0 before:left-full shadow-lg">
             <Image
               src={content.histoireImg}
               alt={`${content?.title || "Histoire"} - Restaurant Palais du Raja, restaurant indien traditionnel à Tours, 113 rue Colbert`}
@@ -79,7 +80,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </section>
 
       {/* Menu Section */}
-      <div className="max-w-main w-full">
+      <div className="w-full">
         <MenuSection
           menuImg1={content?.menuImg1}
           menuImg2={content?.menuImg2}
@@ -91,8 +92,8 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </div>
 
       {/* Infos Section */}
-      <section id="infos" aria-labelledby="infos-heading" className="w-full section-responsive">
-        <div className="max-w-main w-full mx-auto">
+      <section id="infos" aria-labelledby="infos-heading" className="w-full bg-primary-light/20 min-h-screen" style={{ paddingTop: "6rem", paddingBottom: "6rem" }}>
+        <div className="w-full mx-auto px-4 md:px-6 lg:px-8 xl:px-12 py-8 md:py-12">
           <ScrollAnimated direction="up" delay={0}>
             <h2 id="infos-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
               Infos pratiques
@@ -175,15 +176,15 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </section>
 
       {/* Contact Section */}
-      <section id="contact" aria-labelledby="contact-heading" className="w-full">
-        <div className="max-w-main w-full section-responsive mx-auto">
+      <section id="contact" aria-labelledby="contact-heading" className="w-full min-h-screen" style={{ paddingTop: "6rem" }}>
+        <div className="w-full mx-auto px-4 md:px-6 lg:px-8 xl:px-12">
           <ScrollAnimated direction="up" delay={0}>
             <h2 id="contact-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
               Contact et réservation
             </h2>
           </ScrollAnimated>
           <ScrollAnimated direction="up" delay={150}>
-            <div className="flex flex-col gap-4 items-start md:items-center lg:flex-row-reverse justify-between pl-4">
+            <div className="flex flex-col gap-4 items-start md:items-center lg:flex-row-reverse justify-between">
               <div className="flex flex-col gap-4 md:flex-row lg:justify-end justify-around items-start md:items-center">
                 {content?.mail && (
                   <CtaBtn

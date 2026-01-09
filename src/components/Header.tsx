@@ -18,19 +18,45 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const isClickingRef = useRef(false);
   const activeSectionRef = useRef<string>("");
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const onScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      const currentScrollY = window.scrollY;
+      const scrollDifference = currentScrollY - lastScrollY.current;
+      
+      // Toujours afficher le header en haut de page
+      if (currentScrollY <= 10) {
+        setIsHeaderVisible(true);
+        setIsScrolled(false);
+        lastScrollY.current = currentScrollY;
+        return;
+      }
+      
+      setIsScrolled(true);
+      
+      // Si on scroll vers le bas (différence positive) et qu'on n'est pas en haut
+      if (scrollDifference > 5 && currentScrollY > 100) {
+        setIsHeaderVisible(false);
+      }
+      // Si on scroll vers le haut (différence négative), même un petit scroll
+      else if (scrollDifference < -5) {
+        setIsHeaderVisible(true);
+      }
+      
+      lastScrollY.current = currentScrollY;
     };
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // Initialiser lastScrollY au chargement
+    lastScrollY.current = window.scrollY;
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -212,9 +238,13 @@ const Header: React.FC = () => {
       }
       ${isAdminPage ? "bg-primary" : ""}
       `}
+      style={{
+        transform: isHeaderVisible ? "translateY(0)" : "translateY(-100%)",
+        transition: "transform 0.3s ease-in-out",
+      }}
     >
-      <div className="container h-full max-w-main mx-auto px-4 md:px-10 lg:px-0 flex flex-col md:flex-row justify-between items-center">
-        <Link href="/" aria-label="Accueil" className={`text-xl font-bold mb-2 md:mb-0`}>
+      <div className="h-full w-full mx-auto px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 flex flex-col md:flex-row justify-between items-center">
+        <Link href="/" aria-label="Accueil" className={`text-base md:text-lg font-bold mb-2 md:mb-0`}>
           Palais du Raja
         </Link>
         {!isAdminPage && !isLogin && (
@@ -244,7 +274,7 @@ const Header: React.FC = () => {
                 }}
                 href={`#${section.id}`}
                 onClick={(e) => scrollToSection(e, section.id)}
-                className={`relative hover:text-white cursor-pointer transition-colors ${
+                className={`relative text-xs md:text-sm hover:text-white cursor-pointer transition-colors ${
                   activeSection === section.id ? "text-white" : ""
                 }`}
               >

@@ -3,7 +3,7 @@ import React from "react";
 const Footer: React.FC = () => {
   return (
     <footer className="py-5 text-center bg-primary text-white">
-      <div className="footer-content px-4 mx-auto flex flex-col lg:flex-row item-center space-y-2 max-w-main lg:space-y-0 lg:space-x-4 lg:justify-between">
+      <div className="footer-content px-4 mx-auto flex flex-col lg:flex-row item-center space-y-2 w-full lg:space-y-0 lg:space-x-4 lg:justify-between">
         <p>&copy; {new Date().getFullYear()} Palais du Raja. Tous droits réservés.</p>
         <div>
           <address>
