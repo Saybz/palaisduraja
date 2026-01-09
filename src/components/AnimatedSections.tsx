@@ -66,7 +66,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
               loading="lazy"
               sizes="(max-width: 768px) 100vw, 50vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
-              className="rounded-3xl"
+              className=""
               title={`${content?.title || "Histoire"} du restaurant Palais du Raja`}
             />
           </ScrollAnimated>
@@ -85,8 +85,8 @@ export default function AnimatedSections({ content }: { content: Content | null 
           </h2>
         </ScrollAnimated>
         <ScrollAnimated direction="up" delay={150}>
-          <div className="relative min-h-[200px] md:min-h-[300px] md:min-h-[500px] h-[20vh] md:h-[50vh] w-full before:left-full rounded-3xl shadow-lg">
-            <div className="absolute inset-0 bg-black/20 z-10 rounded-3xl">
+          <div className="relative min-h-[200px] md:min-h-[300px] md:min-h-[500px] h-[20vh] md:h-[50vh] w-full before:left-full shadow-lg">
+            <div className="absolute inset-0 bg-black/20 z-10">
               {content?.menuImg && (
                 <Image
                   src={content.menuImg}
@@ -95,7 +95,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
                   loading="lazy"
                   sizes="(max-width: 768px) 100vw, 1280px"
                   style={{ objectFit: "cover", objectPosition: "center" }}
-                  className="rounded-3xl"
+                  className=""
                   title="Menu et carte du restaurant indien Palais du Raja à Tours"
                 />
               )}
@@ -108,7 +108,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
                   rel="noopener noreferrer"
                   aria-label="Télécharger le menu complet au format PDF - Restaurant Palais du Raja"
                   target="_blank"
-                  className="p-4 bg-primary text-white shadow-lg rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-all"
+                  className="p-4 bg-primary text-white shadow-lg font-semibold hover:bg-secondary hover:text-primary transition-all"
                   title="Menu PDF du restaurant Palais du Raja - Téléchargement"
                 >
                   {content.menuDesc || "Télécharger le menu"}
@@ -127,59 +127,79 @@ export default function AnimatedSections({ content }: { content: Content | null 
               Infos pratiques
             </h2>
           </ScrollAnimated>
-          <div className="w-full flex flex-col md:flex-row justify-between">
-            <ScrollAnimated direction="up" delay={0} className="w-full md:w-1/2 flex-col pr-0 md:pr-10 mb-10 md:mb-0">
+          
+          {/* Cuisine et Moyens de paiement */}
+          <div className="w-full flex flex-col md:flex-row gap-8 md:gap-12 mb-10">
+            <ScrollAnimated direction="up" delay={0} className="flex-1">
               {content?.cuisine && (
-                <div className="flex-col mb-10">
+                <div className="flex-col mb-8 md:mb-0">
                   <h3 className="font-bold text-xl mb-2">Cuisine :</h3>
-                  <p>{content.cuisine}</p>
+                  <p className="text-gray-700">{content.cuisine}</p>
                 </div>
               )}
+            </ScrollAnimated>
+            <ScrollAnimated direction="up" delay={100} className="flex-1">
               {content?.paiement && (
                 <div className="flex-col">
                   <h3 className="font-bold text-xl mb-2">
                     Moyens de paiement :
                   </h3>
-                  <p className="max-w-md">
-                    Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans
-                    Contact, Chèque vacances, Tickets restaurant
+                  <p className="text-gray-700">
+                    {content.paiement || "Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact, Chèque vacances, Tickets restaurant"}
                   </p>
                 </div>
               )}
             </ScrollAnimated>
-            {content?.schedules && content.schedules.length > 0 && (
-              <ScrollAnimated direction="up" delay={150} className="flex-col w-full md:w-1/2">
-                <h3 className="font-bold text-xl mb-6">Horaires :</h3>
-                <table className="w-full border-collapse border text-sm">
+          </div>
+
+          {/* Tableau Horaires */}
+          {content?.schedules && content.schedules.length > 0 && (
+            <ScrollAnimated direction="up" delay={200} className="w-full">
+              <h3 className="font-bold text-xl mb-6">Horaires :</h3>
+              <div className="overflow-x-auto rounded-lg p-4">
+                <table className="w-full border-collapse text-sm md:text-base">
                   <thead>
-                    <tr className="bg-primary text-white">
-                      <th className="border px-3 py-2 text-left">Jour</th>
-                      <th className="border px-3 py-2 text-left">Midi</th>
-                      <th className="border px-3 py-2 text-left">Soir</th>
+                    <tr>
+                      <th className="px-3 py-3 text-left font-semibold"></th>
+                      {DAYS.map((day) => (
+                        <th key={day} className="px-3 py-3 text-center font-semibold text-primary">
+                          {day.toUpperCase()}
+                        </th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {DAYS.map((day) => {
-                      const midi = content.schedules?.find(
-                        (s: Schedule) => s.day === day && s.period === "MIDI"
-                      );
-                      const soir = content.schedules?.find(
-                        (s: Schedule) => s.day === day && s.period === "SOIR"
-                      );
-
-                      return (
-                        <tr key={day}>
-                          <td className="border border-primary px-3 py-2">{day}</td>
-                          <td className="border border-primary px-3 py-2">{formatSchedule(midi)}</td>
-                          <td className="border border-primary px-3 py-2">{formatSchedule(soir)}</td>
-                        </tr>
-                      );
-                    })}
+                    <tr className="border-b-2 border-primary/40">
+                      <td className="px-4 py-3 font-semibold text-primary">MIDI</td>
+                      {DAYS.map((day) => {
+                        const midi = content.schedules?.find(
+                          (s: Schedule) => s.day === day && s.period === "MIDI"
+                        );
+                        return (
+                          <td key={`midi-${day}`} className="px-3 py-3 text-center text-gray-700">
+                            {formatSchedule(midi)}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-semibold text-primary">SOIR</td>
+                      {DAYS.map((day) => {
+                        const soir = content.schedules?.find(
+                          (s: Schedule) => s.day === day && s.period === "SOIR"
+                        );
+                        return (
+                          <td key={`soir-${day}`} className="px-3 py-3 text-center text-gray-700">
+                            {formatSchedule(soir)}
+                          </td>
+                        );
+                      })}
+                    </tr>
                   </tbody>
                 </table>
-              </ScrollAnimated>
-            )}
-          </div>
+              </div>
+            </ScrollAnimated>
+          )}
         </div>
       </section>
 

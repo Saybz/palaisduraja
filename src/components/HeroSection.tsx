@@ -23,7 +23,7 @@ export default function HeroSection({ banner, tel }: HeroSectionProps) {
   }, []);
 
   // Calcul du décalage parallax (l'image se déplace plus lentement que le scroll)
-  const parallaxOffset = scrollY * 0.5; // Ajustez cette valeur (0.5 = vitesse moyenne)
+  const parallaxOffset = scrollY * 0.5;
 
   // Séparer les mots du titre pour les animer individuellement
   const titleWords = "Palais du Raja".split(" ");
@@ -33,26 +33,28 @@ export default function HeroSection({ banner, tel }: HeroSectionProps) {
       {banner && (
         <div className="h-screen w-full relative">
           <div
-            className="absolute inset-0 w-full h-[120%]"
+            className="absolute inset-0 w-full h-[120%] hero-banner-zoom"
             style={{
               transform: `translateY(${parallaxOffset}px)`,
               transition: "transform 0.1s ease-out",
             }}
           >
-            <Image
-              src={banner}
-              alt="Salle du restaurant Palais du Raja à Tours"
-              fill
-              priority
-              sizes="100vw"
-              style={{ objectFit: "cover", objectPosition: "center" }}
-              className=""
-            />
+            <div className="absolute inset-0 w-full h-full">
+              <Image
+                src={banner}
+                alt="Salle du restaurant Palais du Raja à Tours"
+                fill
+                priority
+                sizes="100vw"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+                className=""
+              />
+            </div>
           </div>
         </div>
       )}
-      <div className="absolute inset-0 bg-black/40 z-10" aria-hidden="true" />
-      <div className="absolute inset-0 flex flex-col text-secondary items-center justify-center z-20 section-responsive text-center">
+      <div className="absolute inset-0 bg-black/40 z-10 hero-overlay" aria-hidden="true" />
+      <div className="absolute inset-0 flex flex-col text-secondary items-center justify-center z-20 section-responsive text-center hero-content">
         <header>
           <h1 className="relative font-body font-bold text-5xl md:text-7xl mb-2 md:mb-4 flex flex-wrap justify-center gap-2 md:gap-3">
             {titleWords.map((word, index) => (
@@ -60,7 +62,7 @@ export default function HeroSection({ banner, tel }: HeroSectionProps) {
                 key={index}
                 className="hero-word inline-block"
                 style={{
-                  animationDelay: `${index * 200 + 300}ms`,
+                  animationDelay: `${index * 100 + 300}ms`,
                 }}
               >
                 {word}

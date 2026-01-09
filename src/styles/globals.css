@@ -4,12 +4,14 @@
 
 :root {
   --color-primary: #75192E;
-  --color-secondary: #FFF2E0;
-  --color-dark: #1e2225;
+  --color-primary-light: #d4637d;
+  --color-secondary: #d8cbb8;
+  --color-dark: #2c2c2c;
   --color-light: #f5efe6;
+  --color-gray: #d8cbb8;
   --font-head: "Tangerine", serif;
   --font-body: "Karma", sans-serif;
-  --background: #FFF2E0;
+  --background: #d8cbb8;
   --foreground: #1e2225;
 }
 
@@ -137,10 +139,52 @@ body {
   }
 
   /* Animations hero banner - texte délicat */
+  .hero-banner-zoom > div {
+    animation: heroBannerZoom 2s cubic-bezier(.55,.07,.08,.97) forwards;
+    transform-origin: center center;
+  }
+
+  @keyframes heroBannerZoom {
+    from {
+      transform: scale(1.2);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  /* Animation du fond overlay */
+  .hero-overlay {
+    opacity: 0;
+    animation: heroOverlayFade 2s cubic-bezier(.55,.07,.08,.97) forwards;
+    animation-delay: 100ms;
+  }
+
+  @keyframes heroOverlayFade {
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Animation du conteneur principal du header */
+  .hero-content {
+    opacity: 0;
+    transform: translateY(80px);
+    animation: heroContentSlide 2s cubic-bezier(.55,.07,.08,.97) forwards;
+    animation-delay: 100ms;
+  }
+
+  @keyframes heroContentSlide {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .hero-word {
     opacity: 0;
-    transform: translateY(20px);
-    animation: heroWordAppear 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform: translateY(100px);
+    animation: heroWordAppear 2s cubic-bezier(.55,.07,.08,.97) forwards;
   }
 
   @keyframes heroWordAppear {
@@ -152,29 +196,29 @@ body {
 
   .hero-subtitle {
     opacity: 0;
-    transform: translateY(15px);
-    animation: heroElementAppear 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: 1100ms;
+    transform: translateY(20px);
+    animation: heroElementAppear 1.2s cubic-bezier(.55,.07,.08,.97) forwards;
+    animation-delay: 1400ms;
   }
 
   .hero-schedule {
     opacity: 0;
-    transform: translateY(15px);
-    animation: heroElementAppear 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: 1200ms;
+    transform: translateY(20px);
+    animation: heroElementAppear 1.2s cubic-bezier(.55,.07,.08,.97) forwards;
+    animation-delay: 1400ms;
   }
 
   .hero-button {
     opacity: 0;
-    transform: translateY(15px);
-    animation: heroElementAppear 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: 1300ms;
+    transform: translateY(20px);
+    animation: heroElementAppear 1.2s cubic-bezier(.55,.07,.08,.97) forwards;
+    animation-delay: 1400ms;
   }
 
   .hero-arrow {
     opacity: 0;
-    transform: translateY(-15px);
-    animation: heroArrowAppear 1s cubic-bezier(0.16, 1, 0.3, 1) 2s forwards,
+    transform: translateY(20px);
+    animation: heroArrowAppear 1.2s cubic-bezier(.55,.07,.08,.97) 2s forwards,
                heroArrowBounce 2s ease-in-out 3s infinite;
     cursor: pointer;
   }
@@ -203,6 +247,21 @@ body {
     }
     50% {
       transform: translateY(12px);
+    }
+  }
+
+  /* Animation header au chargement */
+  .header-enter {
+    opacity: 0;
+    transform: translateY(-60px);
+    animation: headerEnter 1.5s cubic-bezier(.55,.07,.08,.97) forwards;
+    animation-delay: 1300ms;
+  }
+
+  @keyframes headerEnter {
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }

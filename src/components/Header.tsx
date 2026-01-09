@@ -39,11 +39,12 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`z-50 fixed w-screen top-0 left-0 font-body text-secondary py-2 md:py-6 transition-all duration-300  ${
-        isScrolled ? "shadow-md bg-primary text-secondary" : ""
+      className={`z-50 fixed w-screen top-0 left-0 font-body text-secondary py-2 md:py-6 transition-all duration-300 header-enter ${
+        isScrolled 
+          ? "shadow-lg bg-primary/80 backdrop-blur-md border-b-[0.2px] border-primary-light/90" 
+          : "border-b-[0.2px] border-transparent"
       }
       ${isAdminPage ? "bg-primary" : ""}
-      
       `}
     >
       <div className="container h-full max-w-main mx-auto px-4 md:px-10 lg:px-0 flex flex-col md:flex-row justify-between items-center">
