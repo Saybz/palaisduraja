@@ -46,6 +46,10 @@ export async function POST(req: Request) {
     histoireImg,
     menuDesc,
     menuImg,
+    menuImg1,
+    menuImg2,
+    menuImg3,
+    menuImg4,
     menuPdf,
     cuisine,
     paiement,
@@ -68,6 +72,10 @@ export async function POST(req: Request) {
         histoireImg,
         menuDesc,
         menuImg,
+        menuImg1,
+        menuImg2,
+        menuImg3,
+        menuImg4,
         menuPdf,
         cuisine,
         paiement,
@@ -103,7 +111,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(result);
   } else {
-    // 🟢 Création d’un nouveau contenu
+    // 🟢 Création d'un nouveau contenu
     const newContent = await prisma.content.create({
       data: {
         banner,
@@ -112,6 +120,10 @@ export async function POST(req: Request) {
         histoireImg,
         menuDesc,
         menuImg,
+        menuImg1,
+        menuImg2,
+        menuImg3,
+        menuImg4,
         menuPdf,
         cuisine,
         paiement,

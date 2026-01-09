@@ -35,6 +35,10 @@ export default function AdminPage() {
     histoireImg: "",
     menuDesc: "",
     menuImg: "",
+    menuImg1: "",
+    menuImg2: "",
+    menuImg3: "",
+    menuImg4: "",
     menuPdf: "",
     cuisine: "",
     paiement: "",
@@ -47,6 +51,10 @@ export default function AdminPage() {
   const [newHistoireImage, setNewHistoireImage] = useState<File | null>(null);
   const [newBannerImage, setNewBannerImage] = useState<File | null>(null);
   const [newMenuImage, setNewMenuImage] = useState<File | null>(null);
+  const [newMenuImage1, setNewMenuImage1] = useState<File | null>(null);
+  const [newMenuImage2, setNewMenuImage2] = useState<File | null>(null);
+  const [newMenuImage3, setNewMenuImage3] = useState<File | null>(null);
+  const [newMenuImage4, setNewMenuImage4] = useState<File | null>(null);
   const [newPdf, setNewPdf] = useState<File | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { data: session } = useSession();
@@ -56,7 +64,24 @@ export default function AdminPage() {
     const fetchContent = async () => {
       const res = await fetch("/admin/api/content");
       const data = await res.json();
-      setContent(data || content);
+      // S'assurer que tous les champs sont des chaînes vides et non null/undefined
+      setContent({
+        banner: data?.banner || "",
+        title: data?.title || "",
+        histoire: data?.histoire || "",
+        histoireImg: data?.histoireImg || "",
+        menuDesc: data?.menuDesc || "",
+        menuImg: data?.menuImg || "",
+        menuImg1: data?.menuImg1 || "",
+        menuImg2: data?.menuImg2 || "",
+        menuImg3: data?.menuImg3 || "",
+        menuImg4: data?.menuImg4 || "",
+        menuPdf: data?.menuPdf || "",
+        cuisine: data?.cuisine || "",
+        paiement: data?.paiement || "",
+        mail: data?.mail || "",
+        tel: data?.tel || "",
+      });
       setSchedules(
         data?.schedules?.length
           ? data.schedules
@@ -123,6 +148,10 @@ export default function AdminPage() {
     let uploadedBannerImage = content.banner;
     let uploadedHistoireImage = content.histoireImg;
     let uploadedMenuImage = content.menuImg;
+    let uploadedMenuImage1 = content.menuImg1;
+    let uploadedMenuImage2 = content.menuImg2;
+    let uploadedMenuImage3 = content.menuImg3;
+    let uploadedMenuImage4 = content.menuImg4;
     let uploadedPdf = content.menuPdf;
 
     if (newBannerImage)
@@ -130,6 +159,10 @@ export default function AdminPage() {
     if (newHistoireImage)
       uploadedHistoireImage = await handleFileUpload(newHistoireImage);
     if (newMenuImage) uploadedMenuImage = await handleFileUpload(newMenuImage);
+    if (newMenuImage1) uploadedMenuImage1 = await handleFileUpload(newMenuImage1);
+    if (newMenuImage2) uploadedMenuImage2 = await handleFileUpload(newMenuImage2);
+    if (newMenuImage3) uploadedMenuImage3 = await handleFileUpload(newMenuImage3);
+    if (newMenuImage4) uploadedMenuImage4 = await handleFileUpload(newMenuImage4);
     if (newPdf) uploadedPdf = await handleFileUpload(newPdf);
 
     // Sauvegarde du contenu
@@ -141,6 +174,10 @@ export default function AdminPage() {
         banner: uploadedBannerImage,
         histoireImg: uploadedHistoireImage,
         menuImg: uploadedMenuImage,
+        menuImg1: uploadedMenuImage1,
+        menuImg2: uploadedMenuImage2,
+        menuImg3: uploadedMenuImage3,
+        menuImg4: uploadedMenuImage4,
         menuPdf: uploadedPdf,
         schedules,
       }),
@@ -255,12 +292,6 @@ export default function AdminPage() {
               current: content.histoireImg,
               setFile: setNewHistoireImage,
             },
-            {
-              label: "Image Menu",
-              file: newMenuImage,
-              current: content.menuImg,
-              setFile: setNewMenuImage,
-            },
           ].map(({ label, file, current, setFile }, idx) => (
             <div key={idx}>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -277,6 +308,67 @@ export default function AdminPage() {
               )}
               <input
                 type="file"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
+              />
+              {file && (
+                <Image
+                  src={URL.createObjectURL(file)}
+                  alt={`Prévisualisation ${label}`}
+                  width={100}
+                  height={64}
+                  className="mt-2 rounded-md"
+                />
+              )}
+            </div>
+          ))}
+
+          {/* Images Menu (4 images) */}
+          <h3 className="text-lg font-semibold text-gray-800 mt-6 mb-3">
+            Images Menu (4 images)
+          </h3>
+          {[
+            {
+              label: "Image Menu 1",
+              file: newMenuImage1,
+              current: content.menuImg1,
+              setFile: setNewMenuImage1,
+            },
+            {
+              label: "Image Menu 2",
+              file: newMenuImage2,
+              current: content.menuImg2,
+              setFile: setNewMenuImage2,
+            },
+            {
+              label: "Image Menu 3",
+              file: newMenuImage3,
+              current: content.menuImg3,
+              setFile: setNewMenuImage3,
+            },
+            {
+              label: "Image Menu 4",
+              file: newMenuImage4,
+              current: content.menuImg4,
+              setFile: setNewMenuImage4,
+            },
+          ].map(({ label, file, current, setFile }, idx) => (
+            <div key={idx} className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                {label}
+              </label>
+              {current && (
+                <Image
+                  src={current}
+                  alt={label}
+                  width={600}
+                  height={400}
+                  className="rounded-md mb-2"
+                />
+              )}
+              <input
+                type="file"
+                accept="image/*"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
                 className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
               />

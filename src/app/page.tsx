@@ -17,6 +17,10 @@ interface Content {
   histoire?: string | null;
   title?: string | null;
   menuImg?: string | null;
+  menuImg1?: string | null;
+  menuImg2?: string | null;
+  menuImg3?: string | null;
+  menuImg4?: string | null;
   menuPdf?: string | null;
   menuDesc?: string | null;
   cuisine?: string | null;

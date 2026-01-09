@@ -5,6 +5,7 @@ import Image from "next/image";
 import CtaBtn from "@/components/CtaButton";
 import ScrollAnimated from "@/components/ScrollAnimated";
 import ScrollToTopButton from "@/components/ScrollToTopBtn";
+import MenuSection from "@/components/MenuSection";
 
 type Schedule = {
   id: number;
@@ -20,6 +21,10 @@ type Content = {
   histoire?: string | null;
   title?: string | null;
   menuImg?: string | null;
+  menuImg1?: string | null;
+  menuImg2?: string | null;
+  menuImg3?: string | null;
+  menuImg4?: string | null;
   menuPdf?: string | null;
   menuDesc?: string | null;
   cuisine?: string | null;
@@ -74,50 +79,16 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </section>
 
       {/* Menu Section */}
-      <section
-        id="menu"
-        aria-labelledby="menu-heading"
-        className="relative max-w-main w-full section-responsive"
-      >
-        <ScrollAnimated direction="up" delay={0}>
-          <h2 id="menu-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
-            Carte & Menus
-          </h2>
-        </ScrollAnimated>
-        <ScrollAnimated direction="up" delay={150}>
-          <div className="relative min-h-[200px] md:min-h-[300px] md:min-h-[500px] h-[20vh] md:h-[50vh] w-full before:left-full shadow-lg">
-            <div className="absolute inset-0 bg-black/20 z-10">
-              {content?.menuImg && (
-                <Image
-                  src={content.menuImg}
-                  alt="Carte et menu du restaurant Palais du Raja - Spécialités indiennes et pakistanaises : currys, tandoori, naans, biryani, plats végétariens à Tours"
-                  fill
-                  loading="lazy"
-                  sizes="(max-width: 768px) 100vw, 1280px"
-                  style={{ objectFit: "cover", objectPosition: "center" }}
-                  className=""
-                  title="Menu et carte du restaurant indien Palais du Raja à Tours"
-                />
-              )}
-            </div>
-
-            {content?.menuPdf && (
-              <div className="absolute z-20 top-0 right-0 w-full h-full flex justify-center items-center">
-                  <a
-                  href={content.menuPdf}
-                  rel="noopener noreferrer"
-                  aria-label="Télécharger le menu complet au format PDF - Restaurant Palais du Raja"
-                  target="_blank"
-                  className="p-4 bg-primary text-white shadow-lg font-semibold hover:bg-secondary hover:text-primary transition-all"
-                  title="Menu PDF du restaurant Palais du Raja - Téléchargement"
-                >
-                  {content.menuDesc || "Télécharger le menu"}
-                </a>
-              </div>
-            )}
-          </div>
-        </ScrollAnimated>
-      </section>
+      <div className="max-w-main w-full">
+        <MenuSection
+          menuImg1={content?.menuImg1}
+          menuImg2={content?.menuImg2}
+          menuImg3={content?.menuImg3}
+          menuImg4={content?.menuImg4}
+          menuPdf={content?.menuPdf}
+          menuDesc={content?.menuDesc}
+        />
+      </div>
 
       {/* Infos Section */}
       <section id="infos" aria-labelledby="infos-heading" className="w-full section-responsive">

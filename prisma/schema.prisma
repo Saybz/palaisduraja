@@ -21,6 +21,10 @@ model Content {
   histoireImg String?
   menuDesc    String?
   menuImg     String?
+  menuImg1    String?
+  menuImg2    String?
+  menuImg3    String?
+  menuImg4    String?
   menuPdf     String?
 
   cuisine     String?
