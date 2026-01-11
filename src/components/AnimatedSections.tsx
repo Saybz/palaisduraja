@@ -52,31 +52,53 @@ export default function AnimatedSections({ content }: { content: Content | null 
       <section
         id="about"
         aria-labelledby="about-heading"
-        className="relative flex flex-col gap-10 lg:gap-0 items-center lg:flex-row w-full min-h-screen"
-        style={{ paddingTop: "6rem", paddingBottom: "6rem" }}
+        className="relative w-full h-screen grid grid-cols-3 overflow-hidden border-b border-primary"
       >
-        <ScrollAnimated direction="up" delay={0} className="ml-0 lg:w-1/2 lg:flex-shrink-0 mt-10 lg:mt-0 px-4 md:px-6 lg:px-8 xl:px-12">
-          <h2 id="about-heading" className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-1 md:mb-4">
-            {content?.title || "Histoire du restaurant Palais du Raja"}
-          </h2>
-          <p className="text-lg text-gray-600" itemProp="description">
-            {content?.histoire || "Découvrez l'histoire du Palais du Raja, restaurant indien traditionnel à Tours."}
-          </p>
-        </ScrollAnimated>
+        {/* Partie gauche - Image (1/3) */}
         {content?.histoireImg && (
-          <ScrollAnimated direction="up" delay={150} className="relative min-h-[400px] h-[20vh] md:h-[30vh] w-full lg:w-1/2 lg:flex-shrink-0 before:left-full shadow-lg">
+          <ScrollAnimated direction="up" delay={0} className="col-span-3 lg:col-span-1 w-full h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary">
             <Image
               src={content.histoireImg}
               alt={`${content?.title || "Histoire"} - Restaurant Palais du Raja, restaurant indien traditionnel à Tours, 113 rue Colbert`}
               fill
               loading="lazy"
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="33.333vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
               className=""
               title={`${content?.title || "Histoire"} du restaurant Palais du Raja`}
             />
           </ScrollAnimated>
         )}
+        
+        {/* Partie droite - Texte (2/3) */}
+        <ScrollAnimated direction="up" delay={150} className="col-span-3 lg:col-span-2 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 bg-light border-t lg:border-t-0 border-primary relative overflow-hidden">
+          <div className="max-w-[70%] relative z-10">
+            <h2 id="about-heading" className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-4 md:mb-6">
+              {content?.title || "Histoire du restaurant Palais du Raja"}
+            </h2>
+            <p className="text-lg md:text-xl text-dark" itemProp="description">
+              {content?.histoire || "Découvrez l'histoire du Palais du Raja, restaurant indien traditionnel à Tours."}
+            </p>
+          </div>
+          
+          {/* Rosace en position fixed - visible à moitié à droite du texte */}
+          <div 
+            className="fixed right-0 top-1/2 w-[60vh] h-[60vh] opacity-20 pointer-events-none z-0"
+            style={{ 
+              transform: 'translateY(-50%) translateX(50%)',
+            }}
+            aria-hidden="true"
+          >
+            <Image
+              src="/img/mandala.png"
+              alt=""
+              fill
+              sizes="60vh"
+              style={{ objectFit: "contain", objectPosition: "center" }}
+              className=""
+            />
+          </div>
+        </ScrollAnimated>
       </section>
 
       {/* Menu Section */}
