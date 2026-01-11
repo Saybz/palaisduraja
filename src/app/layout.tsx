@@ -1,9 +1,8 @@
 import { Tangerine, Karma } from "next/font/google";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import Providers from "@/components/Providers";
+import ClientLayout from "@/app/ClientLayout";
 import Script from "next/script";
 
 export const metadata: Metadata = {
@@ -116,9 +115,7 @@ export default function RootLayout({
           Aller au contenu principal
         </a>
         <Providers>
-          <Header />
-          <main id="main">{children}</main>
-          <Footer />
+          <ClientLayout>{children}</ClientLayout>
         </Providers>
         <Script
           id="restaurant-schema"

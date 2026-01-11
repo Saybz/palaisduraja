@@ -236,7 +236,7 @@ const Header: React.FC = () => {
           ? "shadow-lg bg-light/80 backdrop-blur-md border-b-[0.2px] border-primary/90" 
           : "border-b-[0.2px] border-transparent"
       }
-      ${isAdminPage ? "bg-primary" : ""}
+      ${isAdminPage ? "bg-light" : ""}
       `}
       style={{
         transform: isHeaderVisible ? "translateY(0)" : "translateY(-100%)",

@@ -3,8 +3,10 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 type Schedule = {
   id?: number;
@@ -31,6 +33,7 @@ type Section = "hero" | "histoire" | "menu" | "infos" | "contact" | "horaires";
 
 export default function AdminPage() {
   const [activeSection, setActiveSection] = useState<Section>("hero");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [content, setContent] = useState({
     banner: "",
     title: "",
@@ -507,21 +510,58 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-light flex">
+      {/* Bouton burger mobile */}
+      <button
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className="fixed top-4 left-4 z-50 lg:hidden bg-white p-2 rounded-lg shadow-md border border-gray-200"
+        aria-label="Toggle menu"
+      >
+        {isMenuOpen ? <X size={24} className="text-gray-700" /> : <Menu size={24} className="text-gray-700" />}
+      </button>
+
+      {/* Overlay mobile */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 fixed h-screen overflow-y-auto">
+      <aside
+        className={`w-64 bg-white border-r border-gray-200 fixed h-screen overflow-y-auto flex flex-col z-40 transition-transform duration-300 ease-in-out ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        }`}
+      >
+        {/* Bouton retour au site en haut */}
         <div className="p-4 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-gray-800">Administration</h1>
+          <Link
+            href="/"
+            className="text-primary hover:text-primary-light transition-colors font-medium"
+          >
+            ← Revenir au site
+          </Link>
         </div>
-        <nav className="p-4">
+
+        {/* Titre */}
+        <div className="p-4 border-b border-gray-200">
+          <h1 className="text-xl font-bold text-primary">Administration</h1>
+        </div>
+
+        {/* Navigation */}
+        <nav className="p-4 flex-1">
           <ul className="space-y-2">
             {sections.map((section) => (
               <li key={section.id}>
                 <button
-                  onClick={() => setActiveSection(section.id)}
+                  onClick={() => {
+                    setActiveSection(section.id);
+                    setIsMenuOpen(false); // Fermer le menu mobile après sélection
+                  }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                     activeSection === section.id
-                      ? "bg-blue-600 text-white"
+                      ? "bg-primary text-white"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
@@ -532,18 +572,26 @@ export default function AdminPage() {
             ))}
           </ul>
         </nav>
-        <div className="p-4 border-t border-gray-200 mt-auto">
+
+        {/* Boutons en bas */}
+        <div className="p-4 border-t border-gray-200 space-y-3">
           <button
             onClick={handleSave}
             className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-md"
           >
             💾 Sauvegarder
           </button>
+          <button
+            onClick={() => signOut()}
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+          >
+            Se déconnecter
+          </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-64 p-8">
+      <main className="flex-1 lg:ml-64 p-4 lg:p-8">
         <div className="max-w-4xl mx-auto">
           {successMessage && (
             <div
