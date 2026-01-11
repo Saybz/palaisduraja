@@ -49,8 +49,8 @@ export default async function Home() {
   
 
   return (
-    <div className="z-0 min-h-screen w-screen font-body flex flex-col mt-18 items-center">
-      <HeroSection banner={content?.banner} tel={content?.tel} />
+    <div className="z-0 min-h-screen w-screen font-body flex flex-col items-center">
+      <HeroSection banner={content?.banner} tel={content?.tel} menuPdf={content?.menuPdf} />
       <AnimatedSections content={content} />
     </div>
   );

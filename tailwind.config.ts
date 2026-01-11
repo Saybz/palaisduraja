@@ -19,7 +19,8 @@ export default {
         primary: "#75192E",
         primarylight: "#d4637d",
         "primary-light": "#d4637d", // Version avec tiret pour compatibilité
-        secondary: "#FFF2E0",
+        secondary: "#E2B161",
+        light: "#FFF2E0",
         dark: "#333333",
         background: "var(--background)",
         foreground: "var(--foreground)",
