@@ -126,15 +126,15 @@ export default function AnimatedSections({ content }: { content: Content | null 
             </ScrollAnimated>
           </div>
           
-          {/* Case 2 - Moyens de paiement */}
+          {/* Case 2 - Viande Halal */}
           <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={100}>
-              <div className="text-center">
-                <h3 className="font-bold text-xl md:text-2xl text-primary mb-2">
-                  Moyens de paiement
-                </h3>
-                <p className="text-primary text-base md:text-lg">
-                  {content?.paiement || "Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact, Chèque vacances, Tickets restaurant"}
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-[60px] h-[60px] flex items-center justify-center">
+                  <span className="text-primary font-bold text-3xl">حلال</span>
+                </div>
+                <p className="text-primary font-semibold text-lg md:text-xl text-center">
+                  Viande Halal
                 </p>
               </div>
             </ScrollAnimated>
@@ -144,8 +144,8 @@ export default function AnimatedSections({ content }: { content: Content | null 
           <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={200}>
               <div className="flex flex-col items-center gap-3">
-                <div className="w-8 h-8 border-2 border-primary rounded-full flex items-center justify-center">
-                  <span className="text-primary text-xl">🌿</span>
+                <div className="w-[60px] h-[60px] flex items-center justify-center">
+                  <span className="text-primary text-5xl">🌿</span>
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
                   Large choix végétarien
@@ -157,15 +157,15 @@ export default function AnimatedSections({ content }: { content: Content | null 
 
         {/* Colonne 2 - Grille 2x3 (6 cases) */}
         <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
-          {/* Case 1 - Viande Halal */}
+          {/* Case 1 - Moyens de paiement */}
           <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={150}>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 border-2 border-primary rounded-full flex items-center justify-center">
-                  <span className="text-primary font-bold text-sm">حلال</span>
-                </div>
-                <p className="text-primary font-semibold text-lg md:text-xl text-center">
-                  Viande Halal
+              <div className="text-center">
+                <h3 className="font-bold text-xl md:text-2xl text-primary mb-2">
+                  Moyens de paiement
+                </h3>
+                <p className="text-primary text-base md:text-lg">
+                  {content?.paiement || "Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact, Chèque vacances, Tickets restaurant"}
                 </p>
               </div>
             </ScrollAnimated>
@@ -175,8 +175,8 @@ export default function AnimatedSections({ content }: { content: Content | null 
           <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={250}>
               <div className="flex flex-col items-center gap-3">
-                <div className="w-8 h-8 border-2 border-primary rounded-full flex items-center justify-center">
-                  <span className="text-primary text-xl">🍛</span>
+                <div className="w-[60px] h-[60px] flex items-center justify-center">
+                  <span className="text-primary text-5xl">🍛</span>
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
                   {content?.cuisine || "Cuisine Indienne et Pakistanaise"}
@@ -189,8 +189,8 @@ export default function AnimatedSections({ content }: { content: Content | null 
           <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={350}>
               <div className="flex flex-col items-center gap-3">
-                <div className="w-8 h-8 border-2 border-primary rounded-full flex items-center justify-center">
-                  <span className="text-primary text-xl">👨‍🍳</span>
+                <div className="w-[60px] h-[60px] flex items-center justify-center">
+                  <span className="text-primary text-5xl">👨‍🍳</span>
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
                   Plats faits maison
@@ -229,7 +229,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
                         (s: Schedule) => s.day === day && s.period === "SOIR"
                       );
                       return (
-                        <tr key={day} className="border-b border-primary/40">
+                        <tr key={day} className="">
                           <td className="px-4 py-3 font-semibold text-primary text-center">
                             {day}
                           </td>
@@ -251,8 +251,8 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </section>
 
       {/* Contact Section */}
-      <section id="contact" aria-labelledby="contact-heading" className="w-full min-h-screen" style={{ paddingTop: "6rem" }}>
-        <div className="w-full mx-auto px-4 md:px-6 lg:px-8 xl:px-12">
+      <section id="contact" aria-labelledby="contact-heading" className="w-full h-screen flex flex-col" style={{ paddingTop: "6rem" }}>
+        <div className="w-full mx-auto pb-6 px-4 md:px-6 lg:px-8 xl:px-12 flex-shrink-0">
           <ScrollAnimated direction="up" delay={0}>
             <h2 id="contact-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
               Contact et réservation
@@ -288,16 +288,16 @@ export default function AnimatedSections({ content }: { content: Content | null 
             </div>
           </ScrollAnimated>
         </div>
-        <ScrollAnimated direction="up" delay={300}>
+        <ScrollAnimated direction="up" delay={300} className="flex-1 min-h-0 w-full">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5401.635074206616!2d0.689015977602613!3d47.395992871171224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcd5b248f1490b%3A0xd4bc494e1971897e!2sLe%20Palais%20du%20Rajah%20(Rajasthan)!5e0!3m2!1sfr!2sfr!4v1738936968444!5m2!1sfr!2sfr"
-            width="600"
-            height="400"
+            width="100%"
+            height="100%"
             style={{ border: 0 }}
             title="Carte Google Maps du Palais du Raja à Tours"
             aria-label="Carte Google Maps du Palais du Raja à Tours"
             loading="lazy"
-            className="w-full h-[450px] rounded-lg shadow-lg mt-10"
+            className="w-full h-full"
           ></iframe>
         </ScrollAnimated>
       </section>

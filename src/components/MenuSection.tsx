@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import ScrollAnimated from "@/components/ScrollAnimated";
 
@@ -77,6 +77,7 @@ export default function MenuSection({
 }: MenuSectionProps) {
   const [selectedDish, setSelectedDish] = useState<number | null>(null);
   const [expandedDish, setExpandedDish] = useState<number | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Images disponibles pour les plats
   const dishImages = [menuImg1, menuImg2, menuImg3, menuImg4].filter(
@@ -89,9 +90,26 @@ export default function MenuSection({
     : dishImages[0] || null;
 
   const handleDishClick = (dishId: number) => {
+    // Annuler le timeout précédent s'il existe
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
     if (expandedDish === dishId) {
+      // Fermer le plat actuel
       setExpandedDish(null);
+      setSelectedDish(null);
+    } else if (expandedDish !== null) {
+      // Un autre plat est ouvert, fermer d'abord puis ouvrir le nouveau après le délai
+      setExpandedDish(null);
+      timeoutRef.current = setTimeout(() => {
+        setExpandedDish(dishId);
+        setSelectedDish(dishId);
+        timeoutRef.current = null;
+      }, 300); // Délai correspondant à la durée de l'animation (duration-300)
     } else {
+      // Aucun plat n'est ouvert, ouvrir directement
       setExpandedDish(dishId);
       setSelectedDish(dishId);
     }
@@ -130,7 +148,7 @@ export default function MenuSection({
                 rel="noopener noreferrer"
                 aria-label="Télécharger le menu complet au format PDF - Restaurant Palais du Raja"
                 target="_blank"
-                className="inline-block px-6 py-3 bg-secondary text-primary font-semibold shadow-lg hover:bg-secondary/90 transition-all rounded-lg"
+                className="inline-block px-6 py-3 pb-2 bg-secondary text-primary font-semibold shadow-lg hover:bg-secondary/90 transition-all"
                 title="Menu PDF du restaurant Palais du Raja - Téléchargement"
               >
                 {menuDesc || "Découvrir la carte"}
@@ -143,7 +161,7 @@ export default function MenuSection({
       {/* Deuxième colonne - Liste des plats populaires */}
       <div className="col-span-3 lg:col-span-1 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-secondary overflow-y-auto">
         <ScrollAnimated direction="up" delay={150} className="w-full">
-          <h3 className="font-head text-3xl md:text-4xl text-secondary mb-6">
+          <h3 className="font-body text-md md:text-4xl text-secondary mb-6 ml-4">
             Plats populaires
           </h3>
           
@@ -151,7 +169,7 @@ export default function MenuSection({
             {POPULAR_DISHES.map((dish) => (
               <div
                 key={dish.id}
-                className="border-b border-secondary transition-all w-full"
+                className="border-b border-secondary w-full overflow-hidden"
               >
                 <button
                   onClick={() => handleDishClick(dish.id)}
@@ -166,13 +184,19 @@ export default function MenuSection({
                   </span>
                 </button>
                 
-                {expandedDish === dish.id && (
+                <div 
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    expandedDish === dish.id 
+                      ? 'max-h-96 opacity-100' 
+                      : 'max-h-0 opacity-0'
+                  }`}
+                >
                   <div className="px-4 py-3 bg-primary/60 border-t border-secondary">
                     <p className="text-light text-base leading-relaxed">
                       {dish.description}
                     </p>
                   </div>
-                )}
+                </div>
               </div>
             ))}
           </div>

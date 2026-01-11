@@ -233,7 +233,7 @@ const Header: React.FC = () => {
     <header
       className={`z-50 sticky top-0 w-full font-body text-primary py-2 md:py-6 transition-all duration-300 header-enter ${
         isScrolled 
-          ? "shadow-lg bg-primary/80 backdrop-blur-md border-b-[0.2px] border-primary-light/90" 
+          ? "shadow-lg bg-light/80 backdrop-blur-md border-b-[0.2px] border-primary/90" 
           : "border-b-[0.2px] border-transparent"
       }
       ${isAdminPage ? "bg-primary" : ""}
@@ -275,7 +275,7 @@ const Header: React.FC = () => {
                 href={`#${section.id}`}
                 onClick={(e) => scrollToSection(e, section.id)}
                 className={`relative text-xs md:text-sm text-primary chover:text-primary-light cursor-pointer transition-colors ${
-                  activeSection === section.id ? "text-white" : ""
+                  activeSection === section.id ? "text-secondary" : ""
                 }`}
               >
                 {section.label}
