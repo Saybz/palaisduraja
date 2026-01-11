@@ -114,81 +114,134 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </div>
 
       {/* Infos Section */}
-      <section id="infos" aria-labelledby="infos-heading" className="w-full bg-primary-light/20 min-h-screen" style={{ paddingTop: "6rem", paddingBottom: "6rem" }}>
-        <div className="w-full mx-auto px-4 md:px-6 lg:px-8 xl:px-12 py-8 md:py-12">
-          <ScrollAnimated direction="up" delay={0}>
-            <h2 id="infos-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
-              Infos pratiques
-            </h2>
-          </ScrollAnimated>
-          
-          {/* Cuisine et Moyens de paiement */}
-          <div className="w-full flex flex-col md:flex-row gap-8 md:gap-12 mb-10">
-            <ScrollAnimated direction="up" delay={0} className="flex-1">
-              {content?.cuisine && (
-                <div className="flex-col mb-8 md:mb-0">
-                  <h3 className="font-bold text-xl mb-2">Cuisine :</h3>
-                  <p className="text-gray-700">{content.cuisine}</p>
-                </div>
-              )}
-            </ScrollAnimated>
-            <ScrollAnimated direction="up" delay={100} className="flex-1">
-              {content?.paiement && (
-                <div className="flex-col">
-                  <h3 className="font-bold text-xl mb-2">
-                    Moyens de paiement :
-                  </h3>
-                  <p className="text-gray-700">
-                    {content.paiement || "Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact, Chèque vacances, Tickets restaurant"}
-                  </p>
-                </div>
-              )}
+      <section id="infos" aria-labelledby="infos-heading" className="w-full h-screen grid grid-cols-3 overflow-hidden border-b border-primary bg-light">
+        {/* Colonne 1 - Grille 2x3 (6 cases) */}
+        <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
+          {/* Case 1 - Titre "Infos pratiques" */}
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+            <ScrollAnimated direction="up" delay={0}>
+              <h2 id="infos-heading" className="relative text-primary font-head text-4xl md:text-5xl lg:text-6xl text-center">
+                Infos pratiques
+              </h2>
             </ScrollAnimated>
           </div>
+          
+          {/* Case 2 - Moyens de paiement */}
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+            <ScrollAnimated direction="up" delay={100}>
+              <div className="text-center">
+                <h3 className="font-bold text-xl md:text-2xl text-primary mb-2">
+                  Moyens de paiement
+                </h3>
+                <p className="text-primary text-base md:text-lg">
+                  {content?.paiement || "Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact, Chèque vacances, Tickets restaurant"}
+                </p>
+              </div>
+            </ScrollAnimated>
+          </div>
+          
+          {/* Case 3 - Large choix végétarien */}
+          <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+            <ScrollAnimated direction="up" delay={200}>
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-2 border-primary rounded-full flex items-center justify-center">
+                  <span className="text-primary text-xl">🌿</span>
+                </div>
+                <p className="text-primary font-semibold text-lg md:text-xl text-center">
+                  Large choix végétarien
+                </p>
+              </div>
+            </ScrollAnimated>
+          </div>
+        </div>
 
-          {/* Tableau Horaires */}
+        {/* Colonne 2 - Grille 2x3 (6 cases) */}
+        <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
+          {/* Case 1 - Viande Halal */}
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+            <ScrollAnimated direction="up" delay={150}>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-12 h-12 border-2 border-primary rounded-full flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">حلال</span>
+                </div>
+                <p className="text-primary font-semibold text-lg md:text-xl text-center">
+                  Viande Halal
+                </p>
+              </div>
+            </ScrollAnimated>
+          </div>
+          
+          {/* Case 2 - Cuisine Indienne et Pakistanaise */}
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+            <ScrollAnimated direction="up" delay={250}>
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-2 border-primary rounded-full flex items-center justify-center">
+                  <span className="text-primary text-xl">🍛</span>
+                </div>
+                <p className="text-primary font-semibold text-lg md:text-xl text-center">
+                  {content?.cuisine || "Cuisine Indienne et Pakistanaise"}
+                </p>
+              </div>
+            </ScrollAnimated>
+          </div>
+          
+          {/* Case 3 - Plats faits maison */}
+          <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+            <ScrollAnimated direction="up" delay={350}>
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-2 border-primary rounded-full flex items-center justify-center">
+                  <span className="text-primary text-xl">👨‍🍳</span>
+                </div>
+                <p className="text-primary font-semibold text-lg md:text-xl text-center">
+                  Plats faits maison
+                </p>
+              </div>
+            </ScrollAnimated>
+          </div>
+        </div>
+
+        {/* Colonne 3 - Tableau horaires vertical */}
+        <div className="col-span-3 lg:col-span-1 flex flex-col items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-8 md:py-12">
           {content?.schedules && content.schedules.length > 0 && (
-            <ScrollAnimated direction="up" delay={200} className="w-full">
-              <h3 className="font-bold text-xl mb-6">Horaires :</h3>
-              <div className="overflow-x-auto rounded-lg p-4">
-                <table className="w-full border-collapse text-sm md:text-base">
+            <ScrollAnimated direction="up" delay={300} className="w-full h-full flex flex-col items-center">
+              <h3 className="text-primary font-bold text-xl md:text-2xl mb-6 text-center">
+                Horaires
+              </h3>
+              <div className="flex-1 overflow-auto w-full flex justify-center">
+                <table className="border-collapse text-sm md:text-base">
                   <thead>
-                    <tr>
-                      <th className="px-3 py-3 text-left font-semibold"></th>
-                      {DAYS.map((day) => (
-                        <th key={day} className="px-3 py-3 text-center font-semibold text-primary">
-                          {day.toUpperCase()}
-                        </th>
-                      ))}
+                    <tr className="border-b-2 border-primary">
+                      <th className="px-4 py-3 text-center font-semibold text-primary"></th>
+                      <th className="px-4 py-3 text-center font-semibold text-primary border-l border-primary">
+                        MIDI
+                      </th>
+                      <th className="px-4 py-3 text-center font-semibold text-primary border-l border-primary">
+                        SOIR
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b-2 border-primary/40">
-                      <td className="px-4 py-3 font-semibold text-primary">MIDI</td>
-                      {DAYS.map((day) => {
-                        const midi = content.schedules?.find(
-                          (s: Schedule) => s.day === day && s.period === "MIDI"
-                        );
-                        return (
-                          <td key={`midi-${day}`} className="px-3 py-3 text-center text-gray-700">
+                    {DAYS.map((day) => {
+                      const midi = content.schedules?.find(
+                        (s: Schedule) => s.day === day && s.period === "MIDI"
+                      );
+                      const soir = content.schedules?.find(
+                        (s: Schedule) => s.day === day && s.period === "SOIR"
+                      );
+                      return (
+                        <tr key={day} className="border-b border-primary/40">
+                          <td className="px-4 py-3 font-semibold text-primary text-center">
+                            {day}
+                          </td>
+                          <td className="px-4 py-3 text-center text-primary border-l border-primary">
                             {formatSchedule(midi)}
                           </td>
-                        );
-                      })}
-                    </tr>
-                    <tr>
-                      <td className="px-4 py-3 font-semibold text-primary">SOIR</td>
-                      {DAYS.map((day) => {
-                        const soir = content.schedules?.find(
-                          (s: Schedule) => s.day === day && s.period === "SOIR"
-                        );
-                        return (
-                          <td key={`soir-${day}`} className="px-3 py-3 text-center text-gray-700">
+                          <td className="px-4 py-3 text-center text-primary border-l border-primary">
                             {formatSchedule(soir)}
                           </td>
-                        );
-                      })}
-                    </tr>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
