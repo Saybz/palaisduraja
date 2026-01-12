@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import ScrollAnimated from "@/components/ScrollAnimated";
 
@@ -21,52 +21,6 @@ type Dish = {
   image?: string | null;
 };
 
-// Plats populaires selon la maquette
-const POPULAR_DISHES: Dish[] = [
-  {
-    id: 1,
-    name: "Raita",
-    price: "4.00 €",
-    description: "Yaourt frais agrémenté de légumes croquants et d'épices douces, parfait pour accompagner les plats épicés.",
-  },
-  {
-    id: 2,
-    name: "Mix Pakora",
-    price: "5.50 €",
-    description: "Assortiment de légumes frits dans une pâte épicée, croustillants à l'extérieur et tendres à l'intérieur.",
-  },
-  {
-    id: 3,
-    name: "Poulet Vindaloo",
-    price: "11.00 €",
-    description: "Plat de poulet mijoté dans une sauce épicée au vinaigre, originaire de Goa. Un délice pour les amateurs de saveurs intenses.",
-  },
-  {
-    id: 4,
-    name: "Agneau Shai Korma",
-    price: "11.50 €",
-    description: "Agneau tendre cuit dans une sauce crémeuse aux amandes et aux épices douces, un classique de la cuisine moghole.",
-  },
-  {
-    id: 5,
-    name: "Poulet Tikka Massala",
-    price: "12.50 €",
-    description: "Morceaux de poulet marinés et grillés, servis dans une sauce tomate crémeuse et épicée, l'un des plats les plus populaires.",
-  },
-  {
-    id: 6,
-    name: "Butter Chicken",
-    price: "12.00 €",
-    description: "Poulet tendre dans une sauce au beurre et à la crème, douce et onctueuse, parfait pour découvrir la cuisine indienne.",
-  },
-  {
-    id: 7,
-    name: "Bryani Poulet",
-    price: "13.00 €",
-    description: "Riz basmati parfumé aux épices, cuit avec du poulet tendre, des oignons frits et des herbes fraîches. Un plat complet et savoureux.",
-  },
-];
-
 export default function MenuSection({ 
   menuImg1, 
   menuImg2, 
@@ -75,9 +29,25 @@ export default function MenuSection({
   menuPdf, 
   menuDesc 
 }: MenuSectionProps) {
+  const [dishes, setDishes] = useState<Dish[]>([]);
   const [selectedDish, setSelectedDish] = useState<number | null>(null);
   const [expandedDish, setExpandedDish] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const fetchDishes = async () => {
+      try {
+        const res = await fetch("/api/dishes");
+        if (res.ok) {
+          const data = await res.json();
+          setDishes(data);
+        }
+      } catch (error) {
+        console.error("Error fetching dishes:", error);
+      }
+    };
+    fetchDishes();
+  }, []);
 
   // Images disponibles pour les plats
   const dishImages = [menuImg1, menuImg2, menuImg3, menuImg4].filter(
@@ -85,9 +55,22 @@ export default function MenuSection({
   );
 
   // Image par défaut ou selon le plat sélectionné
-  const currentImage = selectedDish 
-    ? dishImages[selectedDish % dishImages.length] || dishImages[0]
-    : dishImages[0] || null;
+  const getCurrentImage = () => {
+    if (selectedDish) {
+      const selectedDishData = dishes.find((d) => d.id === selectedDish);
+      // Si le plat a une image, l'utiliser
+      if (selectedDishData?.image) {
+        return selectedDishData.image;
+      }
+      // Sinon, utiliser les images menuImg1-4 en rotation
+      if (dishImages.length > 0) {
+        return dishImages[selectedDish % dishImages.length] || dishImages[0];
+      }
+    }
+    return dishImages[0] || null;
+  };
+
+  const currentImage = getCurrentImage();
 
   const handleDishClick = (dishId: number) => {
     // Annuler le timeout précédent s'il existe
@@ -166,7 +149,12 @@ export default function MenuSection({
           </h3>
           
           <div className="space-y-0">
-            {POPULAR_DISHES.map((dish) => (
+            {dishes.length === 0 ? (
+              <p className="text-light text-center py-4 px-4">
+                Aucun plat disponible pour le moment.
+              </p>
+            ) : (
+              dishes.map((dish) => (
               <div
                 key={dish.id}
                 className="border-b border-secondary w-full overflow-hidden"
@@ -198,7 +186,8 @@ export default function MenuSection({
                   </div>
                 </div>
               </div>
-            ))}
+              ))
+            )}
           </div>
         </ScrollAnimated>
       </div>

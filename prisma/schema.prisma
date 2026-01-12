@@ -49,6 +49,17 @@ model Schedule {
   content   Content  @relation(fields: [contentId], references: [id])
 }
 
+model Dish {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       String   // Format: "12.00 €"
+  image       String?
+  order       Int      @default(0) // Pour ordonner les plats
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 enum WeekDay {
   LUNDI
   MARDI
