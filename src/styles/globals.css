@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Animation de dessin SVG */
+@keyframes drawSvg {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.logo-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawSvg 2s ease-in-out forwards;
+}
+
+.logo-draw svg path,
+.logo-draw svg text {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawSvg 2s ease-in-out forwards;
+}
+
 :root {
   --color-primary: #67141C;
   --color-primary-light: #d4637d;
@@ -298,6 +318,75 @@ body {
       transform: translateY(0);
     }
   }
+
+  /* Animation de dessin SVG pour le logo titre */
+  @keyframes svgDraw {
+    from {
+      stroke-dashoffset: 2000;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes svgFill {
+    from {
+      fill: transparent;
+    }
+    to {
+      fill: #E2B161;
+    }
+  }
+
+  .logo-draw-svg {
+    position: relative;
+  }
+
+  .logo-draw-svg svg {
+    width: 100%;
+    height: auto;
+    max-width: 28rem;
+  }
+
+  .logo-draw-svg svg path {
+    stroke: #E2B161;
+    stroke-width: 1.5;
+    fill: transparent;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: svgDraw 2s ease-in-out forwards, svgFill 0.5s ease-in-out 4.3s forwards;
+  }
+
+  /* État après l'animation : logo rempli, pas d'animation */
+  .logo-draw-svg-animated {
+    position: relative;
+  }
+
+  .logo-draw-svg-animated svg {
+    width: 100%;
+    height: auto;
+    max-width: 28rem;
+  }
+
+  .logo-draw-svg-animated svg path {
+    stroke: transparent;
+    stroke-width: 1.5;
+    fill: #E2B161;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+
+  .logo-draw-svg svg path:nth-child(1) { animation-delay: 0.3s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(2) { animation-delay: 0.5s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(3) { animation-delay: 0.7s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(4) { animation-delay: 0.9s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(5) { animation-delay: 1.1s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(6) { animation-delay: 1.3s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(7) { animation-delay: 1.5s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(8) { animation-delay: 1.7s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(9) { animation-delay: 1.9s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(10) { animation-delay: 2.1s, 4.3s; }
+  .logo-draw-svg svg path:nth-child(n+11) { animation-delay: 2.3s, 4.3s; }
 
   .hero-subtitle {
     opacity: 0;

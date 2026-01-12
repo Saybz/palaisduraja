@@ -12,6 +12,8 @@ type HeroSectionProps = {
 
 export default function HeroSection({ banner, tel, menuPdf }: HeroSectionProps) {
   const [scrollY, setScrollY] = useState(0);
+  const [logoSvg, setLogoSvg] = useState<string>("");
+  const [animationPlayed, setAnimationPlayed] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,11 +24,29 @@ export default function HeroSection({ banner, tel, menuPdf }: HeroSectionProps) 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    let animationTimer: NodeJS.Timeout;
+    
+    // Charger le SVG en inline pour permettre les animations CSS
+    fetch("/logo/Logo_titre.svg")
+      .then((res) => res.text())
+      .then((svg) => {
+        setLogoSvg(svg);
+        // Marquer que l'animation a été jouée après la durée de l'animation
+        // Temps total: délai max (2.3s) + durée draw (2s) + délai fill (4.3s) + durée fill (0.5s) ≈ 5s
+        animationTimer = setTimeout(() => {
+          setAnimationPlayed(true);
+        }, 5000);
+      })
+      .catch((err) => console.error("Erreur lors du chargement du SVG:", err));
+    
+    return () => {
+      if (animationTimer) clearTimeout(animationTimer);
+    };
+  }, []);
+
   // Calcul du décalage parallax (l'image se déplace plus lentement que le scroll)
   const parallaxOffset = scrollY * 0.5;
-
-  // Séparer les mots du titre pour les animer individuellement
-  const titleWords = "Palais du Raja".split(" ");
 
   return (
     <section 
@@ -38,19 +58,23 @@ export default function HeroSection({ banner, tel, menuPdf }: HeroSectionProps) 
         {/* Partie gauche - Contenu texte (1/3) - Visible seulement sur desktop */}
         <div className="hidden lg:flex lg:col-span-1 flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 bg-light hero-content lg:border-r border-primary">
           <header className="space-y-4 md:space-y-6">
-            <h1 className="relative font-head font-bold text-4xl md:text-5xl lg:text-6xl text-primary mb-4 md:mb-6 flex flex-wrap gap-2 md:gap-3">
-              {titleWords.map((word, index) => (
-                <span
-                  key={index}
-                  className="hero-word inline-block"
-                  style={{
-                    animationDelay: `${index * 100 + 300}ms`,
-                  }}
-                >
-                  {word}
-                </span>
-              ))}
-            </h1>
+            <div className={`mb-4 md:mb-6 ${!animationPlayed ? "logo-draw-svg" : "logo-draw-svg-animated"}`}>
+              {logoSvg ? (
+                <div
+                  className="w-full max-w-md h-auto"
+                  dangerouslySetInnerHTML={{ __html: logoSvg }}
+                />
+              ) : (
+                <Image
+                  src="/logo/Logo_titre.svg"
+                  alt="Palais du Raja"
+                  width={300}
+                  height={100}
+                  className="w-full max-w-md h-auto"
+                  priority
+                />
+              )}
+            </div>
             <p className="text-base md:text-lg text-dark font-semibold hero-subtitle" role="doc-subtitle">
               Restaurant traditionnel indien et pakistanais à Tours
             </p>
@@ -91,21 +115,25 @@ export default function HeroSection({ banner, tel, menuPdf }: HeroSectionProps) 
             <div className="absolute inset-0 bg-black/30 lg:bg-transparent" />
             
             {/* Titre en overlay sur mobile */}
-            <div className="absolute inset-0 flex flex-col justify-center px-4 md:px-6 lg:hidden z-10 hero-content">
-              <header className="space-y-4">
-                <h1 className="relative font-head font-bold text-4xl md:text-5xl text-secondary drop-shadow-lg mb-4 flex flex-wrap gap-2 md:gap-3">
-                  {titleWords.map((word, index) => (
-                    <span
-                      key={index}
-                      className="hero-word inline-block"
-                      style={{
-                        animationDelay: `${index * 100 + 300}ms`,
-                      }}
-                    >
-                      {word}
-                    </span>
-                  ))}
-                </h1>
+            <div className="absolute inset-0 flex flex-col justify-center items-center px-4 md:px-6 lg:hidden z-10 hero-content">
+              <header className="space-y-4 text-center">
+                <div className={`mb-4 ${!animationPlayed ? "logo-draw-svg" : "logo-draw-svg-animated"}`}>
+                  {logoSvg ? (
+                    <div
+                      className="w-full max-w-md h-auto drop-shadow-lg"
+                      dangerouslySetInnerHTML={{ __html: logoSvg }}
+                    />
+                  ) : (
+                    <Image
+                      src="/logo/Logo_titre.svg"
+                      alt="Palais du Raja"
+                      width={300}
+                      height={100}
+                      className="w-full max-w-md h-auto drop-shadow-lg"
+                      priority
+                    />
+                  )}
+                </div>
                 <p className="text-base md:text-lg text-secondary font-semibold drop-shadow-lg hero-subtitle" role="doc-subtitle">
                   Restaurant traditionnel indien et pakistanais à Tours
                 </p>

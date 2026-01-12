@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import LogOutBtn from "@/components/LogOutBtn";
 import Link from "next/link";
 
@@ -244,8 +245,15 @@ const Header: React.FC = () => {
       }}
     >
       <div className="h-full w-full mx-auto px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 flex flex-col md:flex-row justify-between items-center">
-        <Link href="/" aria-label="Accueil" className={`text-base md:text-lg font-bold mb-2 md:mb-0`}>
-          Palais du Raja
+        <Link href="/" aria-label="Accueil" className="mb-2 md:mb-0 flex items-center">
+          <Image
+            src="/logo/Logo_palaisduraja.svg"
+            alt="Palais du Raja"
+            width={150}
+            height={50}
+            className="h-8 md:h-10 w-auto"
+            priority
+          />
         </Link>
         {!isAdminPage && !isLogin && (
           <nav 

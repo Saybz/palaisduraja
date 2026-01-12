@@ -52,21 +52,35 @@ export default function AnimatedSections({ content }: { content: Content | null 
       <section
         id="about"
         aria-labelledby="about-heading"
-        className="relative w-full h-screen grid grid-cols-3 overflow-hidden border-b border-primary"
+        className="relative w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary"
       >
-        {/* Partie gauche - Image (1/3) */}
+        {/* Partie gauche - Image ou Vidéo (1/3) */}
         {content?.histoireImg && (
           <ScrollAnimated direction="up" delay={0} className="col-span-3 lg:col-span-1 w-full h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary">
-            <Image
-              src={content.histoireImg}
-              alt={`${content?.title || "Histoire"} - Restaurant Palais du Raja, restaurant indien traditionnel à Tours, 113 rue Colbert`}
-              fill
-              loading="lazy"
-              sizes="33.333vw"
-              style={{ objectFit: "cover", objectPosition: "center" }}
-              className=""
-              title={`${content?.title || "Histoire"} du restaurant Palais du Raja`}
-            />
+            {/* Détecter si c'est une vidéo par l'extension */}
+            {content.histoireImg.match(/\.(mp4|webm|ogg|mov)$/i) ? (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <source src={content.histoireImg} type="video/mp4" />
+                Votre navigateur ne supporte pas la vidéo.
+              </video>
+            ) : (
+              <Image
+                src={content.histoireImg}
+                alt={`${content?.title || "Histoire"} - Restaurant Palais du Raja, restaurant indien traditionnel à Tours, 113 rue Colbert`}
+                fill
+                loading="lazy"
+                sizes="33.333vw"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+                className=""
+                title={`${content?.title || "Histoire"} du restaurant Palais du Raja`}
+              />
+            )}
           </ScrollAnimated>
         )}
         
@@ -114,7 +128,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </div>
 
       {/* Infos Section */}
-      <section id="infos" aria-labelledby="infos-heading" className="w-full h-screen grid grid-cols-3 overflow-hidden border-b border-primary bg-light">
+      <section id="infos" aria-labelledby="infos-heading" className="w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary bg-light">
         {/* Colonne 1 - Grille 2x3 (6 cases) */}
         <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
           {/* Case 1 - Titre "Infos pratiques" */}
@@ -251,7 +265,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </section>
 
       {/* Contact Section */}
-      <section id="contact" aria-labelledby="contact-heading" className="w-full h-screen flex flex-col" style={{ paddingTop: "6rem" }}>
+      <section id="contact" aria-labelledby="contact-heading" className="w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] flex flex-col" style={{ paddingTop: "6rem" }}>
         <div className="w-full mx-auto pb-6 px-4 md:px-6 lg:px-8 xl:px-12 flex-shrink-0">
           <ScrollAnimated direction="up" delay={0}>
             <h2 id="contact-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">

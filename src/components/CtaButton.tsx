@@ -47,7 +47,7 @@ export default function CtaBtn({
       href={href}
       target={type === "link" || type === "location" ? "_blank" : "_self"}
       rel="noopener noreferrer"
-      className={`px-4 py-3 pb-2 ml-0 md:ml-4 max-w-fit bg-primary text-light font-regular text-base shadow-lg flex items-center gap-2 hover:text-gray-100 ${className}`}
+      className={`px-4 py-3 pb-2 max-w-fit bg-primary text-light font-regular text-base shadow-lg flex items-center gap-2 hover:text-gray-100 ${className}`}
     >
       <div className="pb-1">
         <Icon className="text-light" />

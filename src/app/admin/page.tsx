@@ -117,7 +117,7 @@ export default function AdminPage() {
   }, [successMessage]);
 
   const updateSchedule = <
-    K extends keyof Pick<Schedule, "openTime" | "closeTime" | "isClosed">
+  K extends keyof Pick<Schedule, "openTime" | "closeTime" | "isClosed">
   >(
     day: Schedule["day"],
     period: Schedule["period"],
@@ -206,7 +206,7 @@ export default function AdminPage() {
   const renderSection = () => {
     switch (activeSection) {
       case "hero":
-        return (
+  return (
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Hero / Bannière</h2>
             <div>
@@ -269,31 +269,57 @@ export default function AdminPage() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Image Histoire
+                Image ou Vidéo Histoire
               </label>
               {content.histoireImg && (
-                <Image
-                  src={content.histoireImg}
-                  alt="Image Histoire"
-                  width={600}
-                  height={400}
-                  className="rounded-md mb-2"
-                />
+                <>
+                  {content.histoireImg.match(/\.(mp4|webm|ogg|mov)$/i) ? (
+                    <video
+                      src={content.histoireImg}
+                      controls
+                      className="rounded-md mb-2 w-full max-w-2xl"
+                      style={{ maxHeight: "400px" }}
+                    >
+                      Votre navigateur ne supporte pas la vidéo.
+                    </video>
+                  ) : (
+                    <Image
+                      src={content.histoireImg}
+                      alt="Image Histoire"
+                      width={600}
+                      height={400}
+                      className="rounded-md mb-2"
+                    />
+                  )}
+                </>
               )}
               <input
                 type="file"
-                accept="image/*"
+                accept="image/*,video/*"
                 onChange={(e) => setNewHistoireImage(e.target.files?.[0] || null)}
                 className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
               />
               {newHistoireImage && (
-                <Image
-                  src={URL.createObjectURL(newHistoireImage)}
-                  alt="Prévisualisation Image Histoire"
-                  width={100}
-                  height={64}
-                  className="mt-2 rounded-md"
-                />
+                <>
+                  {newHistoireImage.type.startsWith("video/") ? (
+                    <video
+                      src={URL.createObjectURL(newHistoireImage)}
+                      controls
+                      className="mt-2 rounded-md w-full max-w-md"
+                      style={{ maxHeight: "200px" }}
+                    >
+                      Votre navigateur ne supporte pas la vidéo.
+                    </video>
+                  ) : (
+                    <Image
+                      src={URL.createObjectURL(newHistoireImage)}
+                      alt="Prévisualisation Image Histoire"
+                      width={100}
+                      height={64}
+                      className="mt-2 rounded-md"
+                    />
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -303,37 +329,37 @@ export default function AdminPage() {
         return (
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Menu</h2>
-            <div>
+          <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Menu PDF
-              </label>
-              {content.menuPdf && (
-                <a
-                  href={content.menuPdf}
-                  target="_blank"
-                  rel="noopener noreferrer"
+              Menu PDF
+            </label>
+            {content.menuPdf && (
+              <a
+                href={content.menuPdf}
+                target="_blank"
+                rel="noopener noreferrer"
                   className="text-blue-600 block mb-2 underline"
-                >
-                  Voir le PDF actuel
-                </a>
-              )}
-              <input
-                type="file"
-                accept=".pdf"
-                onChange={(e) => setNewPdf(e.target.files?.[0] || null)}
-                className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
-              />
-              {newPdf && (
-                <a
-                  href={URL.createObjectURL(newPdf)}
-                  target="_blank"
-                  rel="noopener noreferrer"
+              >
+                Voir le PDF actuel
+              </a>
+            )}
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={(e) => setNewPdf(e.target.files?.[0] || null)}
+              className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
+            />
+            {newPdf && (
+              <a
+                href={URL.createObjectURL(newPdf)}
+                target="_blank"
+                rel="noopener noreferrer"
                   className="text-blue-600 block mt-2 underline"
-                >
-                  Fichier PDF sélectionné : {newPdf.name}
-                </a>
-              )}
-            </div>
+              >
+                Fichier PDF sélectionné : {newPdf.name}
+              </a>
+            )}
+          </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-800 mb-3">
                 Images Menu (4 images)
@@ -442,64 +468,64 @@ export default function AdminPage() {
         return (
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Horaires</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border text-sm">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border px-3 py-2 text-left">Jour</th>
-                    <th className="border px-3 py-2">Midi</th>
-                    <th className="border px-3 py-2">Soir</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {DAYS.map((day) => {
-                    const midi = schedules.find((s) => s.day === day && s.period === "MIDI");
-                    const soir = schedules.find((s) => s.day === day && s.period === "SOIR");
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border px-3 py-2 text-left">Jour</th>
+                  <th className="border px-3 py-2">Midi</th>
+                  <th className="border px-3 py-2">Soir</th>
+                </tr>
+              </thead>
+              <tbody>
+                {DAYS.map((day) => {
+                  const midi = schedules.find((s) => s.day === day && s.period === "MIDI");
+                  const soir = schedules.find((s) => s.day === day && s.period === "SOIR");
 
-                    const renderInput = (s: Schedule | undefined, field: "openTime" | "closeTime" | "isClosed") => {
-                      if (!s) return null;
-                      if (field === "isClosed") {
-                        return (
-                          <div className="flex items-center gap-2 mt-2">
-                            <input
-                              type="checkbox"
-                              checked={s.isClosed}
-                              onChange={(e) => updateSchedule(day, s.period, "isClosed", e.target.checked)}
-                              className="w-4 h-4"
-                            />
-                            <span>Fermé</span>
-                          </div>
-                        );
-                      }
+                  const renderInput = (s: Schedule | undefined, field: "openTime" | "closeTime" | "isClosed") => {
+                    if (!s) return null;
+                    if (field === "isClosed") {
                       return (
+                          <div className="flex items-center gap-2 mt-2">
                         <input
-                          type="time"
-                          value={s[field] || ""}
-                          onChange={(e) => updateSchedule(day, s.period, field, e.target.value)}
-                          disabled={s.isClosed}
-                          className="border rounded px-2 py-1 w-full mb-2"
-                        />
+                          type="checkbox"
+                          checked={s.isClosed}
+                          onChange={(e) => updateSchedule(day, s.period, "isClosed", e.target.checked)}
+                              className="w-4 h-4"
+                          />
+                            <span>Fermé</span>
+                        </div>
                       );
-                    };
-
+                    }
                     return (
-                      <tr key={day}>
-                        <td className="border px-3 py-2 font-medium">{day}</td>
-                        <td className="border px-3 py-2">
-                          {renderInput(midi, "openTime")}
-                          {renderInput(midi, "closeTime")}
-                          {renderInput(midi, "isClosed")}
-                        </td>
-                        <td className="border px-3 py-2">
-                          {renderInput(soir, "openTime")}
-                          {renderInput(soir, "closeTime")}
-                          {renderInput(soir, "isClosed")}
-                        </td>
-                      </tr>
+                      <input
+                        type="time"
+                        value={s[field] || ""}
+                        onChange={(e) => updateSchedule(day, s.period, field, e.target.value)}
+                        disabled={s.isClosed}
+                          className="border rounded px-2 py-1 w-full mb-2"
+                      />
                     );
-                  })}
-                </tbody>
-              </table>
+                  };
+
+                  return (
+                    <tr key={day}>
+                        <td className="border px-3 py-2 font-medium">{day}</td>
+                      <td className="border px-3 py-2">
+                        {renderInput(midi, "openTime")}
+                        {renderInput(midi, "closeTime")}
+                        {renderInput(midi, "isClosed")}
+                      </td>
+                      <td className="border px-3 py-2">
+                        {renderInput(soir, "openTime")}
+                        {renderInput(soir, "closeTime")}
+                        {renderInput(soir, "isClosed")}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
             </div>
           </div>
         );
@@ -542,7 +568,7 @@ export default function AdminPage() {
           >
             ← Revenir au site
           </Link>
-        </div>
+          </div>
 
         {/* Titre */}
         <div className="p-4 border-b border-gray-200">
@@ -575,8 +601,8 @@ export default function AdminPage() {
 
         {/* Boutons en bas */}
         <div className="p-4 border-t border-gray-200 space-y-3">
-          <button
-            onClick={handleSave}
+            <button
+              onClick={handleSave}
             className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-md"
           >
             💾 Sauvegarder

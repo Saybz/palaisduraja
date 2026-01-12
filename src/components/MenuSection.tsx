@@ -119,7 +119,7 @@ export default function MenuSection({
     <section
       id="menu"
       aria-labelledby="menu-heading"
-      className="relative w-full h-screen grid grid-cols-3 overflow-hidden border-b border-secondary bg-primary"
+      className="relative w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-secondary bg-primary"
     >
       {/* Première colonne - Texte et bouton */}
       <div className="col-span-3 lg:col-span-1 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 border-b lg:border-b-0 lg:border-r border-secondary">
