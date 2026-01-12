@@ -9,7 +9,14 @@ import MenuSection from "@/components/MenuSection";
 
 type Schedule = {
   id: number;
-  day: "Lundi" | "Mardi" | "Mercredi" | "Jeudi" | "Vendredi" | "Samedi" | "Dimanche";
+  day:
+    | "Lundi"
+    | "Mardi"
+    | "Mercredi"
+    | "Jeudi"
+    | "Vendredi"
+    | "Samedi"
+    | "Dimanche";
   period: "MIDI" | "SOIR";
   openTime: string | null;
   closeTime: string | null;
@@ -35,10 +42,20 @@ type Content = {
 };
 
 const DAYS: Schedule["day"][] = [
-  "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"
+  "Lundi",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
+  "Dimanche",
 ];
 
-export default function AnimatedSections({ content }: { content: Content | null }) {
+export default function AnimatedSections({
+  content,
+}: {
+  content: Content | null;
+}) {
   const formatSchedule = (s?: Schedule) =>
     s
       ? s.isClosed
@@ -52,11 +69,15 @@ export default function AnimatedSections({ content }: { content: Content | null 
       <section
         id="about"
         aria-labelledby="about-heading"
-        className="relative w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary"
+        className="relative w-full min-h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary"
       >
         {/* Partie gauche - Image ou Vidéo (1/3) */}
         {content?.histoireImg && (
-          <ScrollAnimated direction="up" delay={0} className="col-span-3 lg:col-span-1 w-full h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary">
+          <ScrollAnimated
+            direction="up"
+            delay={0}
+            className="col-span-3 lg:col-span-1 w-full h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary"
+          >
             {/* Détecter si c'est une vidéo par l'extension */}
             {content.histoireImg.match(/\.(mp4|webm|ogg|mov)$/i) ? (
               <video
@@ -72,34 +93,46 @@ export default function AnimatedSections({ content }: { content: Content | null 
             ) : (
               <Image
                 src={content.histoireImg}
-                alt={`${content?.title || "Histoire"} - Restaurant Palais du Raja, restaurant indien traditionnel à Tours, 113 rue Colbert`}
+                alt={`${
+                  content?.title || "Histoire"
+                } - Restaurant Palais du Raja, restaurant indien traditionnel à Tours, 113 rue Colbert`}
                 fill
                 loading="lazy"
                 sizes="33.333vw"
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 className=""
-                title={`${content?.title || "Histoire"} du restaurant Palais du Raja`}
+                title={`${
+                  content?.title || "Histoire"
+                } du restaurant Palais du Raja`}
               />
             )}
           </ScrollAnimated>
         )}
-        
+
         {/* Partie droite - Texte (2/3) */}
-        <ScrollAnimated direction="up" delay={150} className="col-span-3 lg:col-span-2 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 bg-light border-t lg:border-t-0 border-primary relative overflow-hidden">
+        <ScrollAnimated
+          direction="up"
+          delay={150}
+          className="col-span-3 lg:col-span-2 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 bg-light border-t lg:border-t-0 border-primary relative overflow-hidden"
+        >
           <div className="max-w-[70%] relative z-10">
-            <h2 id="about-heading" className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-4 md:mb-6">
+            <h2
+              id="about-heading"
+              className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-4 md:mb-6"
+            >
               {content?.title || "Histoire du restaurant Palais du Raja"}
             </h2>
             <p className="text-lg md:text-xl text-dark" itemProp="description">
-              {content?.histoire || "Découvrez l'histoire du Palais du Raja, restaurant indien traditionnel à Tours."}
+              {content?.histoire ||
+                "Découvrez l'histoire du Palais du Raja, restaurant indien traditionnel à Tours."}
             </p>
           </div>
-          
+
           {/* Rosace en position fixed - visible à moitié à droite du texte */}
-          <div 
+          <div
             className="fixed right-0 top-1/2 w-[60vh] h-[60vh] opacity-20 pointer-events-none z-0"
-            style={{ 
-              transform: 'translateY(-50%) translateX(50%)',
+            style={{
+              transform: "translateY(-50%) translateX(50%)",
             }}
             aria-hidden="true"
           >
@@ -128,18 +161,25 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </div>
 
       {/* Infos Section */}
-      <section id="infos" aria-labelledby="infos-heading" className="w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary bg-light">
+      <section
+        id="infos"
+        aria-labelledby="infos-heading"
+        className="w-full min-h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary bg-light"
+      >
         {/* Colonne 1 - Grille 2x3 (6 cases) */}
         <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
           {/* Case 1 - Titre "Infos pratiques" */}
           <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={0}>
-              <h2 id="infos-heading" className="relative text-primary font-head text-4xl md:text-5xl lg:text-6xl text-center">
+              <h2
+                id="infos-heading"
+                className="relative text-primary font-head text-4xl md:text-5xl lg:text-6xl text-center"
+              >
                 Infos pratiques
               </h2>
             </ScrollAnimated>
           </div>
-          
+
           {/* Case 2 - Viande Halal */}
           <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={100}>
@@ -153,7 +193,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
               </div>
             </ScrollAnimated>
           </div>
-          
+
           {/* Case 3 - Large choix végétarien */}
           <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={200}>
@@ -179,12 +219,13 @@ export default function AnimatedSections({ content }: { content: Content | null 
                   Moyens de paiement
                 </h3>
                 <p className="text-primary text-base md:text-lg">
-                  {content?.paiement || "Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact, Chèque vacances, Tickets restaurant"}
+                  {content?.paiement ||
+                    "Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact, Chèque vacances, Tickets restaurant"}
                 </p>
               </div>
             </ScrollAnimated>
           </div>
-          
+
           {/* Case 2 - Cuisine Indienne et Pakistanaise */}
           <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={250}>
@@ -198,7 +239,7 @@ export default function AnimatedSections({ content }: { content: Content | null 
               </div>
             </ScrollAnimated>
           </div>
-          
+
           {/* Case 3 - Plats faits maison */}
           <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
             <ScrollAnimated direction="up" delay={350}>
@@ -215,49 +256,55 @@ export default function AnimatedSections({ content }: { content: Content | null 
         </div>
 
         {/* Colonne 3 - Tableau horaires vertical */}
-        <div className="col-span-3 lg:col-span-1 flex flex-col items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-8 md:py-12">
+        <div className="col-span-3 lg:col-span-1 flex flex-col items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-8 md:py-12 min-h-0 md:min-h-0">
           {content?.schedules && content.schedules.length > 0 && (
-            <ScrollAnimated direction="up" delay={300} className="w-full h-full flex flex-col items-center">
-              <h3 className="text-primary font-bold text-xl md:text-2xl mb-6 text-center">
+            <ScrollAnimated
+              direction="up"
+              delay={300}
+              className="w-full h-full md:h-full flex flex-col items-center"
+            >
+              <h3 className="text-primary font-bold text-xl md:text-2xl mb-6 text-center flex-shrink-0">
                 Horaires
               </h3>
-              <div className="flex-1 overflow-auto w-full flex justify-center">
-                <table className="border-collapse text-sm md:text-base">
-                  <thead>
-                    <tr className="border-b-2 border-primary">
-                      <th className="px-4 py-3 text-center font-semibold text-primary"></th>
-                      <th className="px-4 py-3 text-center font-semibold text-primary border-l border-primary">
-                        MIDI
-                      </th>
-                      <th className="px-4 py-3 text-center font-semibold text-primary border-l border-primary">
-                        SOIR
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {DAYS.map((day) => {
-                      const midi = content.schedules?.find(
-                        (s: Schedule) => s.day === day && s.period === "MIDI"
-                      );
-                      const soir = content.schedules?.find(
-                        (s: Schedule) => s.day === day && s.period === "SOIR"
-                      );
-                      return (
-                        <tr key={day} className="">
-                          <td className="px-4 py-3 font-semibold text-primary text-center">
-                            {day}
-                          </td>
-                          <td className="px-4 py-3 text-center text-primary border-l border-primary">
-                            {formatSchedule(midi)}
-                          </td>
-                          <td className="px-4 py-3 text-center text-primary border-l border-primary">
-                            {formatSchedule(soir)}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+              <div className="flex-1 min-h-0 w-full flex justify-center overflow-y-auto md:overflow-auto max-h-[60vh] md:max-h-none">
+                <div className="w-full max-w-full">
+                  <table className="border-collapse text-sm md:text-base w-full">
+                    <thead className="sticky top-0 bg-light z-10">
+                      <tr className="border-b-2 border-primary">
+                        <th className="px-2 md:px-4 py-3 text-center font-semibold text-primary text-xs md:text-base"></th>
+                        <th className="px-2 md:px-4 py-3 text-center font-semibold text-primary border-l border-primary text-xs md:text-base">
+                          MIDI
+                        </th>
+                        <th className="px-2 md:px-4 py-3 text-center font-semibold text-primary border-l border-primary text-xs md:text-base">
+                          SOIR
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {DAYS.map((day) => {
+                        const midi = content.schedules?.find(
+                          (s: Schedule) => s.day === day && s.period === "MIDI"
+                        );
+                        const soir = content.schedules?.find(
+                          (s: Schedule) => s.day === day && s.period === "SOIR"
+                        );
+                        return (
+                          <tr key={day} className="">
+                            <td className="px-2 md:px-4 py-3 font-semibold text-primary text-center text-xs md:text-base">
+                              {day}
+                            </td>
+                            <td className="px-2 md:px-4 py-3 text-center text-primary border-l border-primary text-xs md:text-base">
+                              {formatSchedule(midi)}
+                            </td>
+                            <td className="px-2 md:px-4 py-3 text-center text-primary border-l border-primary text-xs md:text-base">
+                              {formatSchedule(soir)}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </ScrollAnimated>
           )}
@@ -265,10 +312,18 @@ export default function AnimatedSections({ content }: { content: Content | null 
       </section>
 
       {/* Contact Section */}
-      <section id="contact" aria-labelledby="contact-heading" className="w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] flex flex-col" style={{ paddingTop: "6rem" }}>
+      <section
+        id="contact"
+        aria-labelledby="contact-heading"
+        className="w-full min-h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] flex flex-col"
+        style={{ paddingTop: "6rem" }}
+      >
         <div className="w-full mx-auto pb-6 px-4 md:px-6 lg:px-8 xl:px-12 flex-shrink-0">
           <ScrollAnimated direction="up" delay={0}>
-            <h2 id="contact-heading" className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10">
+            <h2
+              id="contact-heading"
+              className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10"
+            >
               Contact et réservation
             </h2>
           </ScrollAnimated>
@@ -302,7 +357,11 @@ export default function AnimatedSections({ content }: { content: Content | null 
             </div>
           </ScrollAnimated>
         </div>
-        <ScrollAnimated direction="up" delay={300} className="flex-1 min-h-0 w-full">
+        <ScrollAnimated
+          direction="up"
+          delay={300}
+          className="flex-1 min-h-0 w-full"
+        >
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5401.635074206616!2d0.689015977602613!3d47.395992871171224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcd5b248f1490b%3A0xd4bc494e1971897e!2sLe%20Palais%20du%20Rajah%20(Rajasthan)!5e0!3m2!1sfr!2sfr!4v1738936968444!5m2!1sfr!2sfr"
             width="100%"
@@ -319,4 +378,3 @@ export default function AnimatedSections({ content }: { content: Content | null 
     </>
   );
 }
-

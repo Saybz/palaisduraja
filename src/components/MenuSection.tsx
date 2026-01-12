@@ -70,6 +70,20 @@ export default function MenuSection({
     return dishImages[0] || null;
   };
 
+  // Obtenir l'image pour un plat spécifique
+  const getDishImage = (dishId: number) => {
+    const dish = dishes.find((d) => d.id === dishId);
+    // Si le plat a une image, l'utiliser
+    if (dish?.image) {
+      return dish.image;
+    }
+    // Sinon, utiliser les images menuImg1-4 en rotation
+    if (dishImages.length > 0) {
+      return dishImages[dishId % dishImages.length] || dishImages[0];
+    }
+    return null;
+  };
+
   const currentImage = getCurrentImage();
 
   const handleDishClick = (dishId: number) => {
@@ -102,7 +116,7 @@ export default function MenuSection({
     <section
       id="menu"
       aria-labelledby="menu-heading"
-      className="relative w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-secondary bg-primary"
+      className="relative w-full min-h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-secondary bg-primary"
     >
       {/* Première colonne - Texte et bouton */}
       <div className="col-span-3 lg:col-span-1 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 border-b lg:border-b-0 lg:border-r border-secondary">
@@ -175,14 +189,29 @@ export default function MenuSection({
                 <div 
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
                     expandedDish === dish.id 
-                      ? 'max-h-96 opacity-100' 
+                      ? 'max-h-[800px] opacity-100' 
                       : 'max-h-0 opacity-0'
                   }`}
                 >
                   <div className="px-4 py-3 bg-primary/60 border-t border-secondary">
-                    <p className="text-light text-base leading-relaxed">
+                    <p className="text-light text-base leading-relaxed mb-4">
                       {dish.description}
                     </p>
+                    {/* Image du plat - visible uniquement en mobile */}
+                    {getDishImage(dish.id) && (
+                      <div className="lg:hidden relative w-full aspect-video rounded-md overflow-hidden mt-4">
+                        <Image
+                          src={getDishImage(dish.id)!}
+                          alt={`${dish.name} - Restaurant Palais du Raja`}
+                          fill
+                          loading="lazy"
+                          sizes="100vw"
+                          style={{ objectFit: "cover", objectPosition: "center" }}
+                          className="transition-opacity duration-500"
+                          title={`${dish.name} - Palais du Raja`}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -192,8 +221,8 @@ export default function MenuSection({
         </ScrollAnimated>
       </div>
 
-      {/* Troisième colonne - Image dynamique */}
-      <div className="col-span-3 lg:col-span-1 w-full h-full relative overflow-hidden">
+      {/* Troisième colonne - Image dynamique (visible uniquement en desktop) */}
+      <div className="hidden lg:block col-span-3 lg:col-span-1 w-full h-full relative overflow-hidden">
         {currentImage && (
           <ScrollAnimated direction="up" delay={300} className="w-full h-full">
             <div className="relative w-full h-full">
