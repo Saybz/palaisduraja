@@ -1,6 +1,6 @@
 import { Tangerine, Karma } from "next/font/google";
 import "@/styles/globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Providers from "@/components/Providers";
 import ClientLayout from "@/app/ClientLayout";
 import Script from "next/script";
@@ -8,7 +8,8 @@ import Script from "next/script";
 export const metadata: Metadata = {
   metadataBase: new URL("https://palaisduraja.fr"),
   title: {
-    default: "Palais du Raja | Restaurant Indien à Tours | Cuisine Traditionnelle",
+    default:
+      "Palais du Raja | Restaurant Indien à Tours | Cuisine Traditionnelle",
     template: "%s | Palais du Raja",
   },
   description:
@@ -81,6 +82,9 @@ export const metadata: Metadata = {
   },
   category: "restaurant",
   classification: "Restaurant Indien",
+};
+
+export const viewport: Viewport = {
   themeColor: "#75192E",
 };
 
@@ -153,13 +157,26 @@ export default function RootLayout({
               openingHoursSpecification: [
                 {
                   "@type": "OpeningHoursSpecification",
-                  dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                  dayOfWeek: [
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                  ],
                   opens: "19:00",
                   closes: "22:30",
                 },
                 {
                   "@type": "OpeningHoursSpecification",
-                  dayOfWeek: ["Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                  dayOfWeek: [
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                  ],
                   opens: "12:00",
                   closes: "14:00",
                 },

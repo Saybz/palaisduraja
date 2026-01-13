@@ -24,9 +24,9 @@ export default function ScrollToTopButton() {
     <button
       onClick={scrollToTop}
       aria-label="Remonter"
-      className="fixed bottom-20 md:bottom-40 right-6 z-50 bg-primary/80 backdrop-blur-md text-secondary p-3 rounded-full shadow-lg border border-primary-light/90 hover:bg-primary/90 transition-all"
+      className="fixed bottom-20 md:bottom-40 right-6 z-50 bg-primary/60 backdrop-blur-md text-secondary p-3 rounded-full shadow-lg border border-primary-light/90 hover:bg-primary/80 transition-all"
     >
-      <ArrowUp className="w-5 h-5" />
+      <ArrowUp className="w-5 h-5 text-light" />
     </button>
   );
 }

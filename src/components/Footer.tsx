@@ -1,30 +1,54 @@
 import React from "react";
+import Image from "next/image";
 
 const Footer: React.FC = () => {
   return (
     <footer className="py-5 text-center bg-primary text-white">
-      <div className="footer-content px-4 mx-auto flex flex-col lg:flex-row item-center space-y-2 w-full lg:space-y-0 lg:space-x-4 lg:justify-between">
-        <p>&copy; {new Date().getFullYear()} Palais du Raja. Tous droits réservés.</p>
-        <div>
-          <address>
-            113 rue Colbert, 37000 Tours –{" "}
-          </address>
-          <a href="tel:0247648155" className="underline hover:text-secondary">
-            02 47 64 81 55
-          </a>
+      <div className="footer-content px-4 mx-auto flex flex-col items-center space-y-2 w-full text-sm">
+        {/* Logo - Au-dessus des autres éléments */}
+        <div className="flex justify-center mb-2 lg:mb-0 lg:pb-4">
+          <div className="p-4">
+            <Image
+              src="/logo/Logo_palaisduraja_footer.svg"
+              alt="Palais du Raja"
+              width={120}
+              height={120}
+              className="w-24 h-24"
+              style={{
+                filter:
+                  "brightness(0) saturate(100%) invert(85%) sepia(30%) saturate(2000%) hue-rotate(350deg) brightness(105%) contrast(90%)",
+              }}
+            />
+          </div>
         </div>
-        <p>
-          <a href="/mentions-legales" className="underline hover:text-secondary">
-            Mentions légales
-          </a>{" "}
-          |{" "}
-          <a
-            href="/politique-confidentialite"
-            className="underline hover:text-secondary"
-          >
-            Politique de confidentialité
-          </a>
-        </p>
+        {/* Autres éléments - Alignés naturellement en desktop */}
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center lg:gap-4 space-y-2 lg:space-y-0">
+          <p className="text-sm">
+            &copy; {new Date().getFullYear()} Palais du Raja. Tous droits
+            réservés.
+          </p>
+          <div className="text-sm">
+            <address>113 rue Colbert, 37000 Tours – </address>
+            <a href="tel:0247648155" className="underline hover:text-secondary">
+              02 47 64 81 55
+            </a>
+          </div>
+          <p className="text-sm">
+            <a
+              href="/mentions-legales"
+              className="underline hover:text-secondary"
+            >
+              Mentions légales
+            </a>{" "}
+            |{" "}
+            <a
+              href="/politique-confidentialite"
+              className="underline hover:text-secondary"
+            >
+              Politique de confidentialité
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

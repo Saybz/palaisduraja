@@ -69,14 +69,14 @@ export default function AnimatedSections({
       <section
         id="about"
         aria-labelledby="about-heading"
-        className="relative w-full min-h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary"
+        className="relative w-full md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary"
       >
         {/* Partie gauche - Image ou Vidéo (1/3) */}
         {content?.histoireImg && (
           <ScrollAnimated
             direction="up"
             delay={0}
-            className="col-span-3 lg:col-span-1 w-full h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary"
+            className="col-span-3 lg:col-span-1 w-full min-h-[50vh] lg:h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary"
           >
             {/* Détecter si c'est une vidéo par l'extension */}
             {content.histoireImg.match(/\.(mp4|webm|ogg|mov)$/i) ? (
@@ -113,9 +113,9 @@ export default function AnimatedSections({
         <ScrollAnimated
           direction="up"
           delay={150}
-          className="col-span-3 lg:col-span-2 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 bg-light border-t lg:border-t-0 border-primary relative overflow-hidden"
+          className="col-span-3 lg:col-span-2 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-12 md:py-6 lg:py-8 bg-light border-t lg:border-t-0 border-primary relative overflow-hidden"
         >
-          <div className="max-w-[70%] relative z-10">
+          <div className="w-full lg:max-w-[70%] relative z-10">
             <h2
               id="about-heading"
               className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-4 md:mb-6"
@@ -128,9 +128,9 @@ export default function AnimatedSections({
             </p>
           </div>
 
-          {/* Rosace en position fixed - visible à moitié à droite du texte */}
+          {/* Rosace en position absolute - visible à moitié à droite du texte */}
           <div
-            className="fixed right-0 top-1/2 w-[60vh] h-[60vh] opacity-20 pointer-events-none z-0"
+            className="absolute right-0 top-1/2 w-[60%] h-[60%] opacity-20 pointer-events-none z-0"
             style={{
               transform: "translateY(-50%) translateX(50%)",
             }}
@@ -140,7 +140,7 @@ export default function AnimatedSections({
               src="/img/mandala.png"
               alt=""
               fill
-              sizes="60vh"
+              sizes="60%"
               style={{ objectFit: "contain", objectPosition: "center" }}
               className=""
             />
@@ -164,12 +164,12 @@ export default function AnimatedSections({
       <section
         id="infos"
         aria-labelledby="infos-heading"
-        className="w-full min-h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary bg-light"
+        className="w-full md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary bg-light"
       >
         {/* Colonne 1 - Grille 2x3 (6 cases) */}
         <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
           {/* Case 1 - Titre "Infos pratiques" */}
-          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
             <ScrollAnimated direction="up" delay={0}>
               <h2
                 id="infos-heading"
@@ -181,7 +181,7 @@ export default function AnimatedSections({
           </div>
 
           {/* Case 2 - Viande Halal */}
-          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
             <ScrollAnimated direction="up" delay={100}>
               <div className="flex flex-col items-center gap-2">
                 <div className="w-[60px] h-[60px] flex items-center justify-center">
@@ -195,7 +195,7 @@ export default function AnimatedSections({
           </div>
 
           {/* Case 3 - Large choix végétarien */}
-          <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+          <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
             <ScrollAnimated direction="up" delay={200}>
               <div className="flex flex-col items-center gap-3">
                 <div className="w-[60px] h-[60px] flex items-center justify-center">
@@ -212,7 +212,7 @@ export default function AnimatedSections({
         {/* Colonne 2 - Grille 2x3 (6 cases) */}
         <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
           {/* Case 1 - Moyens de paiement */}
-          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
             <ScrollAnimated direction="up" delay={150}>
               <div className="text-center">
                 <h3 className="font-bold text-xl md:text-2xl text-primary mb-2">
@@ -227,7 +227,7 @@ export default function AnimatedSections({
           </div>
 
           {/* Case 2 - Cuisine Indienne et Pakistanaise */}
-          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
             <ScrollAnimated direction="up" delay={250}>
               <div className="flex flex-col items-center gap-3">
                 <div className="w-[60px] h-[60px] flex items-center justify-center">
@@ -241,7 +241,7 @@ export default function AnimatedSections({
           </div>
 
           {/* Case 3 - Plats faits maison */}
-          <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12">
+          <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
             <ScrollAnimated direction="up" delay={350}>
               <div className="flex flex-col items-center gap-3">
                 <div className="w-[60px] h-[60px] flex items-center justify-center">
@@ -256,20 +256,20 @@ export default function AnimatedSections({
         </div>
 
         {/* Colonne 3 - Tableau horaires vertical */}
-        <div className="col-span-3 lg:col-span-1 flex flex-col items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-8 md:py-12 min-h-0 md:min-h-0">
+        <div className="col-span-3 lg:col-span-1 flex flex-col items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-8 md:py-12">
           {content?.schedules && content.schedules.length > 0 && (
             <ScrollAnimated
               direction="up"
               delay={300}
-              className="w-full h-full md:h-full flex flex-col items-center"
+              className="w-full flex flex-col items-center"
             >
-              <h3 className="text-primary font-bold text-xl md:text-2xl mb-6 text-center flex-shrink-0">
+              <h3 className="text-primary font-bold text-xl md:text-2xl mb-6 text-center">
                 Horaires
               </h3>
-              <div className="flex-1 min-h-0 w-full flex justify-center overflow-y-auto md:overflow-auto max-h-[60vh] md:max-h-none">
+              <div className="w-full flex justify-center">
                 <div className="w-full max-w-full">
                   <table className="border-collapse text-sm md:text-base w-full">
-                    <thead className="sticky top-0 bg-light z-10">
+                    <thead>
                       <tr className="border-b-2 border-primary">
                         <th className="px-2 md:px-4 py-3 text-center font-semibold text-primary text-xs md:text-base"></th>
                         <th className="px-2 md:px-4 py-3 text-center font-semibold text-primary border-l border-primary text-xs md:text-base">
@@ -315,7 +315,7 @@ export default function AnimatedSections({
       <section
         id="contact"
         aria-labelledby="contact-heading"
-        className="w-full min-h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4.7rem)] flex flex-col"
+        className="w-full md:h-[calc(100vh-4.7rem)] flex flex-col"
         style={{ paddingTop: "6rem" }}
       >
         <div className="w-full mx-auto pb-6 px-4 md:px-6 lg:px-8 xl:px-12 flex-shrink-0">
@@ -336,7 +336,7 @@ export default function AnimatedSections({
                     aria-label="Envoyer un email au restaurant Palais du Raja"
                     value={content.mail}
                     label={content.mail}
-                    className="md:mr-10"
+                    className=""
                   />
                 )}
                 {content?.tel && (
@@ -360,13 +360,20 @@ export default function AnimatedSections({
         <ScrollAnimated
           direction="up"
           delay={300}
-          className="flex-1 min-h-0 w-full"
+          className="flex-1 min-h-[50vh] md:min-h-0 w-full h-[50vh] md:h-full relative"
         >
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5401.635074206616!2d0.689015977602613!3d47.395992871171224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcd5b248f1490b%3A0xd4bc494e1971897e!2sLe%20Palais%20du%20Rajah%20(Rajasthan)!5e0!3m2!1sfr!2sfr!4v1738936968444!5m2!1sfr!2sfr"
             width="100%"
             height="100%"
-            style={{ border: 0 }}
+            style={{
+              border: 0,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+            }}
             title="Carte Google Maps du Palais du Raja à Tours"
             aria-label="Carte Google Maps du Palais du Raja à Tours"
             loading="lazy"

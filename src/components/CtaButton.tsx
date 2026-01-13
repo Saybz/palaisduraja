@@ -42,17 +42,50 @@ export default function CtaBtn({
       break;
   }
 
+  // Détecter si des classes de couleur personnalisées sont fournies
+  const hasCustomColors =
+    className.includes("bg-") || className.includes("text-");
+  const defaultBgColor = hasCustomColors ? "" : "bg-primary";
+  const defaultTextColor = hasCustomColors ? "" : "text-light";
+  const defaultHoverColor = hasCustomColors ? "" : "hover:text-gray-100";
+  const iconColor = hasCustomColors ? "currentColor" : "text-light";
+
+  // Déterminer la couleur de la bordure : même couleur que le fond du bouton
+  let borderColor = "border-primary"; // Par défaut pour bg-primary
+  if (hasCustomColors) {
+    if (className.includes("bg-secondary")) {
+      borderColor = "border-secondary";
+    } else if (className.includes("bg-primary")) {
+      borderColor = "border-primary";
+    } else {
+      // Extraire la couleur bg-* de className si présente
+      const bgMatch = className.match(/bg-(\w+)/);
+      if (bgMatch) {
+        borderColor = `border-${bgMatch[1]}`;
+      } else {
+        borderColor = "border-primary";
+      }
+    }
+  }
+
   return (
     <a
       href={href}
       target={type === "link" || type === "location" ? "_blank" : "_self"}
       rel="noopener noreferrer"
-      className={`px-4 py-3 pb-2 max-w-fit bg-primary text-light font-regular text-base shadow-lg flex items-center gap-2 hover:text-gray-100 ${className}`}
+      className="group relative inline-block max-w-fit"
     >
-      <div className="pb-1">
-        <Icon className="text-light" />
-      </div>
-      {label}
+      <span
+        className={`absolute inset-0 border-2 ${borderColor} -m-1 group-hover:m-0 transition-all duration-300 ease-in-out`}
+      />
+      <span
+        className={`relative block px-4 py-3 pb-2 ${defaultBgColor} ${defaultTextColor} font-regular text-base shadow-lg flex items-center gap-2 ${defaultHoverColor} ${className} transition-all duration-300 ease-in-out`}
+      >
+        <div className="pb-1">
+          <Icon className={iconColor} />
+        </div>
+        {label}
+      </span>
     </a>
   );
 }

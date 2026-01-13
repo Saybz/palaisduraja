@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import ScrollAnimated from "@/components/ScrollAnimated";
+import CtaBtn from "@/components/CtaButton";
 
 type MenuSectionProps = {
   menuImg1?: string | null;
@@ -21,13 +22,13 @@ type Dish = {
   image?: string | null;
 };
 
-export default function MenuSection({ 
-  menuImg1, 
-  menuImg2, 
-  menuImg3, 
-  menuImg4, 
-  menuPdf, 
-  menuDesc 
+export default function MenuSection({
+  menuImg1,
+  menuImg2,
+  menuImg3,
+  menuImg4,
+  menuPdf,
+  menuDesc,
 }: MenuSectionProps) {
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [selectedDish, setSelectedDish] = useState<number | null>(null);
@@ -120,36 +121,41 @@ export default function MenuSection({
     >
       {/* Première colonne - Texte et bouton */}
       <div className="col-span-3 lg:col-span-1 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 border-b lg:border-b-0 lg:border-r border-secondary">
-        <ScrollAnimated direction="up" delay={0} className="space-y-6 max-w-md mx-auto lg:mx-0">
-          <h2 id="menu-heading" className="relative font-head text-5xl md:text-6xl text-secondary mb-6">
+        <ScrollAnimated
+          direction="up"
+          delay={0}
+          className="space-y-6 max-w-md mx-auto lg:mx-0"
+        >
+          <h2
+            id="menu-heading"
+            className="relative font-head text-5xl md:text-6xl text-secondary mb-6"
+          >
             Carte & Menus
           </h2>
-          
+
           <div className="space-y-4">
             <p className="text-lg md:text-xl text-light leading-relaxed">
-              Plongez dans l&apos;univers envoûtant de la cuisine indienne traditionnelle. 
-              Au Palais du Raja, chaque plat raconte une histoire, chaque épice révèle 
-              un secret transmis de génération en génération.
+              Plongez dans l&apos;univers envoûtant de la cuisine indienne
+              traditionnelle. Au Palais du Raja, chaque plat raconte une
+              histoire, chaque épice révèle un secret transmis de génération en
+              génération.
             </p>
             <p className="text-lg md:text-xl text-light leading-relaxed">
-              Découvrez une palette de saveurs exceptionnelles : currys généreux, 
-              tandooris parfumés, biryanis savoureux et naans moelleux.
+              Découvrez une palette de saveurs exceptionnelles : currys
+              généreux, tandooris parfumés, biryanis savoureux et naans
+              moelleux.
             </p>
           </div>
 
           {/* Bouton PDF */}
           {menuPdf && (
             <div className="mt-8">
-              <a
-                href={menuPdf}
-                rel="noopener noreferrer"
-                aria-label="Télécharger le menu complet au format PDF - Restaurant Palais du Raja"
-                target="_blank"
-                className="inline-block px-6 py-3 pb-2 bg-secondary text-primary font-semibold shadow-lg hover:bg-secondary/90 transition-all"
-                title="Menu PDF du restaurant Palais du Raja - Téléchargement"
-              >
-                {menuDesc || "Découvrir la carte"}
-              </a>
+              <CtaBtn
+                type="link"
+                value={menuPdf}
+                label={menuDesc || "Découvrir la carte"}
+                className="bg-secondary text-primary hover:bg-secondary/90"
+              />
             </div>
           )}
         </ScrollAnimated>
@@ -161,7 +167,7 @@ export default function MenuSection({
           <h3 className="font-body text-md md:text-4xl text-secondary mb-6 ml-4">
             Plats populaires
           </h3>
-          
+
           <div className="space-y-0">
             {dishes.length === 0 ? (
               <p className="text-light text-center py-4 px-4">
@@ -169,52 +175,55 @@ export default function MenuSection({
               </p>
             ) : (
               dishes.map((dish) => (
-              <div
-                key={dish.id}
-                className="border-b border-secondary w-full overflow-hidden"
-              >
-                <button
-                  onClick={() => handleDishClick(dish.id)}
-                  className="w-full px-4 py-3 flex justify-between items-center text-left hover:bg-primary/80 transition-colors cursor-pointer"
-                  aria-expanded={expandedDish === dish.id}
+                <div
+                  key={dish.id}
+                  className="border-b border-secondary w-full overflow-hidden"
                 >
-                  <span className="text-light font-semibold text-lg">
-                    {dish.name}
-                  </span>
-                  <span className="text-light font-bold text-lg ml-4">
-                    {dish.price}
-                  </span>
-                </button>
-                
-                <div 
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    expandedDish === dish.id 
-                      ? 'max-h-[800px] opacity-100' 
-                      : 'max-h-0 opacity-0'
-                  }`}
-                >
-                  <div className="px-4 py-3 bg-primary/60 border-t border-secondary">
-                    <p className="text-light text-base leading-relaxed mb-4">
-                      {dish.description}
-                    </p>
-                    {/* Image du plat - visible uniquement en mobile */}
-                    {getDishImage(dish.id) && (
-                      <div className="lg:hidden relative w-full aspect-video rounded-md overflow-hidden mt-4">
-                        <Image
-                          src={getDishImage(dish.id)!}
-                          alt={`${dish.name} - Restaurant Palais du Raja`}
-                          fill
-                          loading="lazy"
-                          sizes="100vw"
-                          style={{ objectFit: "cover", objectPosition: "center" }}
-                          className="transition-opacity duration-500"
-                          title={`${dish.name} - Palais du Raja`}
-                        />
-                      </div>
-                    )}
+                  <button
+                    onClick={() => handleDishClick(dish.id)}
+                    className="w-full px-4 py-3 flex justify-between items-center text-left hover:bg-primary/80 transition-colors cursor-pointer"
+                    aria-expanded={expandedDish === dish.id}
+                  >
+                    <span className="text-light font-semibold text-lg">
+                      {dish.name}
+                    </span>
+                    <span className="text-light font-bold text-lg ml-4">
+                      {dish.price}
+                    </span>
+                  </button>
+
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      expandedDish === dish.id
+                        ? "max-h-[800px] opacity-100"
+                        : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <div className="px-4 py-3 bg-primary/60 border-t border-secondary">
+                      <p className="text-light text-base leading-relaxed mb-4">
+                        {dish.description}
+                      </p>
+                      {/* Image du plat - visible uniquement en mobile */}
+                      {getDishImage(dish.id) && (
+                        <div className="lg:hidden relative w-full aspect-video rounded-md overflow-hidden mt-4">
+                          <Image
+                            src={getDishImage(dish.id)!}
+                            alt={`${dish.name} - Restaurant Palais du Raja`}
+                            fill
+                            loading="lazy"
+                            sizes="100vw"
+                            style={{
+                              objectFit: "cover",
+                              objectPosition: "center",
+                            }}
+                            className="transition-opacity duration-500"
+                            title={`${dish.name} - Palais du Raja`}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
               ))
             )}
           </div>
