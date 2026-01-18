@@ -35,28 +35,41 @@ type Dish = {
   id?: number;
   name: string;
   description: string;
+  nameEn?: string | null;
+  descriptionEn?: string | null;
   price: string;
   image?: string | null;
   order: number;
 };
 
+type Lang = "fr" | "en";
+
 export default function AdminPage() {
   const [activeSection, setActiveSection] = useState<Section>("hero");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeLang, setActiveLang] = useState<Lang>("fr");
   const [content, setContent] = useState({
     banner: "",
+    // Champs FR
     title: "",
     histoire: "",
-    histoireImg: "",
     menuDesc: "",
+    cuisine: "",
+    paiement: "",
+    // Champs EN
+    titleEn: "",
+    histoireEn: "",
+    menuDescEn: "",
+    cuisineEn: "",
+    paiementEn: "",
+    // Fichiers (non traduisibles)
+    histoireImg: "",
     menuImg: "",
     menuImg1: "",
     menuImg2: "",
     menuImg3: "",
     menuImg4: "",
     menuPdf: "",
-    cuisine: "",
-    paiement: "",
     mail: "",
     tel: "",
   });
@@ -74,7 +87,7 @@ export default function AdminPage() {
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [editingDish, setEditingDish] = useState<Dish | null>(null);
   const [newDishImage, setNewDishImage] = useState<File | null>(null);
-  const { data: session } = useSession();
+  const { status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -83,18 +96,26 @@ export default function AdminPage() {
       const data = await res.json();
       setContent({
         banner: data?.banner || "",
+        // FR
         title: data?.title || "",
         histoire: data?.histoire || "",
-        histoireImg: data?.histoireImg || "",
         menuDesc: data?.menuDesc || "",
+        cuisine: data?.cuisine || "",
+        paiement: data?.paiement || "",
+        // EN
+        titleEn: data?.titleEn || "",
+        histoireEn: data?.histoireEn || "",
+        menuDescEn: data?.menuDescEn || "",
+        cuisineEn: data?.cuisineEn || "",
+        paiementEn: data?.paiementEn || "",
+        // Fichiers
+        histoireImg: data?.histoireImg || "",
         menuImg: data?.menuImg || "",
         menuImg1: data?.menuImg1 || "",
         menuImg2: data?.menuImg2 || "",
         menuImg3: data?.menuImg3 || "",
         menuImg4: data?.menuImg4 || "",
         menuPdf: data?.menuPdf || "",
-        cuisine: data?.cuisine || "",
-        paiement: data?.paiement || "",
         mail: data?.mail || "",
         tel: data?.tel || "",
       });
@@ -127,10 +148,11 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (!session) {
+    // Ne rediriger que si le status est "unauthenticated" (pas pendant "loading")
+    if (status === "unauthenticated") {
       router.push("/login");
     }
-  }, [session, router]);
+  }, [status, router]);
 
   useEffect(() => {
     if (successMessage) {
@@ -174,11 +196,14 @@ export default function AdminPage() {
     setEditingDish({
       name: "",
       description: "",
+      nameEn: "",
+      descriptionEn: "",
       price: "",
       image: null,
       order: dishes.length,
     });
     setNewDishImage(null);
+    setActiveLang("fr"); // Commencer par le français
   };
 
   const handleEditDish = (dish: Dish) => {
@@ -197,6 +222,8 @@ export default function AdminPage() {
     const dishData = {
       ...editingDish,
       image: imageUrl,
+      nameEn: editingDish.nameEn || null,
+      descriptionEn: editingDish.descriptionEn || null,
     };
 
     try {
@@ -342,6 +369,32 @@ export default function AdminPage() {
     { id: "horaires", label: "Horaires", icon: "🕒" },
   ];
 
+  // Composant onglets de langue
+  const LangTabs = () => (
+    <div className="flex gap-2 mb-6">
+      <button
+        onClick={() => setActiveLang("fr")}
+        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          activeLang === "fr"
+            ? "bg-primary text-white"
+            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+        }`}
+      >
+        🇫🇷 Français
+      </button>
+      <button
+        onClick={() => setActiveLang("en")}
+        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          activeLang === "en"
+            ? "bg-primary text-white"
+            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+        }`}
+      >
+        🇬🇧 English
+      </button>
+            </div>
+  );
+
   const renderSection = () => {
     switch (activeSection) {
       case "hero":
@@ -384,31 +437,65 @@ export default function AdminPage() {
         return (
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Histoire</h2>
+            <LangTabs />
+            
+            {activeLang === "fr" ? (
+              <>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Titre Histoire (Français)
+                  </label>
+                  <input
+                    type="text"
+                    value={content.title}
+                    onChange={(e) => setContent({ ...content, title: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Description Histoire (Français)
+                  </label>
+                  <textarea
+                    value={content.histoire}
+                    rows={8}
+                    onChange={(e) => setContent({ ...content, histoire: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Title (English)
+                  </label>
+                  <input
+                    type="text"
+                    value={content.titleEn}
+                    onChange={(e) => setContent({ ...content, titleEn: e.target.value })}
+                    placeholder={content.title || "Enter English title..."}
+                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Description (English)
+                  </label>
+                  <textarea
+                    value={content.histoireEn}
+                    rows={8}
+                    onChange={(e) => setContent({ ...content, histoireEn: e.target.value })}
+                    placeholder={content.histoire || "Enter English description..."}
+                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                  />
+                </div>
+              </>
+            )}
+
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Titre Histoire
-              </label>
-              <input
-                type="text"
-                value={content.title}
-                onChange={(e) => setContent({ ...content, title: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Description Histoire
-              </label>
-              <textarea
-                value={content.histoire}
-                rows={8}
-                onChange={(e) => setContent({ ...content, histoire: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Image ou Vidéo Histoire
+                Image ou Vidéo Histoire (commune aux deux langues)
               </label>
               {content.histoireImg && (
                 <>
@@ -564,32 +651,70 @@ export default function AdminPage() {
                 <h3 className="text-lg font-semibold text-gray-800">
                   {editingDish.id ? "Modifier le plat" : "Nouveau plat"}
                 </h3>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Nom du plat *
-                  </label>
-                  <input
-                    type="text"
-                    value={editingDish.name}
-                    onChange={(e) =>
-                      setEditingDish({ ...editingDish, name: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Description *
-                  </label>
-                  <textarea
-                    value={editingDish.description}
-                    rows={4}
-                    onChange={(e) =>
-                      setEditingDish({ ...editingDish, description: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
-                  />
-                </div>
+                <LangTabs />
+                
+                {activeLang === "fr" ? (
+                  <>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Nom du plat (Français) *
+                      </label>
+                      <input
+                        type="text"
+                        value={editingDish.name}
+                        onChange={(e) =>
+                          setEditingDish({ ...editingDish, name: e.target.value })
+                        }
+                        className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Description (Français) *
+                      </label>
+                      <textarea
+                        value={editingDish.description}
+                        rows={4}
+                        onChange={(e) =>
+                          setEditingDish({ ...editingDish, description: e.target.value })
+                        }
+                        className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Dish name (English)
+                      </label>
+                      <input
+                        type="text"
+                        value={editingDish.nameEn || ""}
+                        onChange={(e) =>
+                          setEditingDish({ ...editingDish, nameEn: e.target.value })
+                        }
+                        placeholder={editingDish.name || "Enter English name..."}
+                        className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Description (English)
+                      </label>
+                      <textarea
+                        value={editingDish.descriptionEn || ""}
+                        rows={4}
+                        onChange={(e) =>
+                          setEditingDish({ ...editingDish, descriptionEn: e.target.value })
+                        }
+                        placeholder={editingDish.description || "Enter English description..."}
+                        className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                      />
+                    </div>
+                  </>
+                )}
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Prix * (ex: &quot;12.00 €&quot;)
@@ -728,28 +853,61 @@ export default function AdminPage() {
         return (
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Infos pratiques</h2>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Cuisine
-              </label>
-              <input
-                type="text"
-                value={content.cuisine}
-                onChange={(e) => setContent({ ...content, cuisine: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Moyens de paiement
-              </label>
-              <input
-                type="text"
-                value={content.paiement}
-                onChange={(e) => setContent({ ...content, paiement: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
-              />
-            </div>
+            <LangTabs />
+            
+            {activeLang === "fr" ? (
+              <>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Cuisine (Français)
+                  </label>
+                  <input
+                    type="text"
+                    value={content.cuisine}
+                    onChange={(e) => setContent({ ...content, cuisine: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Moyens de paiement (Français)
+                  </label>
+                  <input
+                    type="text"
+                    value={content.paiement}
+                    onChange={(e) => setContent({ ...content, paiement: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Cuisine (English)
+                  </label>
+                  <input
+                    type="text"
+                    value={content.cuisineEn}
+                    onChange={(e) => setContent({ ...content, cuisineEn: e.target.value })}
+                    placeholder={content.cuisine || "Enter English cuisine type..."}
+                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Payment methods (English)
+                  </label>
+                  <input
+                    type="text"
+                    value={content.paiementEn}
+                    onChange={(e) => setContent({ ...content, paiementEn: e.target.value })}
+                    placeholder={content.paiement || "Enter English payment methods..."}
+                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
+                  />
+                </div>
+              </>
+            )}
           </div>
         );
 

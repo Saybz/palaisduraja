@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import ScrollAnimated from "@/components/ScrollAnimated";
 import CtaBtn from "@/components/CtaButton";
 
@@ -12,6 +13,7 @@ type MenuSectionProps = {
   menuImg4?: string | null;
   menuPdf?: string | null;
   menuDesc?: string | null;
+  locale?: string;
 };
 
 type Dish = {
@@ -19,6 +21,8 @@ type Dish = {
   name: string;
   price: string;
   description: string;
+  nameEn?: string | null;
+  descriptionEn?: string | null;
   image?: string | null;
 };
 
@@ -28,9 +32,21 @@ export default function MenuSection({
   menuImg3,
   menuImg4,
   menuPdf,
-  menuDesc,
+  locale = "fr",
 }: MenuSectionProps) {
+  const t = useTranslations("menu");
   const [dishes, setDishes] = useState<Dish[]>([]);
+
+  // Helper pour obtenir le nom/description selon la langue
+  const getLocalizedDishName = (dish: Dish) => {
+    if (locale === "en" && dish.nameEn) return dish.nameEn;
+    return dish.name;
+  };
+
+  const getLocalizedDishDescription = (dish: Dish) => {
+    if (locale === "en" && dish.descriptionEn) return dish.descriptionEn;
+    return dish.description;
+  };
   const [selectedDish, setSelectedDish] = useState<number | null>(null);
   const [expandedDish, setExpandedDish] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -130,20 +146,15 @@ export default function MenuSection({
             id="menu-heading"
             className="relative font-head text-5xl md:text-6xl text-secondary mb-6"
           >
-            Carte & Menus
+            {t("title")}
           </h2>
 
           <div className="space-y-4">
             <p className="text-lg md:text-xl text-light leading-relaxed">
-              Plongez dans l&apos;univers envoûtant de la cuisine indienne
-              traditionnelle. Au Palais du Raja, chaque plat raconte une
-              histoire, chaque épice révèle un secret transmis de génération en
-              génération.
+              {t("description1")}
             </p>
             <p className="text-lg md:text-xl text-light leading-relaxed">
-              Découvrez une palette de saveurs exceptionnelles : currys
-              généreux, tandooris parfumés, biryanis savoureux et naans
-              moelleux.
+              {t("description2")}
             </p>
           </div>
 
@@ -153,7 +164,7 @@ export default function MenuSection({
               <CtaBtn
                 type="link"
                 value={menuPdf}
-                label={menuDesc || "Découvrir la carte"}
+                label={t("downloadMenu")}
                 className="bg-secondary text-primary hover:bg-secondary/90"
               />
             </div>
@@ -165,13 +176,13 @@ export default function MenuSection({
       <div className="col-span-3 lg:col-span-1 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-secondary overflow-y-auto">
         <ScrollAnimated direction="up" delay={150} className="w-full">
           <h3 className="font-body text-md md:text-4xl text-secondary mb-6 ml-4">
-            Plats populaires
+            {t("popularDishes")}
           </h3>
 
           <div className="space-y-0">
             {dishes.length === 0 ? (
               <p className="text-light text-center py-4 px-4">
-                Aucun plat disponible pour le moment.
+                {t("noDishes")}
               </p>
             ) : (
               dishes.map((dish) => (
@@ -185,7 +196,7 @@ export default function MenuSection({
                     aria-expanded={expandedDish === dish.id}
                   >
                     <span className="text-light font-semibold text-lg">
-                      {dish.name}
+                      {getLocalizedDishName(dish)}
                     </span>
                     <span className="text-light font-bold text-lg ml-4">
                       {dish.price}
@@ -201,14 +212,14 @@ export default function MenuSection({
                   >
                     <div className="px-4 py-3 bg-primary/60 border-t border-secondary">
                       <p className="text-light text-base leading-relaxed mb-4">
-                        {dish.description}
+                        {getLocalizedDishDescription(dish)}
                       </p>
                       {/* Image du plat - visible uniquement en mobile */}
                       {getDishImage(dish.id) && (
                         <div className="lg:hidden relative w-full aspect-video rounded-md overflow-hidden mt-4">
                           <Image
                             src={getDishImage(dish.id)!}
-                            alt={`${dish.name} - Restaurant Palais du Raja`}
+                            alt={`${dish.name} - Palais du Raja`}
                             fill
                             loading="lazy"
                             sizes="100vw"
@@ -237,13 +248,13 @@ export default function MenuSection({
             <div className="relative w-full h-full">
               <Image
                 src={currentImage}
-                alt={`Plat indien - Restaurant Palais du Raja, spécialités indiennes et pakistanaises à Tours`}
+                alt="Palais du Raja - Tours"
                 fill
                 loading="lazy"
                 sizes="33.333vw"
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 className="transition-opacity duration-500"
-                title={`Spécialité indienne - Palais du Raja`}
+                title="Palais du Raja"
               />
             </div>
           </ScrollAnimated>

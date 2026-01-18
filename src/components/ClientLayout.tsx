@@ -4,11 +4,11 @@ import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function ClientLayout({
-  children,
-}: {
+type Props = {
   children: React.ReactNode;
-}) {
+};
+
+export default function ClientLayout({ children }: Props) {
   const pathname = usePathname();
   const isAdminPage = pathname?.startsWith("/admin");
 
@@ -20,4 +20,3 @@ export default function ClientLayout({
     </>
   );
 }
-

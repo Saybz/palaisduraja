@@ -10,14 +10,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-  const { data: session } = useSession();
+  const { status } = useSession();
 
-  // Effectuer la redirection uniquement après que la session soit disponible
+  // Effectuer la redirection uniquement si authentifié (pas pendant le chargement)
   useEffect(() => {
-    if (session) {
+    if (status === "authenticated") {
       router.push("/admin");
     }
-  }, [session, router]); // Dépendance de la session
+  }, [status, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

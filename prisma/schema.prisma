@@ -16,19 +16,29 @@ datasource db {
 model Content {
   id          Int       @id @default(autoincrement())
   banner      String?
+  
+  // Champs traduisibles - Français (par défaut)
   title       String?
   histoire    String?
-  histoireImg String?
   menuDesc    String?
+  cuisine     String?
+  paiement    String?
+  
+  // Champs traduisibles - Anglais
+  titleEn     String?
+  histoireEn  String?
+  menuDescEn  String?
+  cuisineEn   String?
+  paiementEn  String?
+  
+  // Images et fichiers (non traduisibles)
+  histoireImg String?
   menuImg     String?
   menuImg1    String?
   menuImg2    String?
   menuImg3    String?
   menuImg4    String?
   menuPdf     String?
-
-  cuisine     String?
-  paiement    String?
 
   mail        String?
   tel         String?
@@ -51,8 +61,15 @@ model Schedule {
 
 model Dish {
   id          Int      @id @default(autoincrement())
+  
+  // Champs traduisibles - Français (par défaut)
   name        String
   description String
+  
+  // Champs traduisibles - Anglais
+  nameEn      String?
+  descriptionEn String?
+  
   price       String   // Format: "12.00 €"
   image       String?
   order       Int      @default(0) // Pour ordonner les plats

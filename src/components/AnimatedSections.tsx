@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import CtaBtn from "@/components/CtaButton";
 import ScrollAnimated from "@/components/ScrollAnimated";
 import ScrollToTopButton from "@/components/ScrollToTopBtn";
@@ -25,43 +26,86 @@ type Schedule = {
 
 type Content = {
   histoireImg?: string | null;
+  // Champs FR
   histoire?: string | null;
   title?: string | null;
+  menuDesc?: string | null;
+  cuisine?: string | null;
+  paiement?: string | null;
+  // Champs EN
+  histoireEn?: string | null;
+  titleEn?: string | null;
+  menuDescEn?: string | null;
+  cuisineEn?: string | null;
+  paiementEn?: string | null;
+  // Fichiers
   menuImg?: string | null;
   menuImg1?: string | null;
   menuImg2?: string | null;
   menuImg3?: string | null;
   menuImg4?: string | null;
   menuPdf?: string | null;
-  menuDesc?: string | null;
-  cuisine?: string | null;
-  paiement?: string | null;
   mail?: string | null;
   tel?: string | null;
   schedules?: Schedule[];
 };
 
-const DAYS: Schedule["day"][] = [
-  "Lundi",
-  "Mardi",
-  "Mercredi",
-  "Jeudi",
-  "Vendredi",
-  "Samedi",
-  "Dimanche",
-];
+const DAYS_KEYS = [
+  "LUNDI",
+  "MARDI",
+  "MERCREDI",
+  "JEUDI",
+  "VENDREDI",
+  "SAMEDI",
+  "DIMANCHE",
+] as const;
+
+const DAYS_MAP: Record<string, Schedule["day"]> = {
+  LUNDI: "Lundi",
+  MARDI: "Mardi",
+  MERCREDI: "Mercredi",
+  JEUDI: "Jeudi",
+  VENDREDI: "Vendredi",
+  SAMEDI: "Samedi",
+  DIMANCHE: "Dimanche",
+};
 
 export default function AnimatedSections({
   content,
+  locale = "fr",
 }: {
   content: Content | null;
+  locale?: string;
 }) {
+  const t = useTranslations();
+  const tInfos = useTranslations("infos");
+  const tContact = useTranslations("contact");
+  const tAbout = useTranslations("about");
+  const tDays = useTranslations("days");
+
+  // Helper pour obtenir le contenu traduit
+  const getLocalizedContent = <K extends keyof Content>(
+    frKey: K,
+    enKey: K
+  ): Content[K] | undefined => {
+    if (locale === "en" && content?.[enKey]) {
+      return content[enKey];
+    }
+    return content?.[frKey];
+  };
+
+  // Contenu localisé
+  const localizedTitle = getLocalizedContent("title", "titleEn");
+  const localizedHistoire = getLocalizedContent("histoire", "histoireEn");
+  const localizedCuisine = getLocalizedContent("cuisine", "cuisineEn");
+  const localizedPaiement = getLocalizedContent("paiement", "paiementEn");
+
   const formatSchedule = (s?: Schedule) =>
     s
       ? s.isClosed
-        ? "Fermé"
+        ? tInfos("closed")
         : `${s.openTime || "??"} - ${s.closeTime || "??"}`
-      : "Non renseigné";
+      : "-";
 
   return (
     <>
@@ -88,22 +132,18 @@ export default function AnimatedSections({
                 className="absolute inset-0 w-full h-full object-cover"
               >
                 <source src={content.histoireImg} type="video/mp4" />
-                Votre navigateur ne supporte pas la vidéo.
+                {t("common.error")}
               </video>
             ) : (
               <Image
                 src={content.histoireImg}
-                alt={`${
-                  content?.title || "Histoire"
-                } - Restaurant Palais du Raja, restaurant indien traditionnel à Tours, 113 rue Colbert`}
+                alt={`${localizedTitle || tAbout("title")} - Palais du Raja`}
                 fill
                 loading="lazy"
                 sizes="33.333vw"
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 className=""
-                title={`${
-                  content?.title || "Histoire"
-                } du restaurant Palais du Raja`}
+                title={`${localizedTitle || tAbout("title")} - Palais du Raja`}
               />
             )}
           </ScrollAnimated>
@@ -120,11 +160,10 @@ export default function AnimatedSections({
               id="about-heading"
               className="relative font-head font-light text-5xl md:text-6xl text-primary underline-offset-2 mb-4 md:mb-6"
             >
-              {content?.title || "Histoire du restaurant Palais du Raja"}
+              {localizedTitle || tAbout("title")}
             </h2>
             <p className="text-lg md:text-xl text-dark" itemProp="description">
-              {content?.histoire ||
-                "Découvrez l'histoire du Palais du Raja, restaurant indien traditionnel à Tours."}
+              {localizedHistoire || tAbout("title")}
             </p>
           </div>
 
@@ -157,6 +196,7 @@ export default function AnimatedSections({
           menuImg4={content?.menuImg4}
           menuPdf={content?.menuPdf}
           menuDesc={content?.menuDesc}
+          locale={locale}
         />
       </div>
 
@@ -175,7 +215,7 @@ export default function AnimatedSections({
                 id="infos-heading"
                 className="relative text-primary font-head text-4xl md:text-5xl lg:text-6xl text-center"
               >
-                Infos pratiques
+                {tInfos("title")}
               </h2>
             </ScrollAnimated>
           </div>
@@ -188,7 +228,7 @@ export default function AnimatedSections({
                   <span className="text-primary font-bold text-3xl">حلال</span>
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
-                  Viande Halal
+                  {tInfos("halal")}
                 </p>
               </div>
             </ScrollAnimated>
@@ -202,7 +242,7 @@ export default function AnimatedSections({
                   <span className="text-primary text-5xl">🌿</span>
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
-                  Large choix végétarien
+                  {tInfos("accessibility")}
                 </p>
               </div>
             </ScrollAnimated>
@@ -216,11 +256,10 @@ export default function AnimatedSections({
             <ScrollAnimated direction="up" delay={150}>
               <div className="text-center">
                 <h3 className="font-bold text-xl md:text-2xl text-primary mb-2">
-                  Moyens de paiement
+                  {tInfos("payment")}
                 </h3>
                 <p className="text-primary text-base md:text-lg">
-                  {content?.paiement ||
-                    "Carte Bleue, Visa, Eurocard/Mastercard, Paiement Sans Contact, Chèque vacances, Tickets restaurant"}
+                  {localizedPaiement || tInfos("paymentDesc")}
                 </p>
               </div>
             </ScrollAnimated>
@@ -234,7 +273,7 @@ export default function AnimatedSections({
                   <span className="text-primary text-5xl">🍛</span>
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
-                  {content?.cuisine || "Cuisine Indienne et Pakistanaise"}
+                  {localizedCuisine || tInfos("cuisineDesc")}
                 </p>
               </div>
             </ScrollAnimated>
@@ -248,7 +287,7 @@ export default function AnimatedSections({
                   <span className="text-primary text-5xl">👨‍🍳</span>
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
-                  Plats faits maison
+                  {tInfos("cuisine")}
                 </p>
               </div>
             </ScrollAnimated>
@@ -264,7 +303,7 @@ export default function AnimatedSections({
               className="w-full flex flex-col items-center"
             >
               <h3 className="text-primary font-bold text-xl md:text-2xl mb-6 text-center">
-                Horaires
+                {tInfos("schedule")}
               </h3>
               <div className="w-full flex justify-center">
                 <div className="w-full max-w-full">
@@ -273,15 +312,16 @@ export default function AnimatedSections({
                       <tr className="border-b-2 border-primary">
                         <th className="px-2 md:px-4 py-3 text-center font-semibold text-primary text-xs md:text-base"></th>
                         <th className="px-2 md:px-4 py-3 text-center font-semibold text-primary border-l border-primary text-xs md:text-base">
-                          MIDI
+                          {tInfos("lunch")}
                         </th>
                         <th className="px-2 md:px-4 py-3 text-center font-semibold text-primary border-l border-primary text-xs md:text-base">
-                          SOIR
+                          {tInfos("dinner")}
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {DAYS.map((day) => {
+                      {DAYS_KEYS.map((dayKey) => {
+                        const day = DAYS_MAP[dayKey];
                         const midi = content.schedules?.find(
                           (s: Schedule) => s.day === day && s.period === "MIDI"
                         );
@@ -289,9 +329,9 @@ export default function AnimatedSections({
                           (s: Schedule) => s.day === day && s.period === "SOIR"
                         );
                         return (
-                          <tr key={day} className="">
+                          <tr key={dayKey} className="">
                             <td className="px-2 md:px-4 py-3 font-semibold text-primary text-center text-xs md:text-base">
-                              {day}
+                              {tDays(dayKey)}
                             </td>
                             <td className="px-2 md:px-4 py-3 text-center text-primary border-l border-primary text-xs md:text-base">
                               {formatSchedule(midi)}
@@ -324,7 +364,7 @@ export default function AnimatedSections({
               id="contact-heading"
               className="relative text-primary font-head text-5xl md:text-6xl mb-2 md:mb-10"
             >
-              Contact et réservation
+              {tContact("title")}
             </h2>
           </ScrollAnimated>
           <ScrollAnimated direction="up" delay={150}>
@@ -333,7 +373,7 @@ export default function AnimatedSections({
                 {content?.mail && (
                   <CtaBtn
                     type="email"
-                    aria-label="Envoyer un email au restaurant Palais du Raja"
+                    aria-label={tContact("writeUs")}
                     value={content.mail}
                     label={content.mail}
                     className=""
@@ -341,18 +381,18 @@ export default function AnimatedSections({
                 )}
                 {content?.tel && (
                   <CtaBtn
-                    aria-label="Réserver une table par téléphone"
+                    aria-label={tContact("callUs")}
                     type="tel"
                     value={content.tel}
-                    label="Réserver"
+                    label={tContact("callUs")}
                   />
                 )}
               </div>
               <CtaBtn
                 type="location"
-                aria-label="Trouver le restaurant Palais du Raja à Tours sur Google Maps"
-                value="113 rue Colbert, 37000 Tours"
-                label="113 rue Colbert, 37000 Tours"
+                aria-label={tContact("findUs")}
+                value={tContact("address")}
+                label={tContact("address")}
               />
             </div>
           </ScrollAnimated>
@@ -374,8 +414,8 @@ export default function AnimatedSections({
               width: "100%",
               height: "100%",
             }}
-            title="Carte Google Maps du Palais du Raja à Tours"
-            aria-label="Carte Google Maps du Palais du Raja à Tours"
+            title={tContact("findUs")}
+            aria-label={tContact("findUs")}
             loading="lazy"
             className="w-full h-full"
           ></iframe>

@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "title": "Palais du Raja | Indian Restaurant in Tours | Traditional Cuisine",
+    "description": "Traditional Indian and Pakistani restaurant in Tours. Discover authentic cuisine, spicy specialties and a warm atmosphere. Reservation at +33 2 47 64 81 55."
+  },
+  "header": {
+    "history": "History",
+    "menu": "Menu",
+    "infos": "Info",
+    "contact": "Contact"
+  },
+  "hero": {
+    "subtitle": "Traditional Indian and Pakistani restaurant in Tours",
+    "reserve": "Book",
+    "takeaway": "Dine-in or takeaway",
+    "discoverMenu": "View the menu"
+  },
+  "about": {
+    "title": "Our Story",
+    "readMore": "Read more"
+  },
+  "menu": {
+    "title": "Menu & Dishes",
+    "description1": "Dive into the captivating world of traditional Indian cuisine. At Palais du Raja, every dish tells a story, every spice reveals a secret passed down through generations.",
+    "description2": "Discover an exceptional palette of flavors: generous curries, fragrant tandooris, savory biryanis and fluffy naans.",
+    "downloadMenu": "View the menu",
+    "popularDishes": "Popular dishes",
+    "noDishes": "No dishes available at the moment."
+  },
+  "infos": {
+    "title": "Practical Info",
+    "cuisine": "Cuisine",
+    "cuisineDesc": "Indian & Pakistani",
+    "payment": "Payment methods",
+    "paymentDesc": "Cards, Cash, Meal vouchers",
+    "halal": "Halal Meat",
+    "halalDesc": "100% Certified Halal",
+    "accessibility": "Accessibility",
+    "accessibilityDesc": "Wheelchair accessible",
+    "parking": "Parking",
+    "parkingDesc": "Parking nearby",
+    "wifi": "WiFi",
+    "wifiDesc": "Free WiFi",
+    "schedule": "Opening hours",
+    "lunch": "LUNCH",
+    "dinner": "DINNER",
+    "closed": "Closed"
+  },
+  "contact": {
+    "title": "Contact",
+    "address": "113 rue Colbert, 37000 Tours",
+    "phone": "+33 2 47 64 81 55",
+    "callUs": "Call us",
+    "writeUs": "Email us",
+    "findUs": "Find us"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "legal": "Legal notice",
+    "privacy": "Privacy policy"
+  },
+  "days": {
+    "LUNDI": "Monday",
+    "MARDI": "Tuesday",
+    "MERCREDI": "Wednesday",
+    "JEUDI": "Thursday",
+    "VENDREDI": "Friday",
+    "SAMEDI": "Saturday",
+    "DIMANCHE": "Sunday"
+  },
+  "scrollToTop": "Back to top",
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred"
+  }
+}
+

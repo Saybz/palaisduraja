@@ -1,21 +1,18 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useTranslations, useLocale } from "next-intl";
 import LogOutBtn from "@/components/LogOutBtn";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Link from "next/link";
 
-const sections = [
-  { id: "about", label: "Histoire" },
-  { id: "menu", label: "Menu" },
-  { id: "infos", label: "Infos" },
-  { id: "contact", label: "Contact" },
-];
-
 const Header: React.FC = () => {
+  const t = useTranslations("header");
+  const locale = useLocale();
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/admin");
-  const isLogin = pathname.startsWith("/admin/login");
+  const isLogin = pathname.startsWith("/admin/login") || pathname.startsWith("/login");
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
@@ -27,6 +24,13 @@ const Header: React.FC = () => {
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
   const lastScrollY = useRef(0);
+
+  const sections = useMemo(() => [
+    { id: "about", label: t("history") },
+    { id: "menu", label: t("menu") },
+    { id: "infos", label: t("infos") },
+    { id: "contact", label: t("contact") },
+  ], [t]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -107,7 +111,7 @@ const Header: React.FC = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [isAdminPage, isLogin]);
+  }, [isAdminPage, isLogin, sections]);
 
   // Mettre à jour la position de l'indicateur
   useEffect(() => {
@@ -234,15 +238,16 @@ const Header: React.FC = () => {
     }
   };
 
+  // Construire le lien home avec la locale
+  const homeLink = locale === "fr" ? "/" : `/${locale}`;
+
   return (
     <header
-      className={`z-50 sticky top-0 w-full font-body text-primary py-2 md:py-6 transition-all duration-300 header-enter ${
+      className={`z-50 sticky top-0 w-full font-body text-primary transition-all duration-500 ease-in-out header-enter ${
         isScrolled
-          ? "shadow-lg bg-light/80 backdrop-blur-md border-b-[0.2px] border-primary/90"
-          : "border-b-[0.2px] border-transparent"
-      }
-      ${isAdminPage ? "bg-light" : ""}
-      `}
+          ? "py-1 md:py-3 shadow-lg bg-light/80 backdrop-blur-md border-b-[0.2px] border-primary/90"
+          : "py-2 md:py-6 border-b-[0.2px] border-transparent"
+      } ${isAdminPage ? "bg-light" : ""}`}
       style={{
         transform: isHeaderVisible ? "translateY(0)" : "translateY(-100%)",
         transition: "transform 0.3s ease-in-out",
@@ -250,8 +255,8 @@ const Header: React.FC = () => {
     >
       <div className="h-full w-full mx-auto px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 flex flex-col md:flex-row justify-between items-center">
         <Link
-          href="/"
-          aria-label="Accueil"
+          href={homeLink}
+          aria-label={locale === "en" ? "Home" : "Accueil"}
           className="mb-2 md:mb-0 flex items-center"
         >
           <Image
@@ -264,40 +269,43 @@ const Header: React.FC = () => {
           />
         </Link>
         {!isAdminPage && !isLogin && (
-          <nav
-            ref={navRef}
-            aria-label="Navigation principale"
-            className="relative flex w-full gap-4 md:w-auto items-center justify-around font-semibold"
-          >
-            {/* Indicateur animé */}
-            {activeSection && indicatorStyle.width > 0 && (
-              <div
-                className="absolute bottom-0 h-0.5 bg-secondary transition-all ease-out"
-                style={{
-                  left: `${indicatorStyle.left}px`,
-                  width: `${indicatorStyle.width}px`,
-                  transitionDuration: isClickingRef.current ? "0.2s" : "0.5s",
-                  transitionProperty: "left, width",
-                }}
-              />
-            )}
+          <div className="flex items-center gap-4 md:gap-6">
+            <nav
+              ref={navRef}
+              aria-label="Navigation principale"
+              className="relative flex gap-4 md:w-auto items-center justify-around font-semibold"
+            >
+              {/* Indicateur animé */}
+              {activeSection && indicatorStyle.width > 0 && (
+                <div
+                  className="absolute bottom-0 h-0.5 bg-secondary transition-all ease-out"
+                  style={{
+                    left: `${indicatorStyle.left}px`,
+                    width: `${indicatorStyle.width}px`,
+                    transitionDuration: isClickingRef.current ? "0.2s" : "0.5s",
+                    transitionProperty: "left, width",
+                  }}
+                />
+              )}
 
-            {sections.map((section) => (
-              <a
-                key={section.id}
-                ref={(el) => {
-                  linkRefs.current[section.id] = el;
-                }}
-                href={`#${section.id}`}
-                onClick={(e) => scrollToSection(e, section.id)}
-                className={`relative text-md md:text-sm text-primary chover:text-primary-light cursor-pointer transition-colors ${
-                  activeSection === section.id ? "text-secondary" : ""
-                }`}
-              >
-                {section.label}
-              </a>
-            ))}
-          </nav>
+              {sections.map((section) => (
+                <a
+                  key={section.id}
+                  ref={(el) => {
+                    linkRefs.current[section.id] = el;
+                  }}
+                  href={`#${section.id}`}
+                  onClick={(e) => scrollToSection(e, section.id)}
+                  className={`relative text-md md:text-sm text-primary hover:text-primary-light cursor-pointer transition-colors ${
+                    activeSection === section.id ? "text-secondary" : ""
+                  }`}
+                >
+                  {section.label}
+                </a>
+              ))}
+            </nav>
+            <LanguageSwitcher />
+          </div>
         )}
         {isAdminPage && !isLogin && <LogOutBtn />}
       </div>

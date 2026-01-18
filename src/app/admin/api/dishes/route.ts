@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/utils/db";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 // Récupérer tous les plats
 export async function GET() {
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json();
-  const { name, description, price, image, order } = body;
+  const { name, description, nameEn, descriptionEn, price, image, order } = body;
 
   if (!name || !description || !price) {
     return NextResponse.json(
@@ -49,6 +49,8 @@ export async function POST(req: Request) {
     data: {
       name,
       description,
+      nameEn: nameEn || null,
+      descriptionEn: descriptionEn || null,
       price,
       image: image || null,
       order: newOrder,
@@ -67,7 +69,7 @@ export async function PUT(req: Request) {
   }
 
   const body = await req.json();
-  const { id, name, description, price, image, order } = body;
+  const { id, name, description, nameEn, descriptionEn, price, image, order } = body;
 
   if (!id) {
     return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -78,6 +80,8 @@ export async function PUT(req: Request) {
     data: {
       ...(name !== undefined && { name }),
       ...(description !== undefined && { description }),
+      ...(nameEn !== undefined && { nameEn }),
+      ...(descriptionEn !== undefined && { descriptionEn }),
       ...(price !== undefined && { price }),
       ...(image !== undefined && { image }),
       ...(order !== undefined && { order }),

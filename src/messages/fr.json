@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "title": "Palais du Raja | Restaurant Indien à Tours | Cuisine Traditionnelle",
+    "description": "Restaurant indien et pakistanais traditionnel à Tours. Découvrez une cuisine authentique, des spécialités épicées et une ambiance chaleureuse. Réservation au 02 47 64 81 55."
+  },
+  "header": {
+    "history": "Histoire",
+    "menu": "Menu",
+    "infos": "Infos",
+    "contact": "Contact"
+  },
+  "hero": {
+    "subtitle": "Restaurant traditionnel indien et pakistanais à Tours",
+    "reserve": "Réserver",
+    "takeaway": "Sur place ou à emporter",
+    "discoverMenu": "Découvrir la carte"
+  },
+  "about": {
+    "title": "Notre Histoire",
+    "readMore": "En savoir plus"
+  },
+  "menu": {
+    "title": "Carte & Menus",
+    "description1": "Plongez dans l'univers envoûtant de la cuisine indienne traditionnelle. Au Palais du Raja, chaque plat raconte une histoire, chaque épice révèle un secret transmis de génération en génération.",
+    "description2": "Découvrez une palette de saveurs exceptionnelles : currys généreux, tandooris parfumés, biryanis savoureux et naans moelleux.",
+    "downloadMenu": "Découvrir la carte",
+    "popularDishes": "Plats populaires",
+    "noDishes": "Aucun plat disponible pour le moment."
+  },
+  "infos": {
+    "title": "Infos pratiques",
+    "cuisine": "Cuisine",
+    "cuisineDesc": "Indienne & Pakistanaise",
+    "payment": "Moyens de paiement",
+    "paymentDesc": "CB, Espèces, Titres restaurant",
+    "halal": "Viande Halal",
+    "halalDesc": "100% Halal certifié",
+    "accessibility": "Accessibilité",
+    "accessibilityDesc": "Accessible PMR",
+    "parking": "Parking",
+    "parkingDesc": "Parking à proximité",
+    "wifi": "WiFi",
+    "wifiDesc": "WiFi gratuit",
+    "schedule": "Horaires d'ouverture",
+    "lunch": "MIDI",
+    "dinner": "SOIR",
+    "closed": "Fermé"
+  },
+  "contact": {
+    "title": "Contact",
+    "address": "113 rue Colbert, 37000 Tours",
+    "phone": "02 47 64 81 55",
+    "callUs": "Nous appeler",
+    "writeUs": "Nous écrire",
+    "findUs": "Nous trouver"
+  },
+  "footer": {
+    "rights": "Tous droits réservés",
+    "legal": "Mentions légales",
+    "privacy": "Politique de confidentialité"
+  },
+  "days": {
+    "LUNDI": "Lundi",
+    "MARDI": "Mardi",
+    "MERCREDI": "Mercredi",
+    "JEUDI": "Jeudi",
+    "VENDREDI": "Vendredi",
+    "SAMEDI": "Samedi",
+    "DIMANCHE": "Dimanche"
+  },
+  "scrollToTop": "Remonter",
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue"
+  }
+}
+

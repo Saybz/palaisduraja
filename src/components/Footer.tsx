@@ -1,7 +1,19 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 const Footer: React.FC = () => {
+  const t = useTranslations("footer");
+  const pathname = usePathname();
+  
+  // Déterminer la locale à partir du pathname
+  const locale = pathname.startsWith("/en") ? "en" : "fr";
+  const basePath = locale === "fr" ? "" : `/${locale}`;
+
   return (
     <footer className="py-5 text-center bg-primary text-white">
       <div className="footer-content px-4 mx-auto flex flex-col items-center space-y-2 w-full text-sm">
@@ -24,8 +36,7 @@ const Footer: React.FC = () => {
         {/* Autres éléments - Alignés naturellement en desktop */}
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center lg:gap-4 space-y-2 lg:space-y-0">
           <p className="text-sm">
-            &copy; {new Date().getFullYear()} Palais du Raja. Tous droits
-            réservés.
+            &copy; {new Date().getFullYear()} Palais du Raja. {t("rights")}.
           </p>
           <div className="text-sm">
             <address>113 rue Colbert, 37000 Tours – </address>
@@ -34,19 +45,19 @@ const Footer: React.FC = () => {
             </a>
           </div>
           <p className="text-sm">
-            <a
-              href="/mentions-legales"
+            <Link
+              href={`${basePath}/mentions-legales`}
               className="underline hover:text-secondary"
             >
-              Mentions légales
-            </a>{" "}
+              {t("legal")}
+            </Link>{" "}
             |{" "}
-            <a
-              href="/politique-confidentialite"
+            <Link
+              href={`${basePath}/politique-confidentialite`}
               className="underline hover:text-secondary"
             >
-              Politique de confidentialité
-            </a>
+              {t("privacy")}
+            </Link>
           </p>
         </div>
       </div>

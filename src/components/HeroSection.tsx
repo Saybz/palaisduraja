@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import CtaBtn from "@/components/CtaButton";
 
 type HeroSectionProps = {
@@ -15,6 +16,7 @@ export default function HeroSection({
   tel,
   menuPdf,
 }: HeroSectionProps) {
+  const t = useTranslations("hero");
   const [scrollY, setScrollY] = useState(0);
   const [logoSvg, setLogoSvg] = useState<string>("");
   const [animationPlayed, setAnimationPlayed] = useState(false);
@@ -87,15 +89,15 @@ export default function HeroSection({
               className="text-base md:text-lg text-dark font-semibold hero-subtitle"
               role="doc-subtitle"
             >
-              Restaurant traditionnel indien et pakistanais à Tours
+              {t("subtitle")}
             </p>
           </header>
           <div className="mt-6 md:mt-8 hero-button">
             <CtaBtn
               type="tel"
               value={tel || "0247648155"}
-              label="Réserver"
-              aria-label="Réserver une table au restaurant Palais du Raja par téléphone"
+              label={t("reserve")}
+              aria-label={t("reserve")}
             />
           </div>
         </div>
@@ -113,7 +115,7 @@ export default function HeroSection({
               <div className="absolute inset-0 w-full h-full">
                 <Image
                   src={banner}
-                  alt="Salle du restaurant Palais du Raja à Tours"
+                  alt="Palais du Raja - Tours"
                   fill
                   priority
                   sizes="100vw"
@@ -155,15 +157,15 @@ export default function HeroSection({
                   className="text-base md:text-lg text-secondary font-semibold drop-shadow-lg hero-subtitle"
                   role="doc-subtitle"
                 >
-                  Restaurant traditionnel indien et pakistanais à Tours
+                  {t("subtitle")}
                 </p>
               </header>
               <div className="mt-6 md:mt-8 hero-button">
                 <CtaBtn
                   type="tel"
                   value={tel || "0247648155"}
-                  label="Réserver"
-                  aria-label="Réserver une table au restaurant Palais du Raja par téléphone"
+                  label={t("reserve")}
+                  aria-label={t("reserve")}
                 />
               </div>
             </div>
@@ -176,7 +178,7 @@ export default function HeroSection({
         {/* Div gauche - Texte "Sur place ou à emporter" (1/3) */}
         <div className="col-span-3 lg:col-span-1 border-t border-r border-primary flex items-center justify-start px-4 md:px-6 lg:px-8 xl:px-12 bg-light h-14 md:h-20">
           <p className="text-base md:text-lg font-body text-primary font-bold text-center">
-            Sur place ou à emporter
+            {t("takeaway")}
           </p>
         </div>
 
@@ -186,7 +188,7 @@ export default function HeroSection({
             <CtaBtn
               type="link"
               value={menuPdf}
-              label="Découvrir la carte"
+              label={t("discoverMenu")}
               className="bg-secondary text-primary hover:bg-secondary/90"
             />
           )}

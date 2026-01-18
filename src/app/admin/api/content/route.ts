@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/utils/db";
 import type { Schedule, Content } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 type ScheduleInput = {
   day: Schedule["day"];
@@ -41,18 +41,27 @@ export async function POST(req: Request) {
 
   const {
     banner,
+    // Champs FR
     title,
     histoire,
-    histoireImg,
     menuDesc,
+    cuisine,
+    paiement,
+    // Champs EN
+    titleEn,
+    histoireEn,
+    menuDescEn,
+    cuisineEn,
+    paiementEn,
+    // Images et fichiers
+    histoireImg,
     menuImg,
     menuImg1,
     menuImg2,
     menuImg3,
     menuImg4,
     menuPdf,
-    cuisine,
-    paiement,
+    // Contact
     mail,
     tel,
     schedules,
@@ -73,18 +82,26 @@ export async function POST(req: Request) {
       where: { id: existingContent.id },
       data: {
         banner,
+        // FR
         title,
         histoire,
-        histoireImg,
         menuDesc,
+        cuisine,
+        paiement,
+        // EN
+        titleEn,
+        histoireEn,
+        menuDescEn,
+        cuisineEn,
+        paiementEn,
+        // Images
+        histoireImg,
         menuImg,
         menuImg1,
         menuImg2,
         menuImg3,
         menuImg4,
         menuPdf,
-        cuisine,
-        paiement,
         mail,
         tel,
       } as Parameters<typeof prisma.content.update>[0]['data'],
@@ -121,18 +138,26 @@ export async function POST(req: Request) {
     const newContent = await prisma.content.create({
       data: {
         banner,
+        // FR
         title,
         histoire,
-        histoireImg,
         menuDesc,
+        cuisine,
+        paiement,
+        // EN
+        titleEn,
+        histoireEn,
+        menuDescEn,
+        cuisineEn,
+        paiementEn,
+        // Images
+        histoireImg,
         menuImg,
         menuImg1,
         menuImg2,
         menuImg3,
         menuImg4,
         menuPdf,
-        cuisine,
-        paiement,
         mail,
         tel,
         schedules: {

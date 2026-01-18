@@ -1,10 +1,18 @@
 import { prisma } from "@/utils/db";
+import { setRequestLocale } from "next-intl/server";
 import HeroSection from "@/components/HeroSection";
 import AnimatedSections from "@/components/AnimatedSections";
 
 type Schedule = {
   id: number;
-  day: "Lundi" | "Mardi" | "Mercredi" | "Jeudi" | "Vendredi" | "Samedi" | "Dimanche";
+  day:
+    | "Lundi"
+    | "Mardi"
+    | "Mercredi"
+    | "Jeudi"
+    | "Vendredi"
+    | "Samedi"
+    | "Dimanche";
   period: "MIDI" | "SOIR";
   openTime: string | null;
   closeTime: string | null;
@@ -14,23 +22,38 @@ type Schedule = {
 interface Content {
   banner?: string | null;
   histoireImg?: string | null;
+  // Champs FR
   histoire?: string | null;
   title?: string | null;
+  menuDesc?: string | null;
+  cuisine?: string | null;
+  paiement?: string | null;
+  // Champs EN
+  histoireEn?: string | null;
+  titleEn?: string | null;
+  menuDescEn?: string | null;
+  cuisineEn?: string | null;
+  paiementEn?: string | null;
+  // Fichiers
   menuImg?: string | null;
   menuImg1?: string | null;
   menuImg2?: string | null;
   menuImg3?: string | null;
   menuImg4?: string | null;
   menuPdf?: string | null;
-  menuDesc?: string | null;
-  cuisine?: string | null;
-  paiement?: string | null;
   mail?: string | null;
   tel?: string | null;
-  schedules?: Schedule[]; // ✅ ajout des horaires
+  schedules?: Schedule[];
 }
 
-export default async function Home() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function Home({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const rawContent = await prisma.content.findFirst({
     include: {
       schedules: true,
@@ -42,16 +65,20 @@ export default async function Home() {
         ...rawContent,
         schedules: rawContent.schedules.map((schedule) => ({
           ...schedule,
-          day: schedule.day.charAt(0).toUpperCase() + schedule.day.slice(1).toLowerCase() as Schedule["day"],
+          day: (schedule.day.charAt(0).toUpperCase() +
+            schedule.day.slice(1).toLowerCase()) as Schedule["day"],
         })),
       }
     : null;
-  
 
   return (
     <div className="z-0 min-h-screen w-screen font-body flex flex-col items-center">
-      <HeroSection banner={content?.banner} tel={content?.tel} menuPdf={content?.menuPdf} />
-      <AnimatedSections content={content} />
+      <HeroSection
+        banner={content?.banner}
+        tel={content?.tel}
+        menuPdf={content?.menuPdf}
+      />
+      <AnimatedSections content={content} locale={locale} />
     </div>
   );
 }
