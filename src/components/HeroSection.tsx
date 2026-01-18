@@ -124,10 +124,10 @@ export default function HeroSection({
                 />
               </div>
             </div>
-            {/* Overlay sombre pour améliorer la lisibilité du texte sur mobile */}
-            <div className="absolute inset-0 bg-black/30 lg:bg-transparent" />
+            {/* Overlay sombre avec gradient pour améliorer la lisibilité du texte sur mobile */}
+            <div className="absolute inset-0 lg:hidden bg-gradient-to-b from-black/40 via-black/50 to-black/60" />
 
-            {/* Titre en overlay sur mobile */}
+            {/* Contenu en overlay sur mobile */}
             <div className="absolute inset-0 flex flex-col justify-center items-center px-4 md:px-6 lg:hidden z-10 hero-content">
               <header className="space-y-4 text-center">
                 <div
@@ -136,10 +136,11 @@ export default function HeroSection({
                       ? "logo-draw-svg"
                       : "logo-draw-svg-animated"
                   }`}
+                  style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.5))" }}
                 >
                   {logoSvg ? (
                     <div
-                      className="w-full max-w-md h-auto drop-shadow-lg"
+                      className="w-full max-w-md h-auto"
                       dangerouslySetInnerHTML={{ __html: logoSvg }}
                     />
                   ) : (
@@ -154,36 +155,46 @@ export default function HeroSection({
                   )}
                 </div>
                 <p
-                  className="text-base md:text-lg text-secondary font-semibold drop-shadow-lg hero-subtitle"
+                  className="text-base md:text-lg text-secondary font-semibold hero-subtitle"
                   role="doc-subtitle"
+                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
                 >
                   {t("subtitle")}
                 </p>
               </header>
-              <div className="mt-6 md:mt-8 hero-button">
+              
+              {/* Boutons et texte en overlay sur mobile */}
+              <div className="mt-6 flex flex-col items-center gap-4 hero-button">
                 <CtaBtn
                   type="tel"
                   value={tel || "0247648155"}
                   label={t("reserve")}
                   aria-label={t("reserve")}
                 />
+                {menuPdf && (
+                  <CtaBtn
+                    type="link"
+                    value={menuPdf}
+                    label={t("discoverMenu")}
+                    className="bg-secondary text-primary hover:bg-secondary/90"
+                  />
+                )}
+                <p 
+                  className="text-sm text-light font-semibold mt-2"
+                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
+                >
+                  {t("takeaway")}
+                </p>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Section inférieure : Sur place/à emporter + Bouton carte (même hauteur que le header) */}
-      <div className="grid grid-cols-3 w-full flex-shrink-0">
-        {/* Div gauche - Texte "Sur place ou à emporter" (1/3) */}
-        <div className="col-span-3 lg:col-span-1 border-t border-r border-primary flex items-center justify-start px-4 md:px-6 lg:px-8 xl:px-12 bg-light h-14 md:h-20">
-          <p className="text-base md:text-lg font-body text-primary font-bold text-center">
-            {t("takeaway")}
-          </p>
-        </div>
-
-        {/* Div droite - Bouton "Découvrir la carte" (2/3) */}
-        <div className="col-span-3 lg:col-span-2 flex items-center justify-start px-4 md:px-6 lg:px-8 xl:px-12 h-14 md:h-20 border-t border-primary">
+      {/* Section inférieure : Sur place/à emporter + Bouton carte - Visible seulement sur desktop */}
+      <div className="hidden lg:grid grid-cols-3 w-full flex-shrink-0">
+        {/* Div gauche - Bouton "Découvrir la carte" (1/3) */}
+        <div className="col-span-1 border-t border-r border-primary flex items-center justify-start p-4 md:px-6 lg:px-8 xl:px-12 bg-light h-20">
           {menuPdf && (
             <CtaBtn
               type="link"
@@ -192,6 +203,13 @@ export default function HeroSection({
               className="bg-secondary text-primary hover:bg-secondary/90"
             />
           )}
+        </div>
+
+        {/* Div droite - Texte "Sur place ou à emporter" (2/3) */}
+        <div className="col-span-2 flex items-center justify-start p-4 md:px-6 lg:px-8 xl:px-12 h-20 border-t border-primary">
+          <p className="text-base md:text-lg font-body text-primary font-bold">
+            {t("takeaway")}
+          </p>
         </div>
       </div>
     </section>

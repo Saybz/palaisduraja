@@ -162,8 +162,9 @@ const Header: React.FC = () => {
 
     const section = document.getElementById(sectionId);
     if (section) {
-      // Calculer l'offset pour compenser la hauteur du header fixe
-      const headerHeight = 80;
+      // Calculer la hauteur réelle du header dynamiquement
+      const header = document.querySelector("header");
+      const headerHeight = header ? header.offsetHeight : 88;
       const elementPosition =
         section.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - headerHeight;
@@ -243,10 +244,10 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`z-50 sticky top-0 w-full font-body text-primary transition-all duration-500 ease-in-out header-enter ${
+      className={`z-50 sticky top-0 w-full font-body text-primary transition-all duration-500 ease-in-out header-enter py-2 md:py-6 ${
         isScrolled
-          ? "py-1 md:py-3 shadow-lg bg-light/80 backdrop-blur-md border-b-[0.2px] border-primary/90"
-          : "py-2 md:py-6 border-b-[0.2px] border-transparent"
+          ? "shadow-lg bg-light/80 backdrop-blur-md border-b-[0.2px] border-primary/90"
+          : "border-b-[0.2px] border-transparent"
       } ${isAdminPage ? "bg-light" : ""}`}
       style={{
         transform: isHeaderVisible ? "translateY(0)" : "translateY(-100%)",

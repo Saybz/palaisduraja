@@ -113,7 +113,7 @@ export default function AnimatedSections({
       <section
         id="about"
         aria-labelledby="about-heading"
-        className="relative w-full md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary"
+        className="relative w-full md:h-[calc(100vh-5rem)] grid grid-cols-3 overflow-hidden border-b border-primary"
       >
         {/* Partie gauche - Image ou Vidéo (1/3) */}
         {content?.histoireImg && (
@@ -204,7 +204,7 @@ export default function AnimatedSections({
       <section
         id="infos"
         aria-labelledby="infos-heading"
-        className="w-full md:h-[calc(100vh-4.7rem)] grid grid-cols-3 overflow-hidden border-b border-primary bg-light"
+        className="w-full md:h-[calc(100vh-5rem)] grid grid-cols-3 overflow-hidden border-b border-primary bg-light"
       >
         {/* Colonne 1 - Grille 2x3 (6 cases) */}
         <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
@@ -355,7 +355,7 @@ export default function AnimatedSections({
       <section
         id="contact"
         aria-labelledby="contact-heading"
-        className="w-full md:h-[calc(100vh-4.7rem)] flex flex-col"
+        className="w-full md:h-[calc(100vh-5.7rem)] flex flex-col"
         style={{ paddingTop: "6rem" }}
       >
         <div className="w-full mx-auto pb-6 px-4 md:px-6 lg:px-8 xl:px-12 flex-shrink-0">
