@@ -49,7 +49,11 @@ export async function POST(req: Request) {
     cuisine,
     paiement,
     // Champs EN
-    // Champs EN retirés car non définis dans le type Content
+    titleEn,
+    histoireEn,
+    menuDescEn,
+    cuisineEn,
+    paiementEn,
     // Images et fichiers
     histoireImg,
     menuImg,
