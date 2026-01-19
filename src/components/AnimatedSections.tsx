@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import CtaBtn from "@/components/CtaButton";
@@ -82,6 +82,7 @@ export default function AnimatedSections({
   const tContact = useTranslations("contact");
   const tAbout = useTranslations("about");
   const tDays = useTranslations("days");
+  const [imageError, setImageError] = useState(false);
 
   // Helper pour obtenir le contenu traduit
   const getLocalizedContent = <K extends keyof Content>(
@@ -134,7 +135,7 @@ export default function AnimatedSections({
                 <source src={content.histoireImg} type="video/mp4" />
                 {t("common.error")}
               </video>
-            ) : (
+            ) : !imageError ? (
               <Image
                 src={content.histoireImg}
                 alt={`${localizedTitle || tAbout("title")} - Palais du Raja`}
@@ -144,7 +145,12 @@ export default function AnimatedSections({
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 className=""
                 title={`${localizedTitle || tAbout("title")} - Palais du Raja`}
+                onError={() => setImageError(true)}
               />
+            ) : (
+              <div className="w-full h-full bg-primary/20 flex items-center justify-center">
+                <p className="text-primary/60 text-sm">Image non disponible</p>
+              </div>
             )}
           </ScrollAnimated>
         )}

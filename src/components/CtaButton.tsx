@@ -83,8 +83,8 @@ export default function CtaBtn({
       >
         <div>
           <Icon className={iconColor} size={18} />
-        </div>
-        {label}
+      </div>
+      {label}
       </span>
     </a>
   );

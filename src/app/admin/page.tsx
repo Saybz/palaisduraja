@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Menu, X, Plus, Trash2, Edit2 } from "lucide-react";
-import { upload } from "@vercel/blob/client";
 
 type Schedule = {
   id?: number;
@@ -30,7 +29,7 @@ const DAYS: Schedule["day"][] = [
 ];
 const PERIODS: Schedule["period"][] = ["MIDI", "SOIR"];
 
-type Section = "hero" | "histoire" | "menu" | "plats" | "infos" | "contact" | "horaires";
+type Section = "hero" | "histoire" | "menu" | "plats" | "infos" | "contact" | "horaires" | "blob";
 
 type Dish = {
   id?: number;
@@ -88,6 +87,7 @@ export default function AdminPage() {
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [editingDish, setEditingDish] = useState<Dish | null>(null);
   const [newDishImage, setNewDishImage] = useState<File | null>(null);
+  const [blobFiles, setBlobFiles] = useState<Array<{ url: string; pathname?: string; size?: number; contentType?: string; uploadedAt?: string }>>([]);
   const { status } = useSession();
   const router = useRouter();
 
@@ -156,6 +156,23 @@ export default function AdminPage() {
   }, [status, router]);
 
   useEffect(() => {
+    const fetchBlobFiles = async () => {
+      if (activeSection === "blob") {
+        try {
+          const res = await fetch("/admin/api/blob");
+          if (res.ok) {
+            const data = await res.json();
+            setBlobFiles(data.blobs || []);
+          }
+        } catch (error) {
+          console.error("Erreur lors du chargement des fichiers:", error);
+        }
+      }
+    };
+    fetchBlobFiles();
+  }, [activeSection]);
+
+  useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => setSuccessMessage(null), 3000);
       return () => clearTimeout(timer);
@@ -179,14 +196,24 @@ export default function AdminPage() {
     );
   };
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (file: File): Promise<string | null> => {
     try {
-      // Upload direct vers Vercel Blob (côté client)
-      const blob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/admin/api/upload",
+      // Upload vers Cloudinary via FormData
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/admin/api/upload", {
+        method: "POST",
+        body: formData,
       });
-      return blob.url;
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Erreur lors de l'upload");
+      }
+
+      const data = await response.json();
+      return data.url;
     } catch (error) {
       console.error("Erreur upload:", error);
       return null;
@@ -245,7 +272,7 @@ export default function AdminPage() {
       } else {
         // Création
         const res = await fetch("/admin/api/dishes", {
-          method: "POST",
+      method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dishData),
         });
@@ -270,8 +297,8 @@ export default function AdminPage() {
     try {
       const res = await fetch(`/admin/api/dishes?id=${id}`, {
         method: "DELETE",
-      });
-      if (res.ok) {
+    });
+    if (res.ok) {
         setDishes(dishes.filter((d) => d.id !== id));
         setSuccessMessage("Plat supprimé avec succès !");
       } else {
@@ -279,6 +306,24 @@ export default function AdminPage() {
       }
     } catch {
       setSuccessMessage("Erreur lors de la suppression du plat.");
+    }
+  };
+
+  const handleDeleteBlob = async (url: string) => {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce fichier ?")) return;
+
+    try {
+      const res = await fetch(`/admin/api/blob?url=${encodeURIComponent(url)}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setBlobFiles(blobFiles.filter((f) => f.url !== url));
+        setSuccessMessage("Fichier supprimé avec succès !");
+      } else {
+        setSuccessMessage("Erreur lors de la suppression du fichier.");
+      }
+    } catch {
+      setSuccessMessage("Erreur lors de la suppression du fichier.");
     }
   };
 
@@ -387,6 +432,7 @@ export default function AdminPage() {
     { id: "infos", label: "Infos pratiques", icon: "ℹ️" },
     { id: "contact", label: "Contact", icon: "📧" },
     { id: "horaires", label: "Horaires", icon: "🕒" },
+    { id: "blob", label: "Gestion fichiers", icon: "📁" },
   ];
 
   // Composant onglets de langue
@@ -1022,6 +1068,51 @@ export default function AdminPage() {
                 })}
               </tbody>
             </table>
+            </div>
+          </div>
+        );
+
+      case "blob":
+        return (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Gestion des fichiers Blob</h2>
+            <p className="text-gray-600 mb-4">
+              Espace utilisé: {blobFiles.reduce((acc, f) => acc + (f.size || 0), 0).toLocaleString()} octets
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border text-sm">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border p-2 text-left">Nom</th>
+                    <th className="border p-2 text-left">Taille</th>
+                    <th className="border p-2 text-left">Type</th>
+                    <th className="border p-2 text-left">Date</th>
+                    <th className="border p-2 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {blobFiles.map((file) => (
+                    <tr key={file.url}>
+                      <td className="border p-2">{file.pathname || "N/A"}</td>
+                      <td className="border p-2">{(file.size || 0).toLocaleString()} octets</td>
+                      <td className="border p-2">{file.contentType || "N/A"}</td>
+                      <td className="border p-2">
+                        {file.uploadedAt
+                          ? new Date(file.uploadedAt).toLocaleDateString()
+                          : "N/A"}
+                      </td>
+                      <td className="border p-2">
+                        <button
+                          onClick={() => handleDeleteBlob(file.url)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         );

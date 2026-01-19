@@ -24,6 +24,7 @@ export default function HeroSection({
   const [logoSvg, setLogoSvg] = useState<string>("");
   const [animationPlayed, setAnimationPlayed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const rafRef = useRef<number | null>(null);
 
   // Détecter si mobile
@@ -145,15 +146,22 @@ export default function HeroSection({
               }}
             >
               <div className="absolute inset-0 w-full h-full">
-                <Image
-                  src={banner}
-                  alt="Palais du Raja - Tours"
-                  fill
-                  priority
-                  sizes="100vw"
-                  style={{ objectFit: "cover", objectPosition: "center" }}
-                  className=""
-                />
+                {!imageError && banner ? (
+                  <Image
+                    src={banner}
+                    alt="Palais du Raja - Tours"
+                    fill
+                    priority
+                    sizes="100vw"
+                    style={{ objectFit: "cover", objectPosition: "center" }}
+                    className=""
+                    onError={() => setImageError(true)}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-primary/20 flex items-center justify-center">
+                    <p className="text-primary/60 text-sm">Image non disponible</p>
+                  </div>
+                )}
               </div>
             </div>
             {/* Overlay sombre avec gradient pour améliorer la lisibilité du texte sur mobile */}
