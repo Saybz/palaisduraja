@@ -5,8 +5,21 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["placehold.jp"],
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "placehold.jp",
+      },
+      {
+        protocol: "https",
+        hostname: "*.blob.vercel-storage.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+      },
+    ],
   },
 };
 

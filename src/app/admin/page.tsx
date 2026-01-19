@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Menu, X, Plus, Trash2, Edit2 } from "lucide-react";
+import { upload } from "@vercel/blob/client";
 
 type Schedule = {
   id?: number;
@@ -179,17 +180,17 @@ export default function AdminPage() {
   };
 
   const handleFileUpload = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await fetch("/admin/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-    if (res.ok) {
-      const data = await res.json();
-      return data.fileUrl;
+    try {
+      // Upload direct vers Vercel Blob (côté client)
+      const blob = await upload(file.name, file, {
+        access: "public",
+        handleUploadUrl: "/admin/api/upload",
+      });
+      return blob.url;
+    } catch (error) {
+      console.error("Erreur upload:", error);
+      return null;
     }
-    return null;
   };
 
   const handleAddDish = () => {
@@ -322,15 +323,34 @@ export default function AdminPage() {
     let uploadedMenuImage4 = content.menuImg4;
     let uploadedPdf = content.menuPdf;
 
-    if (newBannerImage)
-      uploadedBannerImage = await handleFileUpload(newBannerImage);
-    if (newHistoireImage)
-      uploadedHistoireImage = await handleFileUpload(newHistoireImage);
-    if (newMenuImage1) uploadedMenuImage1 = await handleFileUpload(newMenuImage1);
-    if (newMenuImage2) uploadedMenuImage2 = await handleFileUpload(newMenuImage2);
-    if (newMenuImage3) uploadedMenuImage3 = await handleFileUpload(newMenuImage3);
-    if (newMenuImage4) uploadedMenuImage4 = await handleFileUpload(newMenuImage4);
-    if (newPdf) uploadedPdf = await handleFileUpload(newPdf);
+    if (newBannerImage) {
+      const url = await handleFileUpload(newBannerImage);
+      if (url) uploadedBannerImage = url;
+    }
+    if (newHistoireImage) {
+      const url = await handleFileUpload(newHistoireImage);
+      if (url) uploadedHistoireImage = url;
+    }
+    if (newMenuImage1) {
+      const url = await handleFileUpload(newMenuImage1);
+      if (url) uploadedMenuImage1 = url;
+    }
+    if (newMenuImage2) {
+      const url = await handleFileUpload(newMenuImage2);
+      if (url) uploadedMenuImage2 = url;
+    }
+    if (newMenuImage3) {
+      const url = await handleFileUpload(newMenuImage3);
+      if (url) uploadedMenuImage3 = url;
+    }
+    if (newMenuImage4) {
+      const url = await handleFileUpload(newMenuImage4);
+      if (url) uploadedMenuImage4 = url;
+    }
+    if (newPdf) {
+      const url = await handleFileUpload(newPdf);
+      if (url) uploadedPdf = url;
+    }
 
     const res = await fetch("/admin/api/content", {
       method: "POST",
@@ -388,8 +408,8 @@ export default function AdminPage() {
           activeLang === "en"
             ? "bg-primary text-white"
             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-        }`}
-      >
+              }`}
+            >
         🇬🇧 English
       </button>
             </div>

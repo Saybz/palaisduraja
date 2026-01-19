@@ -40,10 +40,10 @@ const Footer: React.FC = () => {
           </p>
           <div className="text-sm">
             <address>113 rue Colbert, 37000 Tours – </address>
-            <a href="tel:0247648155" className="underline hover:text-secondary">
-              02 47 64 81 55
-            </a>
-          </div>
+          <a href="tel:0247648155" className="underline hover:text-secondary">
+            02 47 64 81 55
+          </a>
+        </div>
           <p className="text-sm">
             <Link
               href={`${basePath}/mentions-legales`}
@@ -51,14 +51,14 @@ const Footer: React.FC = () => {
             >
               {t("legal")}
             </Link>{" "}
-            |{" "}
+          |{" "}
             <Link
               href={`${basePath}/politique-confidentialite`}
-              className="underline hover:text-secondary"
-            >
+            className="underline hover:text-secondary"
+          >
               {t("privacy")}
             </Link>
-          </p>
+        </p>
         </div>
       </div>
     </footer>

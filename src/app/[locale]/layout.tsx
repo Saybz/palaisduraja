@@ -44,13 +44,13 @@ export async function generateMetadata({
     metadataBase: new URL("https://palaisduraja.fr"),
     title: {
       default: isEnglish
-        ? "Palais du Raja | Indian Restaurant in Tours | Traditional Cuisine"
-        : "Palais du Raja | Restaurant Indien à Tours | Cuisine Traditionnelle",
+        ? "Palais du Raja | Indian Restaurant in Tours | traditional Cuisine"
+        : "Palais du Raja | Restaurant Indien à Tours | Cuisine traditionnelle",
       template: "%s | Palais du Raja",
     },
     description: isEnglish
-      ? "Traditional Indian and Pakistani restaurant in Tours. Discover authentic cuisine, spicy specialties and a warm atmosphere. Reservation at +33 2 47 64 81 55."
-      : "Restaurant indien et pakistanais traditionnel à Tours. Découvrez une cuisine authentique, des spécialités épicées et une ambiance chaleureuse. Réservation au 02 47 64 81 55.",
+      ? "Traditional Indian restaurant in Tours. Discover authentic cuisine, spicy specialties and a warm atmosphere. Reservation at +33 2 47 64 81 55."
+      : "Restaurant indien traditionnel à Tours. Découvrez une cuisine authentique, des spécialités épicées et une ambiance chaleureuse. Réservation au 02 47 64 81 55.",
     keywords: isEnglish
       ? [
           "Indian restaurant Tours",
@@ -61,6 +61,7 @@ export async function generateMetadata({
           "naan Tours",
           "restaurant Tours",
           "Palais du Raja",
+          "Palais du Rajah",
         ]
       : [
           "restaurant indien Tours",
@@ -71,6 +72,7 @@ export async function generateMetadata({
           "naan Tours",
           "restaurant Tours",
           "Palais du Raja",
+          "Palais du Rajah",
         ],
     authors: [{ name: "Palais du Raja" }],
     creator: "Palais du Raja",
@@ -90,10 +92,10 @@ export async function generateMetadata({
     openGraph: {
       title: isEnglish
         ? "Palais du Raja | Traditional Indian Restaurant in Tours"
-        : "Palais du Raja | Restaurant Indien Traditionnel à Tours",
+        : "Palais du Raja | Restaurant Indien traditionnel à Tours",
       description: isEnglish
-        ? "Authentic Indian and Pakistani restaurant in the heart of Tours. Discover our traditional specialties and warm atmosphere. Reservation at +33 2 47 64 81 55."
-        : "Restaurant indien et pakistanais authentique au cœur de Tours. Découvrez nos spécialités traditionnelles et notre ambiance chaleureuse. Réservation au 02 47 64 81 55.",
+        ? "Authentic Indian restaurant in the heart of Tours. Discover our traditional specialties and warm atmosphere. Reservation at +33 2 47 64 81 55."
+        : "Restaurant indien authentique au cœur de Tours. Découvrez nos spécialités traditionnelles et notre ambiance chaleureuse. Réservation au 02 47 64 81 55.",
       url: `https://palaisduraja.fr${locale === "en" ? "/en" : ""}`,
       siteName: "Palais du Raja",
       images: [

@@ -1,29 +1,50 @@
-// Route apellée pour mettre à jour le contenu fichier pdf (upload)
+// Route pour upload de fichiers vers Vercel Blob (client-side upload)
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(req: Request) {
-  const data = await req.formData();
-  const file = data.get("file") as File;
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+  }
 
-  if (!file) {
+  const body = (await req.json()) as HandleUploadBody;
+
+  try {
+    const jsonResponse = await handleUpload({
+      body,
+      request: req,
+      onBeforeGenerateToken: async () => {
+        // Vérifier l'authentification avant de générer le token
+        return {
+          allowedContentTypes: [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml",
+            "video/mp4",
+            "video/webm",
+            "video/quicktime",
+            "application/pdf",
+          ],
+          maximumSizeInBytes: 500 * 1024 * 1024, // 500MB max
+        };
+      },
+      onUploadCompleted: async ({ blob }) => {
+        // Callback après upload réussi (optionnel)
+        console.log("Upload terminé:", blob.url);
+      },
+    });
+
+    return NextResponse.json(jsonResponse);
+  } catch (error) {
+    console.error("Erreur upload:", error);
     return NextResponse.json(
-      { error: "Aucun fichier fourni" },
-      { status: 400 }
+      { error: "Erreur lors de l'upload" },
+      { status: 500 }
     );
   }
-
-  const uploadsDir = path.join(process.cwd(), "public/uploads");
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-  }
-
-  const fileName = `${Date.now()}-${file.name}`;
-  const filePath = path.join(uploadsDir, fileName);
-
-  const buffer = Buffer.from(await file.arrayBuffer());
-  fs.writeFileSync(filePath, buffer);
-
-  return NextResponse.json({ fileUrl: `/uploads/${fileName}` });
 }
