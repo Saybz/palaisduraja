@@ -38,6 +38,26 @@ export default function CtaBtn({
       break;
     case "link":
       href = value.startsWith("http") ? value : `https://${value}`;
+      // Pour les PDF Cloudinary, ajouter le flag fl_inline pour forcer l'ouverture dans le navigateur
+      // au lieu du téléchargement
+      if ((href.match(/\.pdf$/i) || href.includes("/raw/upload/")) && href.includes("cloudinary.com")) {
+        // Pour Cloudinary, ajouter fl_inline dans les transformations pour forcer Content-Disposition: inline
+        // Format URL Cloudinary: https://res.cloudinary.com/{cloud_name}/{resource_type}/upload/{transformations}/{public_id}.{format}
+        if (href.includes("/upload/")) {
+          // Extraire les parties de l'URL
+          const urlParts = href.split("/upload/");
+          if (urlParts.length === 2) {
+            const beforeUpload = urlParts[0] + "/upload";
+            const afterUpload = urlParts[1];
+            
+            // Si fl_inline n'est pas déjà présent, l'ajouter
+            if (!afterUpload.includes("fl_inline")) {
+              // Ajouter fl_inline comme première transformation
+              href = `${beforeUpload}/fl_inline/${afterUpload}`;
+            }
+          }
+        }
+      }
       Icon = ExternalLink;
       break;
   }
