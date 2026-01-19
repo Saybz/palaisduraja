@@ -123,8 +123,9 @@ export default function AnimatedSections({
             delay={0}
             className="col-span-3 lg:col-span-1 w-full min-h-[50vh] lg:h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary"
           >
-            {/* Détecter si c'est une vidéo par l'extension */}
-            {content.histoireImg.match(/\.(mp4|webm|ogg|mov)$/i) ? (
+            {/* Détecter si c'est une vidéo par l'extension ou l'URL Cloudinary */}
+            {content.histoireImg.match(/\.(mp4|webm|ogg|mov)$/i) ||
+            content.histoireImg.includes("/video/upload/") ? (
               <video
                 autoPlay
                 loop

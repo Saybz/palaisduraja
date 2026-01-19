@@ -860,7 +860,7 @@ export default function AdminPage() {
                           {dish.name}
                         </h3>
                         <span className="text-lg font-bold text-primary">
-                          {dish.price}
+                          {dish.price}€
                         </span>
                       </div>
                       <p className="text-gray-600 text-sm mb-2">{dish.description}</p>

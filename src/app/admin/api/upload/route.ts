@@ -78,10 +78,18 @@ export async function POST(req: Request) {
         : "image";
 
     // Upload vers Cloudinary en utilisant upload_stream pour éviter les problèmes de Content-Type
-    const uploadOptions = {
+    const uploadOptions: {
+      resource_type: "image" | "video" | "raw";
+      folder: string;
+      public_id: string;
+      access_mode?: "public";
+      type?: "upload";
+    } = {
       resource_type: resourceType as "image" | "video" | "raw",
       folder: "palais-du-raja", // Organiser les fichiers dans un dossier
       public_id: `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}`, // Nom unique
+      access_mode: "public", // S'assurer que les fichiers sont publics
+      type: "upload", // Type d'upload explicite
     };
 
     // Utiliser upload_stream pour les gros fichiers
@@ -114,11 +122,15 @@ export async function POST(req: Request) {
       bufferStream.pipe(uploadStream);
     });
 
+    // Cloudinary retourne déjà une URL correcte (secure_url)
+    // Pour les PDFs, l'URL devrait fonctionner directement
+    // Si le problème persiste, vérifier les paramètres de sécurité dans Cloudinary Dashboard
     return NextResponse.json({
-      url: result.secure_url,
+      url: result.secure_url, // Utiliser directement l'URL retournée par Cloudinary
       publicId: result.public_id,
-      format: result.format,
+      format: result.format || (resourceType === "raw" ? "pdf" : ""),
       size: result.bytes,
+      resourceType, // Inclure le type de ressource pour faciliter la détection côté client
     });
   } catch (error) {
     console.error("Erreur upload Cloudinary:", error);

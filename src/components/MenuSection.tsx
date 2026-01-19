@@ -199,7 +199,7 @@ export default function MenuSection({
                       {getLocalizedDishName(dish)}
                     </span>
                     <span className="text-light font-bold text-lg ml-4">
-                      {dish.price}
+                      {dish.price}€
                     </span>
                   </button>
 
