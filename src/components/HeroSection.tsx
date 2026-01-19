@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import CtaBtn from "@/components/CtaButton";
@@ -20,15 +20,34 @@ export default function HeroSection({
   const [scrollY, setScrollY] = useState(0);
   const [logoSvg, setLogoSvg] = useState<string>("");
   const [animationPlayed, setAnimationPlayed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const rafRef = useRef<number | null>(null);
+
+  // Détecter si mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Scroll optimisé avec requestAnimationFrame
+  const handleScroll = useCallback(() => {
+    if (rafRef.current) return; // Éviter les appels multiples
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setScrollY(window.scrollY);
+      rafRef.current = null;
+    });
+  }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [handleScroll]);
 
   useEffect(() => {
     let animationTimer: NodeJS.Timeout;
@@ -51,8 +70,10 @@ export default function HeroSection({
     };
   }, []);
 
-  // Calcul du décalage parallax (l'image se déplace plus lentement que le scroll)
-  const parallaxOffset = scrollY * 0.5;
+  // Calcul du décalage parallax - réduit sur mobile pour éviter les saccades
+  // Desktop: 0.3, Mobile: 0.15 (plus léger)
+  const parallaxMultiplier = isMobile ? 0.15 : 0.3;
+  const parallaxOffset = scrollY * parallaxMultiplier;
 
   return (
     <section
@@ -106,10 +127,10 @@ export default function HeroSection({
         {banner && (
           <div className="col-span-3 lg:col-span-2 w-full h-full relative overflow-hidden border-t lg:border-t-0 border-primary">
             <div
-              className="absolute inset-0 w-full h-[120%] hero-banner-zoom"
+              className="absolute inset-0 w-full h-[115%] hero-banner-zoom"
               style={{
-                transform: `translateY(${parallaxOffset}px)`,
-                transition: "transform 0.1s ease-out",
+                transform: `translate3d(0, ${parallaxOffset}px, 0)`,
+                willChange: "transform",
               }}
             >
               <div className="absolute inset-0 w-full h-full">
