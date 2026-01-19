@@ -171,7 +171,7 @@ export default function HeroSection({
             <div className="absolute inset-0 flex flex-col justify-center items-center px-4 md:px-6 lg:hidden z-10 hero-content">
               <header className="space-y-4 text-center">
                 <div
-                  className={`mb-4 ${
+                  className={`mb-4 mx-auto ${
                     !animationPlayed
                       ? "logo-draw-svg"
                       : "logo-draw-svg-animated"
@@ -180,7 +180,7 @@ export default function HeroSection({
                 >
                   {logoSvg ? (
                     <div
-                      className="w-full max-w-md h-auto"
+                      className="w-full max-w-md h-auto mx-auto"
                       dangerouslySetInnerHTML={{ __html: logoSvg }}
                     />
                   ) : (
@@ -189,7 +189,7 @@ export default function HeroSection({
                       alt="Palais du Raja"
                       width={300}
                       height={100}
-                      className="w-full max-w-md h-auto drop-shadow-lg"
+                      className="w-full max-w-md h-auto mx-auto drop-shadow-lg"
                       priority
                     />
                   )}
