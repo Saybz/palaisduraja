@@ -133,7 +133,18 @@ export default function AnimatedSections({
                 playsInline
                 className="absolute inset-0 w-full h-full object-cover"
               >
-                <source src={content.histoireImg} type="video/mp4" />
+                <source
+                  src={
+                    content.histoireImg.includes("/video/upload/")
+                      ? // Pour Cloudinary, ajouter des transformations de compression
+                        content.histoireImg.replace(
+                          /\/video\/upload\//,
+                          "/video/upload/q_auto:good,f_auto,vc_auto/"
+                        )
+                      : content.histoireImg
+                  }
+                  type="video/mp4"
+                />
                 {t("common.error")}
               </video>
             ) : !imageError ? (

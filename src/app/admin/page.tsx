@@ -83,6 +83,7 @@ export default function AdminPage() {
   const [newMenuImage3, setNewMenuImage3] = useState<File | null>(null);
   const [newMenuImage4, setNewMenuImage4] = useState<File | null>(null);
   const [newPdf, setNewPdf] = useState<File | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<string>(""); // Pour entrer directement une URL Cloudinary
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [editingDish, setEditingDish] = useState<Dish | null>(null);
@@ -395,6 +396,9 @@ export default function AdminPage() {
     if (newPdf) {
       const url = await handleFileUpload(newPdf);
       if (url) uploadedPdf = url;
+    } else if (pdfUrl && pdfUrl.trim() !== "") {
+      // Si une URL Cloudinary a été entrée directement, l'utiliser
+      uploadedPdf = pdfUrl.trim();
     }
 
     const res = await fetch("/admin/api/content", {
@@ -635,22 +639,47 @@ export default function AdminPage() {
                 Voir le PDF actuel
               </a>
             )}
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={(e) => setNewPdf(e.target.files?.[0] || null)}
-              className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
-            />
-            {newPdf && (
-              <a
-                href={URL.createObjectURL(newPdf)}
-                target="_blank"
-                rel="noopener noreferrer"
-                  className="text-blue-600 block mt-2 underline"
-              >
-                Fichier PDF sélectionné : {newPdf.name}
-              </a>
-            )}
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Option 1 : Uploader un fichier PDF
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => {
+                    setNewPdf(e.target.files?.[0] || null);
+                    setPdfUrl(""); // Réinitialiser l'URL si un fichier est sélectionné
+                  }}
+                  className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
+                />
+                {newPdf && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Fichier sélectionné : {newPdf.name}
+                  </p>
+                )}
+              </div>
+              <div className="text-center text-gray-400">OU</div>
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Option 2 : Entrer directement une URL Cloudinary
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://res.cloudinary.com/.../raw/upload/.../carte.pdf"
+                  value={pdfUrl}
+                  onChange={(e) => {
+                    setPdfUrl(e.target.value);
+                    setNewPdf(null); // Réinitialiser le fichier si une URL est entrée
+                  }}
+                  className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Si l&apos;upload via formulaire ne fonctionne pas, utilisez l&apos;URL Cloudinary du PDF uploadé manuellement
+                </p>
+              </div>
+            </div>
           </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-800 mb-3">

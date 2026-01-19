@@ -77,6 +77,16 @@ export async function POST(req: Request) {
         ? "raw"
         : "image";
 
+    // Déterminer le public_id selon le type de fichier
+    let publicId: string;
+    if (resourceType === "raw") {
+      // Pour les PDFs, utiliser un nom fixe "carte_palaisduraja"
+      publicId = "carte_palaisduraja";
+    } else {
+      // Pour les autres fichiers, utiliser un nom unique avec timestamp
+      publicId = `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}`;
+    }
+
     // Upload vers Cloudinary en utilisant upload_stream pour éviter les problèmes de Content-Type
     const uploadOptions: {
       resource_type: "image" | "video" | "raw";
@@ -84,12 +94,21 @@ export async function POST(req: Request) {
       public_id: string;
       access_mode?: "public";
       type?: "upload";
+      eager?: Array<{ transformation: Array<{ quality?: string; format?: string }> }>;
+      transformation?: Array<{ quality?: string; format?: string; bit_rate?: string }>;
     } = {
       resource_type: resourceType as "image" | "video" | "raw",
       folder: "palais-du-raja", // Organiser les fichiers dans un dossier
-      public_id: `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}`, // Nom unique
+      public_id: publicId,
       access_mode: "public", // S'assurer que les fichiers sont publics
       type: "upload", // Type d'upload explicite
+      // Compression pour les vidéos : réduire la qualité et le bitrate
+      ...(resourceType === "video" && {
+        transformation: [
+          { quality: "auto:good" }, // Qualité automatique optimisée
+          { bit_rate: "1m" }, // Bitrate max 1Mbps pour réduire la taille
+        ],
+      }),
     };
 
     // Utiliser upload_stream pour les gros fichiers
@@ -122,11 +141,16 @@ export async function POST(req: Request) {
       bufferStream.pipe(uploadStream);
     });
 
-    // Cloudinary retourne déjà une URL correcte (secure_url)
-    // Pour les PDFs, l'URL devrait fonctionner directement
-    // Si le problème persiste, vérifier les paramètres de sécurité dans Cloudinary Dashboard
+    // Utiliser directement l'URL retournée par Cloudinary (elle est correcte)
+    // Pour les PDFs, Cloudinary retourne déjà l'URL correcte avec secure_url
+    // Le message "your store is blocked" peut venir de restrictions Cloudinary sur les fichiers raw
+    // Solution : Utiliser directement l'URL Cloudinary sans transformation
+    
+    // Pour les vidéos, on ajoutera des transformations lors de l'affichage pour compresser
+    // Pour les PDFs, utiliser directement secure_url qui est la bonne URL
+
     return NextResponse.json({
-      url: result.secure_url, // Utiliser directement l'URL retournée par Cloudinary
+      url: result.secure_url,
       publicId: result.public_id,
       format: result.format || (resourceType === "raw" ? "pdf" : ""),
       size: result.bytes,

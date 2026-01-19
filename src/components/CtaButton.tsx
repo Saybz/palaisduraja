@@ -68,11 +68,14 @@ export default function CtaBtn({
     }
   }
 
+  // Déterminer si le lien doit s'ouvrir dans un nouvel onglet
+  const shouldOpenInNewTab = type === "link" || type === "location";
+
   return (
     <a
       href={href}
-      target={type === "link" || type === "location" ? "_blank" : "_self"}
-      rel="noopener noreferrer"
+      target={shouldOpenInNewTab ? "_blank" : "_self"}
+      rel={shouldOpenInNewTab ? "noopener noreferrer" : undefined}
       className="group relative inline-block max-w-fit"
     >
       <span
