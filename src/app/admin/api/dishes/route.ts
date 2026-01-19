@@ -120,6 +120,5 @@ export async function DELETE(req: Request) {
     where: { id: parseInt(id) },
   });
 
-  revalidatePages();
   return NextResponse.json({ success: true });
 }

@@ -67,13 +67,6 @@ export async function POST(req: Request) {
     tel,
     schedules,
   } = body as Content & { 
-    // Champs EN (ajoutés manuellement car le type Prisma peut être en cache)
-    titleEn?: string | null;
-    histoireEn?: string | null;
-    menuDescEn?: string | null;
-    cuisineEn?: string | null;
-    paiementEn?: string | null;
-    // Images supplémentaires
     menuImg1?: string | null;
     menuImg2?: string | null;
     menuImg3?: string | null;

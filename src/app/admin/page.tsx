@@ -388,8 +388,8 @@ export default function AdminPage() {
           activeLang === "en"
             ? "bg-primary text-white"
             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-        }`}
-      >
+              }`}
+            >
         🇬🇧 English
       </button>
             </div>
