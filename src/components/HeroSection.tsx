@@ -4,17 +4,20 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import CtaBtn from "@/components/CtaButton";
+import { Mail, Instagram, MapPin } from "lucide-react";
 
 type HeroSectionProps = {
   banner?: string | null;
   tel?: string | null;
   menuPdf?: string | null;
+  mail?: string | null;
 };
 
 export default function HeroSection({
   banner,
   tel,
   menuPdf,
+  mail,
 }: HeroSectionProps) {
   const t = useTranslations("hero");
   const [scrollY, setScrollY] = useState(0);
@@ -78,7 +81,7 @@ export default function HeroSection({
   return (
     <section
       id=""
-      className="relative w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-5.5rem)] overflow-hidden flex flex-col border-y border-primary"
+      className="relative w-full h-[calc(100vh-8rem)] md:h-[calc(100vh-5.5rem)] overflow-hidden flex flex-col border-y border-primary"
     >
       {/* Partie principale : Image et Titre */}
       <div className="grid grid-cols-3 flex-1 min-h-0 relative">
@@ -99,8 +102,8 @@ export default function HeroSection({
                 <Image
                   src="/logo/Logo_titre.svg"
                   alt="Palais du Raja"
-                  width={300}
-                  height={100}
+                  width={250}
+                  height={80}
                   className="w-full max-w-md h-auto"
                   priority
                 />
@@ -113,13 +116,21 @@ export default function HeroSection({
               {t("subtitle")}
             </p>
           </header>
-          <div className="mt-6 md:mt-8 hero-button">
+          <div className="mt-6 md:mt-8 flex flex-row flex-wrap gap-6 hero-button">
             <CtaBtn
               type="tel"
               value={tel || "0247648155"}
               label={t("reserve")}
               aria-label={t("reserve")}
             />
+            {menuPdf && (
+              <CtaBtn
+                type="link"
+                value={menuPdf}
+                label={t("discoverMenu")}
+                className="bg-secondary text-primary hover:bg-secondary/90"
+              />
+            )}
           </div>
         </div>
 
@@ -201,7 +212,7 @@ export default function HeroSection({
                   />
                 )}
                 <p 
-                  className="text-sm text-light font-semibold mt-2"
+                  className="text-sm text-light font-semibold"
                   style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
                 >
                   {t("takeaway")}
@@ -212,18 +223,69 @@ export default function HeroSection({
         )}
       </div>
 
-      {/* Section inférieure : Sur place/à emporter + Bouton carte - Visible seulement sur desktop */}
+      {/* Section inférieure : Icônes sociales + Sur place/à emporter */}
+      {/* Version Mobile */}
+      <div className="flex lg:hidden items-center justify-center gap-8 w-full flex-shrink-0 bg-light border-t border-primary h-14">
+        {mail && (
+          <a
+            href={`mailto:${mail}`}
+            aria-label="Envoyer un email"
+            className="text-primary hover:text-secondary transition-colors"
+          >
+            <Mail size={22} strokeWidth={1.5} />
+          </a>
+        )}
+        <a
+          href="https://www.instagram.com/palaisduraja/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+          className="text-primary hover:text-secondary transition-colors"
+        >
+          <Instagram size={22} strokeWidth={1.5} />
+        </a>
+        <a
+          href="https://maps.app.goo.gl/yourlink"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Google Maps"
+          className="text-primary hover:text-secondary transition-colors"
+        >
+          <MapPin size={22} strokeWidth={1.5} />
+        </a>
+      </div>
+
+      {/* Version Desktop */}
       <div className="hidden lg:grid grid-cols-3 w-full flex-shrink-0">
-        {/* Div gauche - Bouton "Découvrir la carte" (1/3) */}
-        <div className="col-span-1 border-t border-r border-primary flex items-center justify-start p-4 md:px-6 lg:px-8 xl:px-12 bg-light h-20">
-          {menuPdf && (
-            <CtaBtn
-              type="link"
-              value={menuPdf}
-              label={t("discoverMenu")}
-              className="bg-secondary text-primary hover:bg-secondary/90"
-            />
+        {/* Div gauche - Icônes sociales (1/3) */}
+        <div className="col-span-1 border-t border-r border-primary flex items-center justify-start gap-6 p-4 md:px-6 lg:px-8 xl:px-12 bg-light h-20">
+          {mail && (
+            <a
+              href={`mailto:${mail}`}
+              aria-label="Envoyer un email"
+              className="text-primary hover:text-secondary transition-colors"
+            >
+              <Mail size={24} strokeWidth={1.5} />
+            </a>
           )}
+          <a
+            href="https://www.instagram.com/palaisduraja/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="text-primary hover:text-secondary transition-colors"
+          >
+            <Instagram size={24} strokeWidth={1.5} />
+          </a>
+          <a
+            href="https://maps.app.goo.gl/yourlink"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Google Maps"
+            className="text-primary hover:text-secondary transition-colors"
+          >
+            <MapPin size={24} strokeWidth={1.5} />
+          </a>
         </div>
 
         {/* Div droite - Texte "Sur place ou à emporter" (2/3) */}

@@ -254,7 +254,7 @@ const Header: React.FC = () => {
         transition: "transform 0.3s ease-in-out",
       }}
     >
-      <div className="h-full w-full mx-auto px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 flex flex-col md:flex-row justify-between items-center">
+      <div className="h-full w-full mx-auto px-6 lg:px-8 xl:px-12 2xl:px-16 flex flex-col md:flex-row justify-between items-center">
         <Link
           href={homeLink}
           aria-label={locale === "en" ? "Home" : "Accueil"}
@@ -270,43 +270,41 @@ const Header: React.FC = () => {
           />
         </Link>
         {!isAdminPage && !isLogin && (
-          <div className="flex items-center gap-4 md:gap-6">
-            <nav
-              ref={navRef}
-              aria-label="Navigation principale"
-              className="relative flex gap-4 md:w-auto items-center justify-around font-semibold"
-            >
-              {/* Indicateur animé */}
-              {activeSection && indicatorStyle.width > 0 && (
-                <div
-                  className="absolute bottom-0 h-0.5 bg-secondary transition-all ease-out"
-                  style={{
-                    left: `${indicatorStyle.left}px`,
-                    width: `${indicatorStyle.width}px`,
-                    transitionDuration: isClickingRef.current ? "0.2s" : "0.5s",
-                    transitionProperty: "left, width",
-                  }}
-                />
-              )}
+          <nav
+            ref={navRef}
+            aria-label="Navigation principale"
+            className="relative flex w-full md:w-auto items-center justify-between md:justify-around md:gap-6 font-semibold"
+          >
+            {/* Indicateur animé */}
+            {activeSection && indicatorStyle.width > 0 && (
+              <div
+                className="absolute bottom-0 h-0.5 bg-secondary transition-all ease-out"
+                style={{
+                  left: `${indicatorStyle.left}px`,
+                  width: `${indicatorStyle.width}px`,
+                  transitionDuration: isClickingRef.current ? "0.2s" : "0.5s",
+                  transitionProperty: "left, width",
+                }}
+              />
+            )}
 
-              {sections.map((section) => (
-                <a
-                  key={section.id}
-                  ref={(el) => {
-                    linkRefs.current[section.id] = el;
-                  }}
-                  href={`#${section.id}`}
-                  onClick={(e) => scrollToSection(e, section.id)}
-                  className={`relative text-md md:text-sm text-primary hover:text-primary-light cursor-pointer transition-colors ${
-                    activeSection === section.id ? "text-secondary" : ""
-                  }`}
-                >
-                  {section.label}
-                </a>
-              ))}
-            </nav>
+            {sections.map((section) => (
+              <a
+                key={section.id}
+                ref={(el) => {
+                  linkRefs.current[section.id] = el;
+                }}
+                href={`#${section.id}`}
+                onClick={(e) => scrollToSection(e, section.id)}
+                className={`relative text-md md:text-sm text-primary hover:text-primary-light cursor-pointer transition-colors ${
+                  activeSection === section.id ? "text-secondary" : ""
+                }`}
+              >
+                {section.label}
+              </a>
+            ))}
             <LanguageSwitcher />
-          </div>
+          </nav>
         )}
         {isAdminPage && !isLogin && <LogOutBtn />}
       </div>

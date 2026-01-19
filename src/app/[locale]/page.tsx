@@ -80,6 +80,7 @@ export default async function Home({ params }: Props) {
         banner={content?.banner}
         tel={content?.tel}
         menuPdf={content?.menuPdf}
+        mail={content?.mail}
       />
       <AnimatedSections content={content} locale={locale} />
     </div>

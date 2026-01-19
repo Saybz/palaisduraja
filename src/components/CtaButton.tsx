@@ -79,10 +79,10 @@ export default function CtaBtn({
         className={`absolute inset-0 border-2 ${borderColor} -m-1 group-hover:m-0 transition-all duration-300 ease-in-out`}
       />
       <span
-        className={`relative block px-4 py-3 pb-2 ${defaultBgColor} ${defaultTextColor} font-regular text-base shadow-lg flex items-center gap-2 ${defaultHoverColor} ${className} transition-all duration-300 ease-in-out`}
+        className={`relative block px-3 py-2 ${defaultBgColor} ${defaultTextColor} font-regular text-sm shadow-lg flex items-center gap-2 ${defaultHoverColor} ${className} transition-all duration-300 ease-in-out`}
       >
-        <div className="pb-1">
-          <Icon className={iconColor} />
+        <div>
+          <Icon className={iconColor} size={18} />
         </div>
         {label}
       </span>

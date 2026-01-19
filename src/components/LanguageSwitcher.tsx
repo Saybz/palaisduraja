@@ -59,7 +59,7 @@ export default function LanguageSwitcher() {
             {loc.toUpperCase()}
           </button>
           {index < locales.length - 1 && (
-            <span className="text-primary/40">|</span>
+            <span className="text-primary/40"> |</span>
           )}
         </span>
       ))}
