@@ -1,39 +1,47 @@
-// Route pour upload de fichiers vers Vercel Blob
+// Route pour upload de fichiers vers Vercel Blob (client-side upload)
 import { NextResponse } from "next/server";
-import { put } from "@vercel/blob";
+import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
 export async function POST(req: Request) {
-  // Vérifier l'authentification
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
-  const data = await req.formData();
-  const file = data.get("file") as File;
-
-  if (!file) {
-    return NextResponse.json(
-      { error: "Aucun fichier fourni" },
-      { status: 400 }
-    );
-  }
+  const body = (await req.json()) as HandleUploadBody;
 
   try {
-    // Générer un nom de fichier unique
-    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    
-    // Upload vers Vercel Blob
-    const blob = await put(fileName, file, {
-      access: "public",
+    const jsonResponse = await handleUpload({
+      body,
+      request: req,
+      onBeforeGenerateToken: async () => {
+        // Vérifier l'authentification avant de générer le token
+        return {
+          allowedContentTypes: [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml",
+            "video/mp4",
+            "video/webm",
+            "video/quicktime",
+            "application/pdf",
+          ],
+          maximumSizeInBytes: 100 * 1024 * 1024, // 100MB max
+        };
+      },
+      onUploadCompleted: async ({ blob }) => {
+        // Callback après upload réussi (optionnel)
+        console.log("Upload terminé:", blob.url);
+      },
     });
 
-    // Retourner l'URL du fichier uploadé
-    return NextResponse.json({ fileUrl: blob.url });
+    return NextResponse.json(jsonResponse);
   } catch (error) {
-    console.error("Erreur upload Vercel Blob:", error);
+    console.error("Erreur upload:", error);
     return NextResponse.json(
       { error: "Erreur lors de l'upload" },
       { status: 500 }
