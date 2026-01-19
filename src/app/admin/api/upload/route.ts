@@ -30,7 +30,7 @@ export async function POST(req: Request) {
             "video/quicktime",
             "application/pdf",
           ],
-          maximumSizeInBytes: 100 * 1024 * 1024, // 100MB max
+          maximumSizeInBytes: 500 * 1024 * 1024, // 500MB max
         };
       },
       onUploadCompleted: async ({ blob }) => {
