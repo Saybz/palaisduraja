@@ -3,6 +3,9 @@ import { setRequestLocale } from "next-intl/server";
 import HeroSection from "@/components/HeroSection";
 import AnimatedSections from "@/components/AnimatedSections";
 
+// Force le rendu dynamique pour toujours afficher le contenu à jour
+export const dynamic = "force-dynamic";
+
 type Schedule = {
   id: number;
   day:

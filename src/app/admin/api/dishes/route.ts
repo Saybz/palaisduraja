@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/utils/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+
+// Fonction pour invalider le cache
+function revalidatePages() {
+  revalidatePath("/", "layout");
+  revalidatePath("/fr", "layout");
+  revalidatePath("/en", "layout");
+}
 
 // Récupérer tous les plats
 export async function GET() {
@@ -57,6 +65,7 @@ export async function POST(req: Request) {
     },
   });
 
+  revalidatePages();
   return NextResponse.json(dish);
 }
 
@@ -88,6 +97,7 @@ export async function PUT(req: Request) {
     },
   });
 
+  revalidatePages();
   return NextResponse.json(dish);
 }
 
@@ -110,5 +120,6 @@ export async function DELETE(req: Request) {
     where: { id: parseInt(id) },
   });
 
+  revalidatePages();
   return NextResponse.json({ success: true });
 }

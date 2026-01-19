@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/utils/db";
 import type { Schedule, Content } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -48,11 +49,7 @@ export async function POST(req: Request) {
     cuisine,
     paiement,
     // Champs EN
-    titleEn,
-    histoireEn,
-    menuDescEn,
-    cuisineEn,
-    paiementEn,
+    // Champs EN retirés car non définis dans le type Content
     // Images et fichiers
     histoireImg,
     menuImg,
@@ -132,6 +129,11 @@ export async function POST(req: Request) {
       include: { schedules: true },
     });
 
+    // Invalider le cache des pages
+    revalidatePath("/", "layout");
+    revalidatePath("/fr", "layout");
+    revalidatePath("/en", "layout");
+
     return NextResponse.json(result);
   } else {
     // 🟢 Création d'un nouveau contenu
@@ -172,6 +174,11 @@ export async function POST(req: Request) {
       } as Parameters<typeof prisma.content.create>[0]['data'],
       include: { schedules: true },
     });
+
+    // Invalider le cache des pages
+    revalidatePath("/", "layout");
+    revalidatePath("/fr", "layout");
+    revalidatePath("/en", "layout");
 
     return NextResponse.json(newContent);
   }
