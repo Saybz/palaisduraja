@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { v2 as cloudinary } from "cloudinary";
+import { Readable } from "stream";
 
 // Configuration Cloudinary
 cloudinary.config({
@@ -18,6 +19,13 @@ export async function POST(req: Request) {
   }
 
   try {
+    // Vérifier le Content-Type
+    const contentType = req.headers.get("content-type");
+    if (!contentType || !contentType.includes("multipart/form-data")) {
+      // Si ce n'est pas multipart/form-data, essayer de parser quand même
+      // (certains clients peuvent ne pas envoyer le header correctement)
+    }
+
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
@@ -69,22 +77,42 @@ export async function POST(req: Request) {
         ? "raw"
         : "image";
 
-    // Convertir le buffer en base64 pour Cloudinary
-    const base64 = buffer.toString("base64");
-    const dataUri = `data:${file.type};base64,${base64}`;
-
-    // Upload vers Cloudinary
-    const uploadOptions: {
-      resource_type: "image" | "video" | "raw";
-      folder: string;
-      public_id: string;
-    } = {
+    // Upload vers Cloudinary en utilisant upload_stream pour éviter les problèmes de Content-Type
+    const uploadOptions = {
       resource_type: resourceType as "image" | "video" | "raw",
       folder: "palais-du-raja", // Organiser les fichiers dans un dossier
       public_id: `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}`, // Nom unique
     };
 
-    const result = await cloudinary.uploader.upload(dataUri, uploadOptions);
+    // Utiliser upload_stream pour les gros fichiers
+    const result = await new Promise<{
+      secure_url: string;
+      public_id: string;
+      format: string;
+      bytes: number;
+    }>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        uploadOptions,
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else if (result) {
+            resolve({
+              secure_url: result.secure_url,
+              public_id: result.public_id,
+              format: result.format || "",
+              bytes: result.bytes,
+            });
+          } else {
+            reject(new Error("Upload failed: no result"));
+          }
+        }
+      );
+
+      // Créer un stream à partir du buffer et le pipe vers uploadStream
+      const bufferStream = Readable.from(buffer);
+      bufferStream.pipe(uploadStream);
+    });
 
     return NextResponse.json({
       url: result.secure_url,
