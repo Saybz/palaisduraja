@@ -34,16 +34,18 @@ const Footer: React.FC = () => {
           </div>
         </div>
         {/* Autres éléments - Alignés naturellement en desktop */}
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center lg:gap-4 space-y-2 lg:space-y-0">
+        <div className="w-full self-stretch flex flex-col lg:flex-row lg:justify-between lg:items-center lg:gap-4 space-y-2 lg:space-y-0">
           <p className="text-sm">
-            &copy; {new Date().getFullYear()} Palais du Raja. {t("rights")}.
+            &copy; {new Date().getFullYear()} Palais du Raja. • {t("rights")} <a href="https://shailashbhati.fr" className="underline hover:text-secondary">Shailash Bhati</a>
           </p>
-          <div className="text-sm">
-            <address>113 rue Colbert, 37000 Tours – </address>
-          <a href="tel:0247648155" className="underline hover:text-secondary">
-            02 47 64 81 55
-          </a>
-        </div>
+          <div className="text-sm flex flex-wrap items-center justify-center lg:justify-start gap-x-1 lg:flex-nowrap">
+            <address className="not-italic">
+              113 rue Colbert, 37000 Tours –
+            </address>
+            <a href="tel:0247648155" className="underline hover:text-secondary">
+              02 47 64 81 55
+            </a>
+          </div>
           <p className="text-sm">
             <Link
               href={`${basePath}/mentions-legales`}

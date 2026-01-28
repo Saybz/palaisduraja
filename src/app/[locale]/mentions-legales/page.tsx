@@ -43,7 +43,7 @@ export default async function MentionsLegales({ params }: Props) {
               href={`/${locale === "fr" ? "" : locale}`}
               className="inline-block text-primary hover:underline font-semibold"
             >
-              ← {isEnglish ? "Back to home" : "Retour à l'accueil"}
+              ← {isEnglish ? "Back to site" : "Retour à au site"}
             </Link>
           </div>
 
@@ -196,7 +196,7 @@ export default async function MentionsLegales({ params }: Props) {
               href={`/${locale === "fr" ? "" : locale}`}
               className="inline-block text-primary hover:underline font-semibold"
             >
-              ← {isEnglish ? "Back to home" : "Retour à l'accueil"}
+              ← {isEnglish ? "Back to site" : "Retour à au site"}
             </Link>
           </div>
         </div>

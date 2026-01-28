@@ -13,6 +13,9 @@ const Header: React.FC = () => {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/admin");
   const isLogin = pathname.startsWith("/admin/login") || pathname.startsWith("/login");
+  const isLegalPage =
+    pathname.includes("/mentions-legales") ||
+    pathname.includes("/politique-confidentialite");
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
@@ -241,6 +244,11 @@ const Header: React.FC = () => {
 
   // Construire le lien home avec la locale
   const homeLink = locale === "fr" ? "/" : `/${locale}`;
+
+  // Ne pas afficher le header sur les pages Mentions légales / Politique de confidentialité
+  if (isLegalPage) {
+    return null;
+  }
 
   return (
     <header

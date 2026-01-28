@@ -36,7 +36,7 @@ export default async function PolitiqueConfidentialite({ params }: Props) {
             href={`/${locale === "fr" ? "" : locale}`}
             className="inline-block text-primary hover:underline font-semibold"
           >
-            ← {isEnglish ? "Back to home" : "Retour à l'accueil"}
+            ← {isEnglish ? "Back to site" : "Retour à au site"}
           </Link>
         </div>
         <h1 className="text-4xl md:text-5xl font-head text-primary mb-4">
@@ -225,7 +225,7 @@ export default async function PolitiqueConfidentialite({ params }: Props) {
               href={`/${locale === "fr" ? "" : locale}`}
               className="text-primary hover:underline font-semibold"
             >
-              ← {isEnglish ? "Back to home" : "Retour à l'accueil"}
+              ← {isEnglish ? "Back to site" : "Retour à au site"}
             </Link>
           </div>
         </div>
