@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Tangerine, Karma } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -7,20 +6,6 @@ import Script from "next/script";
 import Providers from "@/components/Providers";
 import ClientLayout from "@/components/ClientLayout";
 import { locales, type Locale } from "@/i18n/config";
-
-const karmaBody = Karma({
-  variable: "--font-body",
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const TangerineHead = Tangerine({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-head",
-});
 
 type Props = {
   children: React.ReactNode;
@@ -152,26 +137,24 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <head />
-      <body className={`${karmaBody.variable} ${TangerineHead.variable} antialiased`}>
-          <a
-            href="#main"
-            className="absolute left-0 top-0 -translate-y-full focus:translate-y-0 bg-primary text-white p-2"
-          >
-            {locale === "en" ? "Skip to main content" : "Aller au contenu principal"}
-          </a>
-          <NextIntlClientProvider messages={messages}>
-            <Providers>
-              <ClientLayout>{children}</ClientLayout>
-            </Providers>
-          </NextIntlClientProvider>
-          <Script
-            id="restaurant-schema"
-            type="application/ld+json"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
+    <div className="antialiased">
+      <a
+        href="#main"
+        className="absolute left-0 top-0 -translate-y-full focus:translate-y-0 bg-primary text-white p-2"
+      >
+        {locale === "en" ? "Skip to main content" : "Aller au contenu principal"}
+      </a>
+      <NextIntlClientProvider messages={messages}>
+        <Providers>
+          <ClientLayout>{children}</ClientLayout>
+        </Providers>
+      </NextIntlClientProvider>
+      <Script
+        id="restaurant-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "Restaurant",
                 name: "Palais du Raja",
@@ -221,10 +204,9 @@ export default async function LocaleLayout({ children, params }: Props) {
                   reviewCount: "150",
                 },
               }),
-            }}
-          />
-      </body>
-    </html>
+        }}
+      />
+    </div>
   );
 }
 

@@ -200,8 +200,8 @@ export default function AdminPage() {
   const handleFileUpload = async (file: File): Promise<string | null> => {
     try {
       // Upload vers Cloudinary via FormData
-      const formData = new FormData();
-      formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
       const response = await fetch("/admin/api/upload", {
         method: "POST",
@@ -644,16 +644,16 @@ export default function AdminPage() {
                 <label className="block text-xs text-gray-600 mb-1">
                   Option 1 : Uploader un fichier PDF
                 </label>
-                <input
-                  type="file"
-                  accept=".pdf"
+            <input
+              type="file"
+              accept=".pdf"
                   onChange={(e) => {
                     setNewPdf(e.target.files?.[0] || null);
                     setPdfUrl(""); // Réinitialiser l'URL si un fichier est sélectionné
                   }}
-                  className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
-                />
-                {newPdf && (
+              className="w-full px-3 py-2 bg-white border rounded-lg shadow-sm text-sm"
+            />
+            {newPdf && (
                   <p className="text-xs text-gray-500 mt-1">
                     Fichier sélectionné : {newPdf.name}
                   </p>

@@ -37,7 +37,13 @@ export default function CtaBtn({
       Icon = MapPin;
       break;
     case "link":
-      href = value.startsWith("http") ? value : `https://${value}`;
+      // Si c'est une URL relative (commence par "/"), on la garde telle quelle
+      // pour qu'elle pointe sur le même domaine (ex: /upload/old_card_pdr.pdf)
+      if (value.startsWith("/")) {
+        href = value;
+      } else {
+        href = value.startsWith("http") ? value : `https://${value}`;
+      }
       // Pour les PDF Cloudinary, ajouter le flag fl_inline pour forcer l'ouverture dans le navigateur
       // au lieu du téléchargement
       if ((href.match(/\.pdf$/i) || href.includes("/raw/upload/")) && href.includes("cloudinary.com")) {
@@ -68,7 +74,7 @@ export default function CtaBtn({
   const defaultBgColor = hasCustomColors ? "" : "bg-primary";
   const defaultTextColor = hasCustomColors ? "" : "text-light";
   const defaultHoverColor = hasCustomColors ? "" : "hover:text-gray-100";
-  const iconColor = hasCustomColors ? "currentColor" : "text-light";
+  const iconColor = hasCustomColors ? "currentColor pb-1" : "text-light pb-1";
 
   // Déterminer la couleur de la bordure : même couleur que le fond du bouton
   let borderColor = "border-primary"; // Par défaut pour bg-primary
@@ -102,7 +108,7 @@ export default function CtaBtn({
         className={`absolute inset-0 border-2 ${borderColor} -m-1 group-hover:m-0 transition-all duration-300 ease-in-out`}
       />
       <span
-        className={`relative block px-3 py-2 ${defaultBgColor} ${defaultTextColor} font-regular text-sm shadow-lg flex items-center gap-2 ${defaultHoverColor} ${className} transition-all duration-300 ease-in-out`}
+        className={`relative block px-3 pt-2 pb-1 ${defaultBgColor} ${defaultTextColor} font-regular text-sm shadow-lg flex items-center gap-2 ${defaultHoverColor} ${className} transition-all duration-300 ease-in-out`}
       >
         <div>
           <Icon className={iconColor} size={18} />

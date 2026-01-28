@@ -66,6 +66,15 @@ export default function MenuSection({
     fetchDishes();
   }, []);
 
+  // À l'initialisation, ouvrir par défaut le premier plat populaire
+  useEffect(() => {
+    if (dishes.length > 0 && expandedDish === null && selectedDish === null) {
+      const firstId = dishes[0].id;
+      setExpandedDish(firstId);
+      setSelectedDish(firstId);
+    }
+  }, [dishes, expandedDish, selectedDish]);
+
   // Images disponibles pour les plats
   const dishImages = [menuImg1, menuImg2, menuImg3, menuImg4].filter(
     (img): img is string => img !== null && img !== undefined && img !== ""
@@ -136,7 +145,7 @@ export default function MenuSection({
       className="relative w-full min-h-[calc(100vh-3.5rem)] md:h-[calc(100vh-5.7rem)] grid grid-cols-3 overflow-hidden border-b border-secondary bg-primary"
     >
       {/* Première colonne - Texte et bouton */}
-      <div className="col-span-3 lg:col-span-1 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 border-b lg:border-b-0 lg:border-r border-secondary">
+      <div className="col-span-3 lg:col-span-1 py-10 flex flex-col justify-center px-4 md:px-6 lg:px-8 xl:px-12 border-b lg:border-b-0 lg:border-r border-secondary">
         <ScrollAnimated
           direction="up"
           delay={0}
@@ -173,7 +182,7 @@ export default function MenuSection({
       </div>
 
       {/* Deuxième colonne - Liste des plats populaires */}
-      <div className="col-span-3 lg:col-span-1 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-secondary overflow-y-auto">
+      <div className="col-span-3 lg:col-span-1 py-10 flex flex-col justify-start lg:justify-center border-b lg:border-b-0 lg:border-r border-secondary lg:overflow-y-auto">
         <ScrollAnimated direction="up" delay={150} className="w-full">
           <h3 className="font-body text-md md:text-4xl text-secondary mb-6 ml-4">
             {t("popularDishes")}
@@ -185,7 +194,9 @@ export default function MenuSection({
                 {t("noDishes")}
               </p>
             ) : (
-              dishes.map((dish) => (
+              dishes.map((dish) => {
+                const isExpanded = expandedDish === dish.id;
+                return (
                 <div
                   key={dish.id}
                   className="border-b border-secondary w-full overflow-hidden"
@@ -195,8 +206,17 @@ export default function MenuSection({
                     className="w-full px-4 py-3 flex justify-between items-center text-left hover:bg-primary/80 transition-colors cursor-pointer"
                     aria-expanded={expandedDish === dish.id}
                   >
-                    <span className="text-light font-semibold text-lg">
-                      {getLocalizedDishName(dish)}
+                    <span className="flex items-center gap-2">
+                      {/* Petit indicateur d'état ouvert/fermé */}
+                      <span
+                        className={`inline-flex h-2.5 w-2.5 mb-1 rounded-full border border-secondary transition-colors duration-200 ${
+                          isExpanded ? "bg-secondary" : "bg-transparent"
+                        }`}
+                        aria-hidden="true"
+                      />
+                      <span className="text-light font-semibold text-lg">
+                        {getLocalizedDishName(dish)}
+                      </span>
                     </span>
                     <span className="text-light font-bold text-lg ml-4">
                       {dish.price}€
@@ -235,7 +255,8 @@ export default function MenuSection({
                     </div>
                   </div>
                 </div>
-              ))
+              );
+              })
             )}
           </div>
         </ScrollAnimated>

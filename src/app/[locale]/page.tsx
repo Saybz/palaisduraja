@@ -79,7 +79,8 @@ export default async function Home({ params }: Props) {
       <HeroSection
         banner={content?.banner}
         tel={content?.tel}
-        menuPdf={content?.menuPdf}
+        // Utiliser systématiquement le PDF local du menu
+        menuPdf={"/upload/old_card_pdr.pdf"}
         mail={content?.mail}
       />
       <AnimatedSections content={content} locale={locale} />

@@ -5,6 +5,13 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import CtaBtn from "@/components/CtaButton";
 import ScrollAnimated from "@/components/ScrollAnimated";
+import {
+  BadgeCheck,
+  Leaf,
+  UtensilsCrossed,
+  ChefHat,
+  CreditCard,
+} from "lucide-react";
 import ScrollToTopButton from "@/components/ScrollToTopBtn";
 import MenuSection from "@/components/MenuSection";
 
@@ -116,56 +123,31 @@ export default function AnimatedSections({
         aria-labelledby="about-heading"
         className="relative w-full md:h-[calc(100vh-5rem)] grid grid-cols-3 overflow-hidden border-b border-primary"
       >
-        {/* Partie gauche - Image ou Vidéo (1/3) */}
-        {content?.histoireImg && (
-          <ScrollAnimated
-            direction="up"
-            delay={0}
-            className="col-span-3 lg:col-span-1 w-full min-h-[50vh] lg:h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary"
-          >
-            {/* Détecter si c'est une vidéo par l'extension ou l'URL Cloudinary */}
-            {content.histoireImg.match(/\.(mp4|webm|ogg|mov)$/i) ||
-            content.histoireImg.includes("/video/upload/") ? (
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover"
-              >
-                <source
-                  src={
-                    content.histoireImg.includes("/video/upload/")
-                      ? // Pour Cloudinary, ajouter des transformations de compression
-                        content.histoireImg.replace(
-                          /\/video\/upload\//,
-                          "/video/upload/q_auto:good,f_auto,vc_auto/"
-                        )
-                      : content.histoireImg
-                  }
-                  type="video/mp4"
-                />
-                {t("common.error")}
-              </video>
-            ) : !imageError ? (
-              <Image
-                src={content.histoireImg}
-                alt={`${localizedTitle || tAbout("title")} - Palais du Raja`}
-                fill
-                loading="lazy"
-                sizes="33.333vw"
-                style={{ objectFit: "cover", objectPosition: "center" }}
-                className=""
-                title={`${localizedTitle || tAbout("title")} - Palais du Raja`}
-                onError={() => setImageError(true)}
-              />
-            ) : (
-              <div className="w-full h-full bg-primary/20 flex items-center justify-center">
-                <p className="text-primary/60 text-sm">Image non disponible</p>
-              </div>
-            )}
-          </ScrollAnimated>
-        )}
+        {/* Partie gauche - visuel Histoire (1/3) : utiliser l'image gérée dans l'admin */}
+        <ScrollAnimated
+          direction="up"
+          delay={0}
+          className="col-span-3 lg:col-span-1 w-full min-h-[50vh] lg:h-full relative overflow-hidden border-t lg:border-t-0 lg:border-r border-primary"
+        >
+          {content?.histoireImg && !imageError ? (
+            <Image
+              src={content.histoireImg}
+              alt={(localizedTitle || tAbout("title")) as string}
+              fill
+              sizes="(max-width: 1024px) 100vw, 33vw"
+              className="absolute inset-0 w-full h-full object-cover"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <Image
+              src="/img/mandala.png"
+              alt=""
+              fill
+              sizes="(max-width: 1024px) 100vw, 33vw"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+        </ScrollAnimated>
 
         {/* Partie droite - Texte (2/3) */}
         <ScrollAnimated
@@ -212,7 +194,8 @@ export default function AnimatedSections({
           menuImg2={content?.menuImg2}
           menuImg3={content?.menuImg3}
           menuImg4={content?.menuImg4}
-          menuPdf={content?.menuPdf}
+          // Utiliser systématiquement le PDF local du menu
+          menuPdf={"/menu/old_card_pdr.pdf"}
           menuDesc={content?.menuDesc}
           locale={locale}
         />
@@ -226,15 +209,33 @@ export default function AnimatedSections({
       >
         {/* Colonne 1 - Grille 2x3 (6 cases) */}
         <div className="col-span-3 lg:col-span-1 grid grid-rows-3 border-b lg:border-b-0 lg:border-r border-primary">
-          {/* Case 1 - Titre "Infos pratiques" */}
-          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
+          {/* Case 1 - Titre "Infos pratiques" (mobile/tablette) */}
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6 bg-primary lg:hidden">
             <ScrollAnimated direction="up" delay={0}>
               <h2
                 id="infos-heading"
-                className="relative text-primary font-head text-4xl md:text-5xl lg:text-6xl text-center"
+                className="relative text-light font-head text-4xl md:text-5xl lg:text-6xl text-center"
               >
                 {tInfos("title")}
               </h2>
+            </ScrollAnimated>
+          </div>
+
+          {/* Case 1 bis - Cuisine (desktop uniquement, prend la place de l'ancien titre) */}
+          <div className="hidden lg:flex border-b border-primary items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
+            <ScrollAnimated direction="up" delay={0}>
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-[60px] h-[60px] flex items-center justify-center">
+                  <UtensilsCrossed
+                    className="text-primary"
+                    size={38}
+                    strokeWidth={1.5}
+                  />
+                </div>
+                <p className="text-primary font-semibold text-lg md:text-xl text-center">
+                  {localizedCuisine || tInfos("cuisineDesc")}
+                </p>
+              </div>
             </ScrollAnimated>
           </div>
 
@@ -243,7 +244,7 @@ export default function AnimatedSections({
             <ScrollAnimated direction="up" delay={100}>
               <div className="flex flex-col items-center gap-2">
                 <div className="w-[60px] h-[60px] flex items-center justify-center">
-                  <span className="text-primary font-bold text-3xl">حلال</span>
+                  <BadgeCheck className="text-primary" size={40} strokeWidth={1.5} />
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
                   {tInfos("halal")}
@@ -257,7 +258,7 @@ export default function AnimatedSections({
             <ScrollAnimated direction="up" delay={200}>
               <div className="flex flex-col items-center gap-3">
                 <div className="w-[60px] h-[60px] flex items-center justify-center">
-                  <span className="text-primary text-5xl">🌿</span>
+                  <Leaf className="text-primary" size={38} strokeWidth={1.5} />
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
                   {tInfos("accessibility")}
@@ -273,6 +274,9 @@ export default function AnimatedSections({
           <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
             <ScrollAnimated direction="up" delay={150}>
               <div className="text-center">
+                <div className="w-[60px] h-[60px] mx-auto mb-2 flex items-center justify-center">
+                  <CreditCard className="text-primary" size={38} strokeWidth={1.5} />
+                </div>
                 <h3 className="font-bold text-xl md:text-2xl text-primary mb-2">
                   {tInfos("payment")}
                 </h3>
@@ -283,12 +287,16 @@ export default function AnimatedSections({
             </ScrollAnimated>
           </div>
 
-          {/* Case 2 - Cuisine Indienne et Pakistanaise */}
-          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
+          {/* Case 2 - Cuisine Indienne et Pakistanaise (mobile/tablette uniquement) */}
+          <div className="border-b border-primary flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6 lg:hidden">
             <ScrollAnimated direction="up" delay={250}>
               <div className="flex flex-col items-center gap-3">
                 <div className="w-[60px] h-[60px] flex items-center justify-center">
-                  <span className="text-primary text-5xl">🍛</span>
+                  <UtensilsCrossed
+                    className="text-primary"
+                    size={38}
+                    strokeWidth={1.5}
+                  />
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
                   {localizedCuisine || tInfos("cuisineDesc")}
@@ -297,12 +305,21 @@ export default function AnimatedSections({
             </ScrollAnimated>
           </div>
 
+          {/* Case 2 bis - Titre "Infos pratiques" centré (desktop uniquement) */}
+          <div className="hidden lg:flex border-b border-primary items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6 bg-primary">
+            <ScrollAnimated direction="up" delay={250}>
+              <h2 className="relative text-light font-head text-4xl md:text-5xl lg:text-6xl text-center">
+                {tInfos("title")}
+              </h2>
+            </ScrollAnimated>
+          </div>
+
           {/* Case 3 - Plats faits maison */}
           <div className="flex items-center justify-center px-4 md:px-6 lg:px-8 xl:px-12 py-4 md:py-6">
             <ScrollAnimated direction="up" delay={350}>
               <div className="flex flex-col items-center gap-3">
                 <div className="w-[60px] h-[60px] flex items-center justify-center">
-                  <span className="text-primary text-5xl">👨‍🍳</span>
+                  <ChefHat className="text-primary" size={38} strokeWidth={1.5} />
                 </div>
                 <p className="text-primary font-semibold text-lg md:text-xl text-center">
                   {tInfos("cuisine")}
@@ -373,8 +390,7 @@ export default function AnimatedSections({
       <section
         id="contact"
         aria-labelledby="contact-heading"
-        className="w-full md:h-[calc(100vh-5.7rem)] flex flex-col"
-        style={{ paddingTop: "6rem" }}
+        className="w-full md:h-[calc(100vh-5.7rem)] flex flex-col pt-10"
       >
         <div className="w-full mx-auto pb-6 px-4 md:px-6 lg:px-8 xl:px-12 flex-shrink-0">
           <ScrollAnimated direction="up" delay={0}>
@@ -386,8 +402,19 @@ export default function AnimatedSections({
             </h2>
           </ScrollAnimated>
           <ScrollAnimated direction="up" delay={150}>
+            <p className="text-dark text-lg md:text-xl mb-4 md:mb-6 max-w-2xl">
+              {tContact("intro")}
+            </p>
             <div className="flex flex-col gap-4 items-start md:items-center lg:flex-row-reverse justify-between">
               <div className="flex flex-col gap-4 md:flex-row lg:justify-end justify-around items-start md:items-center">
+              {content?.tel && (
+                  <CtaBtn
+                    aria-label={tContact("callUs")}
+                    type="tel"
+                    value={content.tel}
+                    label={tContact("callUs")}
+                  />
+                )}
                 {content?.mail && (
                   <CtaBtn
                     type="email"
@@ -395,14 +422,6 @@ export default function AnimatedSections({
                     value={content.mail}
                     label={content.mail}
                     className=""
-                  />
-                )}
-                {content?.tel && (
-                  <CtaBtn
-                    aria-label={tContact("callUs")}
-                    type="tel"
-                    value={content.tel}
-                    label={tContact("callUs")}
                   />
                 )}
               </div>
